@@ -6,8 +6,10 @@
 #import "@preview/ctheorems:1.1.2": *
 #import "@preview/numbly:0.1.0": numbly
 
+#let animations = true
 // Animations On/Off
 #let pause=[]
+#let animations = false
 
 
 #let disintegrates = "disintegrates"
@@ -60,10 +62,10 @@
 
 _
 Abstract:
-I present a quick review of the usage of Bayesian networks, d-separation
-and causal discovery, and their limitations for making sense of structure in observed data distributions. I highlight d-separation as the central object in classical causal discovery and present its generalization, 'structural independence' as a combinatorial property on product spaces.
-The main theorem states that its definition is justified. More precisely, 
-this combinatorial property is characterized as independence in all product probability distributions on the product space, generalizing soundness and completeness of $d$-separation.
+We will review the usage of Bayesian networks, $d$-separation
+and causal discovery, and their limitations for making sense of structure in observed data distributions. We will highlight d-separation as the central object in classical causal discovery and present its generalization, "structural independence" as a combinatorial property of random variables on a product space.
+The main theorem justifies this definition by showing the equivalence to
+independence in all product probability distributions on the product space, generalizing soundness and completeness of $d$-separation.
 _
 
 
@@ -164,7 +166,13 @@ What can we tell about the structure that the variables $V$ have?
 #let cf = gradient.radial(yellow.lighten(80%),yellow, center: (30%, 20%), radius: 80%)
 #let sf = gradient.radial(blue.lighten(80%), blue, center: (30%, 20%), radius: 80%)
 
-#slide(repeat: 6, self => [
+
+#let nrepeat = 6
+#if animations==false {
+  nrepeat = 1
+}
+
+#slide(repeat: nrepeat, self => [
   #let (uncover, only, alternatives) = utils.methods(self)
   #let diaglist = (
     diagram1(nf,nf,nf,nf,nf,nf,nf,caption:[#h(-60pt) Example Graph]),
@@ -213,7 +221,7 @@ What can we tell about the structure that the variables $V$ have?
 //   // A directed graph without $PP$ is a qualitative bayesian network.  It characterizes admissible distributions.
 // ]
 
-== Inference
+== Causal Discovery
 
 We want to infer the structure of the graph given $PP$. \
 #pause
