@@ -7,7 +7,7 @@
 #import "@preview/numbly:0.1.0": numbly
 
 // Animations On/Off
-// #let pause=[]
+#let pause=[]
 
 
 #let disintegrates = "disintegrates"
@@ -58,11 +58,21 @@
 // #components.adaptive-columns(outline(title: none, indent: 1em))
 
 
+_
+Abstract:
+I present a quick review of the usage of Bayesian networks, d-separation
+and causal discovery, and their limitations for making sense of structure in observed data distributions. I highlight d-separation as the central object in classical causal discovery and present its generalization, 'structural independence' as a combinatorial property on product spaces.
+The main theorem states that its definition is justified. More precisely, 
+this combinatorial property is characterized as independence in all product probability distributions on the product space, generalizing soundness and completeness of $d$-separation.
+_
+
+
 = Background
 
 == Structure
 Let $V$ be a set of variables and $PP$ a distributions over those.
 What can we tell about the structure that the variables $V$ have?
+(Assume finiteness for now)
 
 // #set node(radius: 1em)
 #pause
@@ -108,8 +118,7 @@ What can we tell about the structure that the variables $V$ have?
   there is a walk $W$ from a node in $X$ to a node in $Y$ s.t.
   $w in W$ is a collider if and only if $w in Z$.
 
-  $X$ and $Y$ given $Z$ are $d$-separated if they are not $d$-connected given $Z$.
-]
+  #pause
 #fletcher-diagram(
   node-stroke: .1em,
   node-fill: gradient.radial(white, blue.lighten(80%), center: (30%, 20%), radius: 80%),
@@ -120,6 +129,12 @@ What can we tell about the structure that the variables $V$ have?
   node((4,0),radius:1em),
   edge((2,0),"-|>")
 )
+#pause
+ \
+ \
+ 
+  $X$ and $Y$ given $Z$ are $d$-separated if they are not $d$-connected given $Z$.
+]
 
 
 
@@ -151,19 +166,17 @@ What can we tell about the structure that the variables $V$ have?
 
 #slide(repeat: 6, self => [
   #let (uncover, only, alternatives) = utils.methods(self)
-
-
-#let diaglist = (
-  diagram1(nf,nf,nf,nf,nf,nf,nf,caption:[#h(-60pt) Example Graph]),
-  diagram1(nf,sf,nf,sf,cf,nf,nf),
-  diagram1(sf,nf,nf,sf,cf,nf,nf),
-  diagram1(sf,nf,sf,nf,nf,cf,nf),
-  diagram1(sf,nf,nf,nf,cf,nf,sf),
-  diagram1(sf,nf,nf,nf,nf,cf,sf),
-  diagram1(sf,cf,nf,nf,nf,cf,sf, caption:[Blue nodes are #text(red)[#underline[not]] $d$-connected given the yellow nodes. \ I.e. $d$-separated.]),
-)
-#diaglist.at(self.subslide)
-])
+  #let diaglist = (
+    diagram1(nf,nf,nf,nf,nf,nf,nf,caption:[#h(-60pt) Example Graph]),
+    diagram1(nf,sf,nf,sf,cf,nf,nf),
+    diagram1(sf,nf,nf,sf,cf,nf,nf),
+    diagram1(sf,nf,sf,nf,nf,cf,nf),
+    diagram1(sf,nf,nf,nf,cf,nf,sf),
+    diagram1(sf,nf,nf,nf,nf,cf,sf),
+    diagram1(sf,cf,nf,nf,nf,cf,sf, caption:[Blue nodes are #text(red)[#underline[not]] $d$-connected given the yellow nodes. \ I.e. $d$-separated.]),
+  )
+  #diaglist.at(self.subslide)
+  ])
 ]
 
 #slide[
@@ -171,8 +184,15 @@ What can we tell about the structure that the variables $V$ have?
     Let $X,Y,Z$ be set of nodes. Then
     $X$ and $Y$ are $d$-separated given $Z$ if and only if
     $forall P in distributions(G) : X indep_P Y | Z$.
+
+    Furthermore, we have this if and only if ${P in distributions(G): X indep_P Y | Z}$ has interior.
   ]
+
+
+  $d$-separation is a criterion based solely the graph that tells us the independencies in all compatible distribution.
+  
 ]
+
 
   
 // #table(columns: 2, stroke: none, column-gutter: 1em)[
@@ -195,9 +215,10 @@ What can we tell about the structure that the variables $V$ have?
 
 == Inference
 
-We want to infer the structure of the graph given $PP$.
-We assume independencies are structural
-
+We want to infer the structure of the graph given $PP$. \
+#pause
+Realizability assumption: $PP$ is compatible with a graph and
+all inde-pendencies are characterized by $d$-separation. We say $PP$ is a perfect map.
 #pause
 
 #table(columns: 2, stroke: none, column-gutter: 1em)[
@@ -213,6 +234,14 @@ We assume independencies are structural
   edge(<N2>,<N3>,[?],"-|>"),
 )
 ][
+  #pause
+  In a sense, we can see that this is not too strong an assumption.
+  In a graph, the set of $P$ where \
+  $X indep_P Y | Z$ holds contrary to $d$-separation is nowhere dense and closed.
+
+  #pause
+  It is known that it is impossible to infer the whole graph in general.
+  The equivalence classes that you can infer are called _markov equivalence classes_.
   // #definition[
   //   A bayesian network is a directed graph $G=(V,E)$
   //   with a probability distribution $PP$ over $V$, s.t.
@@ -227,11 +256,30 @@ We assume independencies are structural
 
 
 
+== Towards Structural Independence
+
+But we only used the independencies between nodes!
+#pause
+There are many more independencies like
+$X indep (X+Y)$.
+#pause
+
+We want to extend '$d$-separation' to arbitrary random variables on the graph,
+so that we can infer more structure.
+
+Via the product  $PP(V=v) = product_(X in V) PP(X=v_X|PA(X)=v_PA(X))$,
+we can reduce to a simple product probability space.
+One factor corresponding to $PP(X=x| PA(X)="pa")$ with fixed 'pa'.
 
 
 
 
 
+
+
+#[
+= Structural Independence
+]
 
 == Setting
 
@@ -258,7 +306,6 @@ $forall A in sigma(X), B in sigma(Y)  : P(A|Z)P(B|Z) = P(A,B|Z) "a.s."$
 Technicalities: We assume that all $sigma$-algebras are complete.
 
 
-= Definition
 
 ==  Definitions
 
