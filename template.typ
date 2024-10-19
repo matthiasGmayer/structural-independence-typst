@@ -8,6 +8,7 @@
   set heading(numbering: "1.1 ")
   set text(font: "New Computer Modern", lang: "en")
   set page(numbering: "1")
+  set align(left)
   body
 }
 
