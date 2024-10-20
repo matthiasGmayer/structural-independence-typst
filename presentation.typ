@@ -164,7 +164,7 @@ That means all $PP in distributions(G)$ arise as follows:
   node((0.75,0), $PP(V_1 in dot| nothing)$, stroke: 0em, fill: white, name:<T1>),
   node((-1.30,1), $PP(V_2 in dot| V_1)$, stroke: 0em, fill: white, name:<T2>),
   node((1.30,1), $PP(V_3 in dot| V_1)$, stroke: 0em, fill: white, name:<T3>),
-  node((0.75,2), $PP(V_4 in dot| V_2, V_3)$, stroke: 0em, fill: white, name:<T4>),
+  node((0.9,2), $PP(V_4 in dot| V_2, V_3)$, stroke: 0em, fill: white, name:<T4>),
   
   edge(<T1>, <N1>, "-->"),
   edge(<T2>, <N2>, "-->"),
@@ -528,10 +528,10 @@ Let $I$ be an arbitrary index set.
 
 #pause
 
-$(Omega, AS) := Times.circle_(i in I) (Omega_i, AS_i)$
+$(Omega, AS) := Times.circle_(i in I) (Omega_i, AS_i)$.
 
 #pause
-Reference measure: $PP = times.big_(i in I) PP_i$, where $PP_i in distributions (Omega_i)$
+Reference measure: $PP = times.big_(i in I) PP_i$, where $PP_i in distributions (Omega_i)$.
 
 #pause
 $distributionstimes (Omega) := {Times_(i in I) P_i << PP | forall i in I: P_i in distributions(Omega_i)}$.
@@ -541,12 +541,28 @@ $distributionstimes (Omega) := {Times_(i in I) P_i << PP | forall i in I: P_i in
 Question: Can we characterize
 $forall P in distributionstimes (Omega) : X indep_P Y | Z?
 $
-Independence is defined in the usual way as
-$forall A in sigma(X), B in sigma(Y)  : P(A|Z)P(B|Z) = P(A,B|Z) "a.s."$
+Recall: $X indep_P Y | Z :<=> forall A in sigma(X), B in sigma(Y)  : P(A|Z)P(B|Z) =^"a.s." P(A,B|Z) #h(-100pt) $
 
 #pause
-Technicalities: We assume that all $sigma$-algebras are complete.
 
+  #figure[
+#fletcher-diagram(
+  spacing:1em,
+  node-outset:4pt,
+  node((0,0),$Omega$,name:<G>),
+  edge("->",label:$P in distributionstimes(Omega)$),
+  node((3,0), $(Omega,P)$,name:<GP>, outset:8pt),
+  pause,
+
+  node((0,1),$X orth Y | Z$,name:<d>),
+  edge("->"),
+  node((3,1),$X indep_P Y | Z$,name:<p>),
+
+  edge(<G>,<d>,"-->", label:""),
+  edge(<GP>,<p>,"-->", label:""),
+  
+)
+]
 
 
 == Definitions
@@ -559,7 +575,7 @@ Technicalities: We assume that all $sigma$-algebras are complete.
 
 #definition[Generalized projection][
   #v(-12pt)
-$ pi_J : Omega -> Union_(I_0 subset.eq I) Omega_(I_0); omega  |-> pi_J(omega)(omega) $
+$ pi_J : Omega -> Union_(I_0 subset.eq I) Omega_(I_0); quad omega  |-> pi_J(omega)(omega) $
 ]
 
 
@@ -585,7 +601,6 @@ $ pi_J : Omega -> Union_(I_0 subset.eq I) Omega_(I_0); omega  |-> pi_J(omega)(om
   cetz.draw.content((x-max,-0.5), [1]),
   cetz.draw.line((0,y-max),(x-max,y-max)),
   cetz.draw.line((x-max,0),(x-max,y-max))
-  
 )
 
 #let colors = (
@@ -714,20 +729,38 @@ $ forall P in distributionstimes(Omega): pi_J indep_P pi_comp(J) | Z. $]
 #pause
 #definition[Generation][Let $J$ be a $Z ms$ index-set function.
 $J$ generates $X$ given $Z$ if
-$X$ is $pi_J ms$ and $J$ disintegrates $Z$#v(-100pt)
+$X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
 ]
+
+#pause
+#lemma[
+  If $J generates X$ given $Z$ and $K generates Y$ given $Z$ and
+  $J sect K =^"a.s." nothing$ then
+  $forall P in distributionstimes(Omega) : X indep_P Y | Z$.
+]
+#pause
+#proof[
+  By the definition of generation, we have $sigma(X) subset.eq sigma(pi_J,Z)$ and likewise
+  by assumption $sigma(Y) subset.eq sigma(pi_comp(J),Z).$
+  #pause
+  Disintegration gives
+  $(pi_J,Z) indep_p (pi_comp(J),Z) | Z$ for any $P in distributionstimes(Omega)$.
 ]
 
 
+
+]
 == Results
 
 
-#hide("hello")#v(-46.5pt)
 #lemma[
   There exists a minimal generating index-set function for $X$ given $Z$.
   Denote this minimal element by $history (X|Z)$. I.e.
   for any generating $J$, we have
   $history(X|Z) subset.eq J "a.s."$
+]
+#proof[idea][
+  $Sect_(s in S) A_s$ exists up to nullsets.
 ]
 
 #pause 
@@ -737,23 +770,79 @@ $X$ is $pi_J ms$ and $J$ disintegrates $Z$#v(-100pt)
 #pause
 
 #theorem[
-  $X orth Y | Z <=> forall P in distributionstimes (Omega) : X indep_P Y | Z
+  $X orth Y | Z <=> forall P in distributionstimes (Omega) : X indep_P Y | Z.
   $
 ]
-
 #pause
+#lemma[If ${P in distributionstimes(Omega):X indep_P Y | Z}$ has interior, it is equal to $distributionstimes(Omega)$. ]
+
+#slide(repeat:4, self =>[
+  
 #corollary[
   If $forall P in distributionstimes(Omega): X indep_P Y | Z$ then \
   $forall P  in distributionstimes (Omega) : pi_(history(X|Z)) indep_P
   pi_(history(Y|Z)) | Z$.
+  
 ]
 
-// #pause
-// #lemma[If ${P in distributionstimes(Omega):X indep_P Y | Z}$ has interior, it equals $distributionstimes(Omega)$ ]
+#pause
 
-#v(-100pt)
-#hide("hello")
+#if self.subslide == 2 {
+figure[#cetz-canvas({
+  covering
+  basic
+  cetz.draw.content((2.5,-1.5),[$sigma(Z)$])
+})]
 
+} else if self.subslide == 3 {
+figure[#cetz-canvas({
+  covering
+  basic
+  cetz.draw.content((2.5,-1.5),[Let $B subset.eq Omega$, if  $forall P in distributionstimes(Omega): A indep_P B | Z$,])
+  let step = 0.5
+  let y1 = (0,0,0,0,0.4,1.5,1.47,1.4,1.45,1.63)
+  let y2 = (0,2.97,3.2,3.5,3.71,3.84,4,4.27,4.5,4.68)
+  for i in (2,) {
+    cetz.draw.line((step*i,y1.at(i)),(step*i,y2.at(i)))
+  }
+  
+  let x1 = (0,2.08,2.37,2.5,1.94,1.5,1.25,1.5,3,4)
+  let x2 = (0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5)
+  for i in (2,) {
+  cetz.draw.line((x1.at(i),step*i),(x2.at(i),step*i))
+
+  // cetz.draw.circle((3.3,3),radius:1)
+
+  cetz.draw.line((2,3.7),(5,2))
+  cetz.draw.content((2.3,1.8),text(size:2em)[$A$])
+  
+  // cetz.draw.arc-through((3.5,),(2,2),(2,3))
+  }
+})]
+
+} else if self.subslide == 4 {
+figure[#cetz-canvas({
+  covering
+  basic
+  cetz.draw.content((2.5,-1.5),[Let $B subset.eq Omega$, if  $forall P in distributionstimes(Omega): A indep_P B | Z$,])
+  cetz.draw.content((2.5,-2.7),[then $forall P in distributionstimes(Omega): pi_J indep_P B | Z.$])
+  let step = 0.5
+  let y1 = (0,0,0,0,0.4,1.5,1.47,1.4,1.45,1.63)
+  let y2 = (0,2.97,3.2,3.5,3.71,3.84,4,4.27,4.5,4.68)
+  for i in range(calc.min(y1.len(),y2.len())) {
+    cetz.draw.line((step*i,y1.at(i)),(step*i,y2.at(i)))
+  }
+  
+  let x1 = (0,2.08,2.37,2.5,1.94,1.5,1.25,1.5,3,4)
+  let x2 = (0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5)
+  for i in range(calc.min(x1.len(),x2.len())) {
+  cetz.draw.line((x1.at(i),step*i),(x2.at(i),step*i))
+  }
+})]
+}
+
+  
+])
 == Compositional Semigraphoid
 
 #counter("theorem").update(12)
@@ -791,12 +880,32 @@ a quantifier?
 #pause
 
 #lemma[
-  If $Omega$ is finite, then $J disintegrates Z$, if
+  If $sigma(Z)$ corresponds to a countable partition , then $J disintegrates Z$, if
   any atom $C in sigma(Z)$ fulfills.
-  $C= pi_J (C) times pi_comp(J) (C)$. This is not true with $Omega$ infinite.
+  $C= pi_J (C) times pi_comp(J) (C)$. This is not true in general.
 ]
 
-#pause
+
+#let rects = (
+  cetz.draw.scale(5),
+  cetz.draw.rect((0, 0), (0.6, 0.4), fill:rgb(173, 216, 230)),
+  cetz.draw.rect((0.6, 0), (1, 0.4), fill:rgb(135, 206, 235)),
+  cetz.draw.rect((0, 0.4), (0.3, 1), fill:rgb(176, 224, 230)),
+  cetz.draw.rect((0.3, 0.4), (0.8, 0.7), fill:rgb(175, 238, 238)),
+  cetz.draw.rect((0.8, 0.4), (1, 1), fill:rgb(202, 225, 255)),
+  cetz.draw.rect((0.3, 0.7), (0.8, 1), fill:rgb(173, 216, 230)),
+  cetz.draw.scale(1/5),
+)
+#slide[
+  #figure[#cetz-canvas(
+    start,
+    basic,
+    rects,
+    cetz.draw.content((2.5,-1.5),${1} disintegrates Z.$)
+  )]
+]
+
+#slide(repeat:4, self => [
 
 #lemma[
   If $J disintegrates Z$, then for $A in sigma(pi_J, Z), B in sigma(pi_comp(J),Z)$, with $A sect B = nothing$ there is $C in sigma(Z)$ s.t.
@@ -804,7 +913,24 @@ a quantifier?
 ]
 #pause
 
+#if self.subslide == 2 {figure[#cetz-canvas(
+    basic,
+    rects,
+    cetz.draw.content((2.5,-1.5),$A in sigma(pi_1,Z), quad B in sigma(pi_2,Z)$),
+    cetz.draw.line((2,0),(2,2),stroke:(dash:"dashed")),
+    cetz.draw.content((1,1),$A$),
+    cetz.draw.line((3,1.5),(5,1.5), stroke:(dash:"dashed")),
+    cetz.draw.content((4,0.75),$B$),
+)]} else [
+  
+#pause
+
 Interaction between ($pi_J,Z$) and $(pi_comp(J),Z)$ happens only through $Z$.
+
+#pause
+When $sigma(Z)$ corresponds to a countable partition, this characterizes disintegration.
+]
+])
 
 
 == Convergence
@@ -816,7 +942,7 @@ $d(A,B) = PP(A triangle.t B)$.
 
 #lemma[
   $A_n -> nothing $ if and only if every subsequence has a subsequence s.t.
-  $lim sup A_n = nothing "a.s."$
+  $lim sup A_n = nothing$
 ]
 
 #pause
