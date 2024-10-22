@@ -184,7 +184,7 @@ There is a nice graphical criterion:
 #pause
 
 #definition[
-  Given a directed graph $G$ and sets of nodes $X$,$Y$ and $Z$.
+  Given a DAG $G$ and sets of nodes $X$,$Y$ and $Z$.
   $X$ and $Y$ are 
   #box(stroke: (bottom: 1pt), outset: (bottom: 2pt))[$d$-connected]
   given $Z$ if 
@@ -243,7 +243,7 @@ There is a nice graphical criterion:
 #let sf = gradient.radial(blue.lighten(80%), blue, center: (30%, 20%), radius: 80%)
 
 
-#let nrepeat = 10
+#let nrepeat = 9
 #if animations==false {
   nrepeat = 1
 }
@@ -260,7 +260,7 @@ There is a nice graphical criterion:
     diagram1(sf,nf,nf,nf,nf,cf,sf),
     diagram1(sf,cf,nf,nf,nf,cf,sf, caption:[Blue nodes are #text(red)[#underline[not]] $d$-connected given the yellow nodes, \ i.e. $d$-separated.]),
     diagram1(sf,cf,nf,nf,nf,nf,sf, caption:[Blue nodes are #text(red)[#underline[not]] $d$-connected given the yellow nodes, \ i.e. $d$-separated.]),
-    diagram1(sf,nf,nf,nf,cf,nf,sf, caption:[Blue nodes are #text(red)[#underline[not]] $d$-connected given the yellow nodes, \ i.e. $d$-separated.]),
+    // diagram1(sf,nf,nf,nf,cf,nf,sf),
     diagram1(sf,nf,nf,cf,nf,nf,sf, caption:[Blue nodes are #text(red)[#underline[not]] $d$-connected given the yellow nodes, \ i.e. $d$-separated.]),
     diagram1(sf,nf,cf,nf,nf,nf,sf, caption:[Blue nodes are #text(red)[#underline[not]] $d$-connected given the yellow nodes, \ i.e. $d$-separated.]),
   )
@@ -573,9 +573,13 @@ Recall: $X indep_P Y | Z :<=> forall A in sigma(X), B in sigma(Y)  : P(A|Z)P(B|Z
 
 #pause
 
+For $J subset.eq I$, let $pi_J : Omega -> Times_(i in J) Omega_i$ be the projection on the $J$ components. #h(-100pt)
+
+#pause
+
 #definition[Generalized projection][
-  #v(-12pt)
-$ pi_J : Omega -> Union_(I_0 subset.eq I) Omega_(I_0); quad omega  |-> pi_J(omega)(omega) $
+  For an index-set function $J$, let $pi_J (omega) = pi_(J (omega)) (omega)$ with signature
+$ pi_J : Omega -> Union_(I_0 subset.eq I) (times.big_(i in I_0) Omega_i) $
 ]
 
 
@@ -663,6 +667,16 @@ rgb(202, 225, 255),  // Light Steel Blue
   ),
   cetz.draw.scale(1/x-max),
 )
+#let rects = (
+  cetz.draw.scale(5),
+  cetz.draw.rect((0, 0), (0.6, 0.4), fill:rgb(173, 216, 230)),
+  cetz.draw.rect((0.6, 0), (1, 0.4), fill:rgb(135, 206, 235)),
+  cetz.draw.rect((0, 0.4), (0.3, 1), fill:rgb(176, 224, 230)),
+  cetz.draw.rect((0.3, 0.4), (0.8, 0.7), fill:rgb(175, 238, 238)),
+  cetz.draw.rect((0.8, 0.4), (1, 1), fill:rgb(202, 225, 255)),
+  cetz.draw.rect((0.3, 0.7), (0.8, 1), fill:rgb(173, 216, 230)),
+  cetz.draw.scale(1/5),
+)
 #slide(repeat: 4, self => [
 #v(-30pt)
 #if self.subslide==1 {
@@ -721,8 +735,9 @@ figure[#cetz-canvas({
 
 
 
-
-#slide[
+== Definitions
+#slide(repeat:5, self => [
+  
 #definition[Disintegration][$J disintegrates Z$ iff
 $ forall P in distributionstimes(Omega): pi_J indep_P pi_comp(J) | Z. $]
 
@@ -745,11 +760,12 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
   #pause
   Disintegration gives
   $(pi_J,Z) indep_p (pi_comp(J),Z) | Z$ for any $P in distributionstimes(Omega)$.
+  // #v(-100pt)
 ]
 
 
 
-]
+])
 == Results
 
 
@@ -759,11 +775,99 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
   for any generating $J$, we have
   $history(X|Z) subset.eq J "a.s."$
 ]
+#pause
 #proof[idea][
   $Sect_(s in S) A_s$ exists up to nullsets.
 ]
 
-#pause 
+#definition[history][
+  $history(X|Z) : Omega -> 2^I$ is the almost surely unique minimal index-set function that generates
+  $X$ given $Z$.
+]
+
+
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+    rects
+    cetz.draw.content((2.5,-1.5),$sigma(Z)$)
+})]
+]
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+    rects
+    cetz.draw.content((2.5,-1.5),$A subset.eq Omega$)
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
+
+    cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    cetz.draw.content((2,2),text(size:2em)[$A$])
+})]
+]
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+    rects
+    cetz.draw.content((2.5,-1.5),$history(1_A|Z)$)
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
+
+    cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    // cetz.draw.content((2,2),text(size:2em)[$A$])
+    // content()
+    cetz.draw.content((0.75,3.5), ${2}$)
+    cetz.draw.content((1.5,1.0), $nothing$)
+    cetz.draw.content((4.0,1.0), ${1}$)
+    cetz.draw.content((2.75,2.75), ${1}$)
+    cetz.draw.content((2.75,4.35), ${1,2}$)
+    cetz.draw.content((4.5,3.5), $nothing$)
+})]
+]
+
+
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+
+    cetz.draw.rect((0,0),(5,5), fill: rgb(173, 216, 230))
+    cetz.draw.rect((2,2),(5,5), fill: rgb(202, 225, 255))
+    
+    cetz.draw.content((2.5,-1.5),$sigma(Z)$)
+    
+})]
+]
+
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+
+    cetz.draw.rect((0,0),(5,5), fill: rgb(173, 216, 230))
+    cetz.draw.rect((2,2),(5,5), fill: rgb(202, 225, 255))
+    cetz.draw.rect((0,0),(1.5,5),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    cetz.draw.content((0.75,2.5),text(size:2em)[$A$])
+    
+    cetz.draw.content((2.5,-1.5),$A subset.eq Omega$)
+    
+})]
+]
+
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+
+    cetz.draw.rect((0,0),(5,5), fill: rgb(173, 216, 230))
+    cetz.draw.rect((2,2),(5,5), fill: rgb(202, 225, 255))
+    cetz.draw.rect((0,0),(1.5,5),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    cetz.draw.content((1.35,1.25),${1,2}$)
+    cetz.draw.content((3.35,3.25),$nothing$)
+    
+    cetz.draw.content((2.5,-1.5),$history(1_A | Z)$)
+    
+})]
+]
+
+#slide[
 #definition[Structural independence][
   $ X orth Y | Z :<=> history(X|Z) sect history(Y|Z) = nothing "a.s." $ 
 ]
@@ -776,73 +880,185 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
 #pause
 #lemma[If ${P in distributionstimes(Omega):X indep_P Y | Z}$ has interior, it is equal to $distributionstimes(Omega)$. ]
 
-#slide(repeat:4, self =>[
-  
+#pause
 #corollary[
   If $forall P in distributionstimes(Omega): X indep_P Y | Z$ then \
   $forall P  in distributionstimes (Omega) : pi_(history(X|Z)) indep_P
   pi_(history(Y|Z)) | Z$.
+]
+
+
   
 ]
 
-#pause
 
-#if self.subslide == 2 {
-figure[#cetz-canvas({
-  covering
-  basic
-  cetz.draw.content((2.5,-1.5),[$sigma(Z)$])
+#slide[
+  #figure[#cetz-canvas({
+    start
+    basic
+    rects
+    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
+    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
+
+    cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    cetz.draw.content((2,2),text(size:2em)[$A$])
 })]
+]
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+    rects
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
 
-} else if self.subslide == 3 {
-figure[#cetz-canvas({
-  covering
-  basic
-  cetz.draw.content((2.5,-1.5),[Let $B subset.eq Omega$, if  $forall P in distributionstimes(Omega): A indep_P B | Z$,])
-  let step = 0.5
-  let y1 = (0,0,0,0,0.4,1.5,1.47,1.4,1.45,1.63)
-  let y2 = (0,2.97,3.2,3.5,3.71,3.84,4,4.27,4.5,4.68)
-  for i in (2,) {
-    cetz.draw.line((step*i,y1.at(i)),(step*i,y2.at(i)))
-  }
-  
-  let x1 = (0,2.08,2.37,2.5,1.94,1.5,1.25,1.5,3,4)
-  let x2 = (0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5)
-  for i in (2,) {
-  cetz.draw.line((x1.at(i),step*i),(x2.at(i),step*i))
-
-  // cetz.draw.circle((3.3,3),radius:1)
-
-  cetz.draw.line((2,3.7),(5,2))
-  cetz.draw.content((2.3,1.8),text(size:2em)[$A$])
-  
-  // cetz.draw.arc-through((3.5,),(2,2),(2,3))
-  }
+    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
+    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    
+    cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    // cetz.draw.content((2,2),text(size:2em)[$A$])
+    // content()
+    cetz.draw.content((0.75,3.5), ${2}$)
+    cetz.draw.content((1.5,1.0), $nothing$)
+    cetz.draw.content((4.0,1.0), ${1}$)
+    cetz.draw.content((2.75,2.75), ${1}$)
+    cetz.draw.content((2.75,4.35), ${1,2}$)
+    cetz.draw.content((4.5,3.5), $nothing$)
 })]
+]
 
-} else if self.subslide == 4 {
-figure[#cetz-canvas({
-  covering
-  basic
-  cetz.draw.content((2.5,-1.5),[Let $B subset.eq Omega$, if  $forall P in distributionstimes(Omega): A indep_P B | Z$,])
-  cetz.draw.content((2.5,-2.7),[then $forall P in distributionstimes(Omega): pi_J indep_P B | Z.$])
-  let step = 0.5
-  let y1 = (0,0,0,0,0.4,1.5,1.47,1.4,1.45,1.63)
-  let y2 = (0,2.97,3.2,3.5,3.71,3.84,4,4.27,4.5,4.68)
-  for i in range(calc.min(y1.len(),y2.len())) {
-    cetz.draw.line((step*i,y1.at(i)),(step*i,y2.at(i)))
-  }
-  
-  let x1 = (0,2.08,2.37,2.5,1.94,1.5,1.25,1.5,3,4)
-  let x2 = (0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5)
-  for i in range(calc.min(x1.len(),x2.len())) {
-  cetz.draw.line((x1.at(i),step*i),(x2.at(i),step*i))
-  }
+#let rectgrids = (
+  cetz.draw.grid((0,2),(1.5,5), step:(5,0.2)),
+  cetz.draw.grid((1.5,3.5),(4,5), step:(0.2,0.2)),
+  cetz.draw.grid((1.5,2.0),(4,3.5), step:(0.2,2.2)),
+  cetz.draw.grid((3,0.0),(5,2.0), step:(0.2,2.2)),
+)
+
+#slide[#figure[#cetz-canvas({
+    start
+    basic
+    rects
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
+
+    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
+    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    
+    cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+
+    rectgrids
+    // cetz.draw.content((2,2),text(size:2em)[$A$])
+    // content()
 })]
-}
+]
 
+#slide[
+  #figure[#cetz-canvas({
+    start
+    basic
+    rects
+    // cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
+    // cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
+
+    cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    cetz.draw.content((2,2),text(size:2em)[$A$])
+})]
+]
+
+#slide[
+  #figure[#cetz-canvas({
+    start
+    basic
+    rects
+    // cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
+    // cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
+
+    // cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    cetz.draw.rect((1.5,1),(5,3),fill:rgb(000,200,100,130), stroke:(dash:"dashed"))
+    // cetz.draw.content((2,2),text(size:2em)[$A$])
+    cetz.draw.content((3,2),text(size:2em)[$B$])
+})]
+]
+
+#slide[
+  #figure[#cetz-canvas({
+    start
+    basic
+    rects
+    // cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
+    // cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
+    // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
+
+    cetz.draw.rect((1.5,1),(5,3),fill:rgb(000,200,100,130), stroke:(dash:"dashed"))
+    cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
+    cetz.draw.content((1.4,2),text(size:2em)[$A$])
+    cetz.draw.content((3.5,2),text(size:2em)[$B$])
+})]
+]
+// #slide(repeat:4, self =>[
+// #if self.subslide == 2 {
+// figure[#cetz-canvas({
+//   covering
+//   basic
+//   cetz.draw.content((2.5,-1.5),[$sigma(Z)$])
+// })]
+
+// } else if self.subslide == 3 {
+// figure[#cetz-canvas({
+//   covering
+//   basic
+//   cetz.draw.content((2.5,-1.5),[Let $B subset.eq Omega$, if  $forall P in distributionstimes(Omega): A indep_P B | Z$,])
+//   let step = 0.5
+//   let y1 = (0,0,0,0,0.4,1.5,1.47,1.4,1.45,1.63)
+//   let y2 = (0,2.97,3.2,3.5,3.71,3.84,4,4.27,4.5,4.68)
+//   for i in (2,) {
+//     cetz.draw.line((step*i,y1.at(i)),(step*i,y2.at(i)))
+//   }
   
-])
+//   let x1 = (0,2.08,2.37,2.5,1.94,1.5,1.25,1.5,3,4)
+//   let x2 = (0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5)
+//   for i in (2,) {
+//   cetz.draw.line((x1.at(i),step*i),(x2.at(i),step*i))
+
+//   // cetz.draw.circle((3.3,3),radius:1)
+
+//   cetz.draw.line((2,3.7),(5,2))
+//   cetz.draw.content((2.3,1.8),text(size:2em)[$A$])
+  
+//   // cetz.draw.arc-through((3.5,),(2,2),(2,3))
+//   }
+// })]
+
+// } else if self.subslide == 4 {
+// figure[#cetz-canvas({
+//   covering
+//   basic
+//   cetz.draw.content((2.5,-1.5),[Let $B subset.eq Omega$, if  $forall P in distributionstimes(Omega): A indep_P B | Z$,])
+//   cetz.draw.content((2.5,-2.7),[then $forall P in distributionstimes(Omega): pi_J indep_P B | Z.$])
+//   let step = 0.5
+//   let y1 = (0,0,0,0,0.4,1.5,1.47,1.4,1.45,1.63)
+//   let y2 = (0,2.97,3.2,3.5,3.71,3.84,4,4.27,4.5,4.68)
+//   for i in range(calc.min(y1.len(),y2.len())) {
+//     cetz.draw.line((step*i,y1.at(i)),(step*i,y2.at(i)))
+//   }
+  
+//   let x1 = (0,2.08,2.37,2.5,1.94,1.5,1.25,1.5,3,4)
+//   let x2 = (0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5)
+//   for i in range(calc.min(x1.len(),x2.len())) {
+//   cetz.draw.line((x1.at(i),step*i),(x2.at(i),step*i))
+//   }
+// })]
+// }
+// ])
+
+
+
 == Compositional Semigraphoid
 
 #counter("theorem").update(12)
@@ -877,6 +1093,24 @@ a quantifier?
 #lemma[
   $J$ disintegrates $Z$ iff $pi_J indep_PP pi_comp(J) | Z$.
 ]
+
+#pause
+
+#proof[idea][
+  $P = f dot PP$, $thick EE_f := integral dot dif PP$. 
+  #pause
+  $thick EE_f (X|Z) = EE(f X|Z)/EE(f|Z). $
+
+  #pause
+
+  $f = product_(i in I) f_i =product_(i in I)
+  underbrace((1_(i in J) f_i + 1_(i in.not J)), pi_J ms)
+  underbrace((1_(i in J) + 1_(i in.not J) f_i), pi_comp(J) ms).
+  $
+]
+
+
+
 #pause
 
 #lemma[
@@ -886,16 +1120,6 @@ a quantifier?
 ]
 
 
-#let rects = (
-  cetz.draw.scale(5),
-  cetz.draw.rect((0, 0), (0.6, 0.4), fill:rgb(173, 216, 230)),
-  cetz.draw.rect((0.6, 0), (1, 0.4), fill:rgb(135, 206, 235)),
-  cetz.draw.rect((0, 0.4), (0.3, 1), fill:rgb(176, 224, 230)),
-  cetz.draw.rect((0.3, 0.4), (0.8, 0.7), fill:rgb(175, 238, 238)),
-  cetz.draw.rect((0.8, 0.4), (1, 1), fill:rgb(202, 225, 255)),
-  cetz.draw.rect((0.3, 0.7), (0.8, 1), fill:rgb(173, 216, 230)),
-  cetz.draw.scale(1/5),
-)
 #slide[
   #figure[#cetz-canvas(
     start,
@@ -917,9 +1141,9 @@ a quantifier?
     basic,
     rects,
     cetz.draw.content((2.5,-1.5),$A in sigma(pi_1,Z), quad B in sigma(pi_2,Z)$),
-    cetz.draw.line((2,0),(2,2),stroke:(dash:"dashed")),
+    cetz.draw.rect((0,0),(2,2),stroke:(dash:"dashed"), fill:rgb(100,100,100,100)),
     cetz.draw.content((1,1),$A$),
-    cetz.draw.line((3,1.5),(5,1.5), stroke:(dash:"dashed")),
+    cetz.draw.rect((3,0),(5,1.5), stroke:(dash:"dashed"), fill:rgb(100,100,100,100)),
     cetz.draw.content((4,0.75),$B$),
 )]} else [
   
@@ -933,7 +1157,7 @@ When $sigma(Z)$ corresponds to a countable partition, this characterizes disinte
 ])
 
 
-== Convergence
+== Conjectures
 
 We can put a metric on sets modulo nullsets by
 $d(A,B) = PP(A triangle.t B)$.
