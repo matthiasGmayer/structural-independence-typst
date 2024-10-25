@@ -271,6 +271,7 @@ There is a nice graphical criterion:
   #diaglist.at(self.subslide, default:none)
   ])
 
+== $d$-separation
 #slide[
   We write $orth_d$ for the $d$-separation relation.
   #theorem[
@@ -335,6 +336,8 @@ all inde-pendencies are characterized by $d$-separation. We say $G$ is a perfect
 // $X orth_d Y | Z <=> {P in distributions(G): X indep_P Y | Z}$ has interior.
 // ]
 
+#v(-20pt)
+
 #table(columns: 2, stroke: none, column-gutter: 1em)[
 #fletcher-diagram(
   node-stroke: .1em,  
@@ -349,7 +352,11 @@ all inde-pendencies are characterized by $d$-separation. We say $G$ is a perfect
 )
 ][
   #pause
-  In a sense, we can see that this is not too strong an assumption.
+  #v(-25pt)
+  We can then infer the set of graphs $G'$, in which
+  $X orth_(d) Y | Z <=> X indep_PP Y | Z$.
+  #pause
+  The assumption that $G$ is a perfect of $PP$ is not too strong.
   #pause
   #theorem[
   $X orth_d Y | Z <=> {P in distributions(G): X indep_P Y | Z}$ has interior.
@@ -359,8 +366,8 @@ all inde-pendencies are characterized by $d$-separation. We say $G$ is a perfect
   // $X indep_P Y | Z$ holds contrary to $d$-separation is nowhere dense and closed.
 
   #pause
-  It is known that it is impossible to infer the whole graph in general.
-  The equivalence classes that you can infer are called _markov equivalence classes_.
+  This set of inferred Graphs is called _markov equivalence classes_.
+  In general it will have more than one element.
   // #definition[
   //   A bayesian network is a directed graph $G=(V,E)$
   //   with a probability distribution $PP$ over $V$, s.t.
@@ -566,7 +573,7 @@ without quantifying over $distributionstimes (Omega)?$
 
 #pause
 
-Note the similarity to the graph situtation:
+Note the similarity to the previous situtation:
 
   #figure[
 #fletcher-diagram(
@@ -766,7 +773,7 @@ figure[#cetz-canvas({
 ])
 
 
-== Definitions
+== The Result
 
 #theorem[
   For each choice of $X$ and $Z$ we can choose a $sigma(Z) ms$ index-set function
@@ -836,7 +843,7 @@ $X$ is $sigma(pi_J,Z,NS) ms$ and $J$ disintegrates $Z$.
 
 
 ])
-== Results
+== Construction
 
 
 #lemma[
@@ -937,6 +944,7 @@ $X$ is $sigma(pi_J,Z,NS) ms$ and $J$ disintegrates $Z$.
 })]
 ]
 
+== Results
 #slide[
 #definition[Structural independence][
   $ X orth Y | Z :<=> history(X|Z) sect history(Y|Z) = nothing "a.s." $ 
@@ -1155,7 +1163,8 @@ By composition, pairwise structural independence and structural independence are
 
 == Disintegration
 
-The definition of disintegration is not satisfactory.
+The definition of disintegration is not satisfactory, because it uses a quantifier.
+#pause
 Can we characterize
 $forall P in distributionstimes(Omega) : pi_J indep_P pi_comp(J) | Z$ without
 a quantifier?
@@ -1239,7 +1248,7 @@ $d(A,B) = PP(A triangle.t B)$.
 
 #lemma[
   $A_n -> nothing $ if and only if every subsequence has a subsequence s.t.
-  $lim sup A_n = nothing$
+  $lim sup A_n = nothing$.
 ]
 
 #pause
@@ -1249,7 +1258,7 @@ $d(A,B) = PP(A triangle.t B)$.
 #conjecture[
   There is a sense of convergence of $sigma$-algebras that only depends on nullsets, s.t.
   $J$ disintegrates $Z$ iff there is a sequence of
-  partitions $BS_n$ with rectangular parts, s.t.
+  finite partitions $BS_n$ with rectangular atoms, s.t.
   $sigma(BS_n) -> sigma(Z)$.
 ]
 
@@ -1309,7 +1318,7 @@ $tilde(history)(X|Z) = comp(history(X|Z))$.
   #theorem[
     If $forall P in distributionstimes(Omega): A indep_p B | Z$,
     \ then
-    $tilde(history)(A|Z) union tilde(history)(B|Z) = I "a.s."$.
+    $tilde(history)(A|Z) union tilde(history)(B|Z) = I "a.s."$
   ]
 ]
 
