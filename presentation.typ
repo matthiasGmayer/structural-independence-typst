@@ -12,6 +12,8 @@
 #let generates = "generates"
 #let given = "given"
 
+#let powerset = math.frak("P")
+
 // cetz and fletcher bindings for touying
 #let cetz-canvas = touying-reducer.with(reduce: cetz.canvas, cover: cetz.draw.hide.with(bounds: true))
 #let fletcher-diagram = touying-reducer.with(reduce: fletcher.diagram, cover: fletcher.hide)
@@ -83,10 +85,12 @@ and causal discovery, and their limitations for making sense of structure in obs
 The main theorem justifies this definition by showing the equivalence to
 independence in all product probability distributions on the product space, generalizing soundness and completeness of $d$-separation._]
 
+#text(size:0.8em)[This work is an extension of Scott Garrabrant's Finite Factored Sets to General Spaces.]
+
 = Background
 
 == Structure
-Let $V$ be a set of variables and $PP$ a distributions over those.
+Let $V$ be a set of random variables and $PP$ their joint probability distribution. 
 What can we tell about the structure that the variables $V$ have?
 (Assume finiteness for now)
 
@@ -124,15 +128,15 @@ What can we tell about the structure that the variables $V$ have?
     Let $distributions(G)$ be the set of all $PP$ compatible with $G$.
 
 
-    #only("6-7")[
+    #only("7-8")[
     In this example: \
     $V_2 indep_PP V_3 | V_1$
     ]
-    #only("7")[
+    #only("8")[
     $quad quad quad V_4 indep_PP V_1 | V_2, V_3$
     ]
 
-    #only("8")[
+    #only("9")[
     Equivalently, for all $v = (v_X)_(X in V) in Val(V)$,
     $ PP(V=v) = product_(X in V) PP(X=v_X|PA(X)=v_PA(X)) $
     ]
@@ -325,7 +329,7 @@ There is a nice graphical criterion:
 We want to infer the structure of the graph given $PP$. \
 #pause
 Realizability assumption: $PP$ is compatible with a graph and
-all inde-pendencies are characterized by $d$-separation. We say $PP$ is a perfect map.
+all inde-pendencies are characterized by $d$-separation. We say $G$ is a perfect map of $PP$.
 // #pause
 // #theorem[
 // $X orth_d Y | Z <=> {P in distributions(G): X indep_P Y | Z}$ has interior.
@@ -472,6 +476,7 @@ so that we can infer more structure.
       edge((2,0),"-|>"),
   
       node((4.3,1), $V_1 indep V_1 + V_2$, stroke:none,fill:none),
+      node((4.3,2), "etc.", stroke:none,fill:none),
   )
   ]
 } else {
@@ -489,6 +494,7 @@ so that we can infer more structure.
       edge((2,0),"--|>"),
   
       node((4.3,1), $V_1 indep V_1 + V_2$, stroke:none,fill:none),
+      node((4.3,2), "etc.", stroke:none,fill:none),
   )
   ]
 
@@ -525,25 +531,42 @@ so that we can infer more structure.
 == Setting
 
 Let $I$ be an arbitrary index set.
+#pause 
+
+For $i in I$, let $(Omega_i,AS_i)$ be a measurable space.
 
 #pause
 
-$(Omega, AS) := Times.circle_(i in I) (Omega_i, AS_i)$.
+Let $(Omega, AS) := Times.circle_(i in I) (Omega_i, AS_i)$.
 
 #pause
-Reference measure: $PP = times.big_(i in I) PP_i$, where $PP_i in distributions (Omega_i)$.
+We build a reference probability measure:
+For $i in I$ let $PP_i in distributions (Omega_i)$ and set
+$PP := times.big_(i in I) PP_i$. We complete $AS$ w.r.t. $PP$.
 
 #pause
 $distributionstimes (Omega) := {Times_(i in I) P_i << PP | forall i in I: P_i in distributions(Omega_i)}$.
 
-
 #pause
+
+In the following, let $(Omega',AS')$ be any measurable space. \
+We will use $X,Y,Z$ as names for random functions from $Omega -> Omega'$.
+
+The theory only depends on their $sigma$-algebras $sigma(X),sigma(Y),sigma(Z)$.
+
+
+#slide[
+  
+Recall the definition of independence w.r.t. $P in distributions(Omega)$: \
+$X indep_P Y | Z :<=> forall A in sigma(X), B in sigma(Y)  : P(A|Z)P(B|Z) =^"a.s." P(A,B|Z) #h(-100pt) $
+
 Question: Can we characterize
-$forall P in distributionstimes (Omega) : X indep_P Y | Z?
-$
-Recall: $X indep_P Y | Z :<=> forall A in sigma(X), B in sigma(Y)  : P(A|Z)P(B|Z) =^"a.s." P(A,B|Z) #h(-100pt) $
+$forall P in distributionstimes (Omega) : X indep_P Y | Z$
+without quantifying over $distributionstimes (Omega)?$
 
 #pause
+
+Note the similarity to the graph situtation:
 
   #figure[
 #fletcher-diagram(
@@ -563,13 +586,22 @@ Recall: $X indep_P Y | Z :<=> forall A in sigma(X), B in sigma(Y)  : P(A|Z)P(B|Z
   
 )
 ]
+#pause
+In the following $P$ will be used for $P in distributionstimes(Omega)$.
+]
+
 
 
 == Definitions
 
 
+We want to formalize that $X$ depends on a projection $pi_J$ where $J subset.eq I$ depends on the realizations of $Z$.
+#pause
+Morally, if then $Y$ depends on $pi_K$ and $J sect K = nothing$, then we should have $X indep_P Y | Z$,
+because $pi_J indep_P pi_K$.
 
-#definition[Index-set function][We call a measurable mapping $J : Omega -> 2^I$ an index-set function.]
+
+#definition[Index-set function][We call a measurable mapping $J : Omega -> powerset(I) tilde.eq {0,1}^I$ an index-set function.]
 
 #pause
 
@@ -579,6 +611,7 @@ For $J subset.eq I$, let $pi_J : Omega -> Times_(i in J) Omega_i$ be the project
 
 #definition[Generalized projection][
   For an index-set function $J$, let $pi_J (omega) = pi_(J (omega)) (omega)$ with signature
+  #v(-30pt)
 $ pi_J : Omega -> Union_(I_0 subset.eq I) (times.big_(i in I_0) Omega_i) $
 ]
 
@@ -698,7 +731,7 @@ figure[#cetz-canvas({
   start
   covering
   basic
-  cetz.draw.content((2.5,-1.5),[$J:Omega->2^I$])
+  cetz.draw.content((2.5,-1.5),[$J:Omega->powerset(I)$])
   cetz.draw.content((1.2,4.2),[$nothing$])
   cetz.draw.content((0.8,1.2),[${1}$])
   cetz.draw.content((3.8,0.8),[${2}$])
@@ -733,30 +766,67 @@ figure[#cetz-canvas({
 ])
 
 
-
-
 == Definitions
+
+#theorem[
+  For each choice of $X$ and $Z$ we can choose a $sigma(Z) ms$ index-set function
+  denoted by $history(X|Z) : Omega -> powerset(I)$, s.t. the family $(history(X|Z))_(X,Z)$ of index-set functions fulfills:
+
+  #pause
+
+  #v(-10pt)
+  $
+  history(X|Z)(omega) sect history(Y|Z)(omega) = nothing "for a.e." omega <=> forall P in distributionstimes(Omega): X indep_P Y | Z.
+  $
+
+  #v(-10pt)
+  #pause
+
+  Furthermore, $history$ has the following properties:
+  #pause
+  $
+  history(Z|Z)(omega) = nothing "for a.e." omega,
+  $
+
+  #pause
+  $
+  sigma(X) subset.eq sigma(Y) => history(X|Z)(omega) subset.eq history(Y|Z)(omega) "for a.e." omega,
+  $
+  #pause
+  $
+  history(pi_i|Z)(omega) != nothing <=> i in history(pi_i|Z) (omega) "for a.e." omega.
+  $
+
+
+  #pause
+  We will now construct $history(X|Z)$.
+]
+
+
+
+== Construction
 #slide(repeat:5, self => [
+// We want to construct $history(X|Z)$.
   
 #definition[Disintegration][$J disintegrates Z$ iff
 $ forall P in distributionstimes(Omega): pi_J indep_P pi_comp(J) | Z. $]
 
 #pause
-#definition[Generation][Let $J$ be a $Z ms$ index-set function.
+#definition[Generation][Let $NS = {A in AS:PP(A)=0}$. Let $J$ be a $sigma(Z) ms$ index-set function.
 $J$ generates $X$ given $Z$ if
-$X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
+$X$ is $sigma(pi_J,Z,NS) ms$ and $J$ disintegrates $Z$.
 ]
 
 #pause
 #lemma[
-  If $J generates X$ given $Z$ and $K generates Y$ given $Z$ and
-  $J sect K =^"a.s." nothing$ then
+  If $J generates X$ given $Z$, and $K generates Y$ given $Z$, and
+  $J(omega) sect K(omega) = nothing "for a.e." omega$, then
   $forall P in distributionstimes(Omega) : X indep_P Y | Z$.
 ]
 #pause
 #proof[
-  By the definition of generation, we have $sigma(X) subset.eq sigma(pi_J,Z)$ and likewise
-  by assumption $sigma(Y) subset.eq sigma(pi_comp(J),Z).$
+  By the definition of generation, we have $sigma(X) subset.eq sigma(pi_J,Z,NS)$ and likewise
+  by assumption $sigma(Y) subset.eq sigma(pi_K,Z,NS) subset.eq sigma(pi_comp(J),Z,NS).$
   #pause
   Disintegration gives
   $(pi_J,Z) indep_p (pi_comp(J),Z) | Z$ for any $P in distributionstimes(Omega)$.
@@ -771,9 +841,9 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
 
 #lemma[
   There exists a minimal generating index-set function for $X$ given $Z$.
-  Denote this minimal element by $history (X|Z)$. I.e.
-  for any generating $J$, we have
-  $history(X|Z) subset.eq J "a.s."$
+  I.e. There is a generating index-set function $M$, s.t.
+  for all generating index-set functions $J$, we have
+  $M subset.eq J "a.s."$
 ]
 #pause
 #proof[idea][
@@ -878,7 +948,7 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
   $
 ]
 #pause
-#lemma[If ${P in distributionstimes(Omega):X indep_P Y | Z}$ has interior, it is equal to $distributionstimes(Omega)$. ]
+#lemma[If ${P in distributionstimes(Omega):X indep_P Y | Z}$ has interior, then \  $forall P in distributionstimes(Omega): X indep_P Y | Z$. ]
 
 #pause
 #corollary[
@@ -897,8 +967,8 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
     start
     basic
     rects
-    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
-    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B | Z$) 
+    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B | Z$)
     // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
     // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
 
@@ -913,8 +983,8 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
     // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
     // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
 
-    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
-    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B | Z$) 
+    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B | Z$)
     
     cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
     // cetz.draw.content((2,2),text(size:2em)[$A$])
@@ -942,8 +1012,8 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
     // cetz.draw.line((3.5,0),(3.5,4),stroke:(dash:"dashed"))
     // cetz.draw.line((3.5,4),(0,4),stroke:(dash:"dashed"))
 
-    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B$) 
-    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B$)
+    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B | Z$) 
+    cetz.draw.content((2.5,-2.1), $=> forall P in distributionstimes(Omega) : pi_history(1_A|Z) indep_P B | Z$)
     
     cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
 
@@ -999,6 +1069,7 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
     cetz.draw.rect((0,0),(3.5,4),fill:rgb(100,100,100,130), stroke:(dash:"dashed"))
     cetz.draw.content((1.4,2),text(size:2em)[$A$])
     cetz.draw.content((3.5,2),text(size:2em)[$B$])
+    cetz.draw.content((2.5,-1.25),$forall P in distributionstimes(Omega): A indep_P B | Z$) 
 })]
 ]
 // #slide(repeat:4, self =>[
@@ -1078,6 +1149,7 @@ $X$ is $sigma(pi_J,Z) ms$ and $J$ disintegrates $Z$.
   $
 ]
 
+#pause
 By composition, pairwise structural independence and structural independence are equivalent.
 
 
@@ -1097,7 +1169,7 @@ a quantifier?
 #pause
 
 #proof[idea][
-  $P = f dot PP$, $thick EE_f := integral dot dif PP$. 
+  $P = f dot PP$, $thick EE_f := integral dot dif P$. 
   #pause
   $thick EE_f (X|Z) = EE(f X|Z)/EE(f|Z). $
 
@@ -1125,7 +1197,8 @@ a quantifier?
     start,
     basic,
     rects,
-    cetz.draw.content((2.5,-1.5),${1} disintegrates Z.$)
+    cetz.draw.content((2.5,-1.2),$(omega |-> {1}) disintegrates Z,$),
+    cetz.draw.content((2.5,-2.1),$"i.e." forall P in distributionstimes(Omega): pi_1 indep_P pi_2 | Z.$),
   )]
 ]
 
@@ -1182,6 +1255,66 @@ $d(A,B) = PP(A triangle.t B)$.
 
 
 
+==
+  #v(100pt)
+  #align(center)[#text(size:2em)[Thanks for listening.]]
+  #align(center)[#text(size:3em)[Questions?]]
+
+
+
+#show: appendix
+
+== Appendix: Proof Ideas
+
+
+We define a dual object to the history
+
+#definition[$J$ is irrelevant to $X$ given $Z$, if
+#only("-1")[...]
+\
+#pause
+$forall i in I: forall P, Q in distributionstimes(Omega) "with" forall j in I without {i} : P_j = Q_j$, we have
+#only("-2")[...]
+#pause
+for any $A in sigma(X)$ that
+$i in J(omega) => P(A|Z)(omega) = Q(A|Z)(omega).$ 
+]
+
+#pause
+#lemma[A maximal irrelevant $J$ exists.]
+
+#pause
+
+#definition[Set $tilde(history) (X|Z)$ to this maximal index-set function.]
+
+
+#pause
+#theorem[
+$tilde(history)(X|Z) = comp(history(X|Z))$.
+]
+
+#slide[
+  #theorem[mutual exclusion principle][
+    
+    If $forall P in distributionstimes(Omega): A indep_P B | Z$, then \
+    #pause
+    $forall i in I: forall P,Q in distributionstimes(Omega) "with " forall j in I without {i} : P_j = Q_j$, we have
+    #pause
+
+    $(P(A|Z) - Q(A|Z))(P(B|Z) - Q(B|Z)) = 0 "a.s."$ 
+  ]
+
+  #pause
+
+  #theorem[
+    If $forall P in distributionstimes(Omega): A indep_p B | Z$,
+    \ then
+    $tilde(history)(A|Z) union tilde(history)(B|Z) = I "a.s."$.
+  ]
+]
+
+
+// $tilde(history) (X|Z) = {i in I : forall P, Q in distributionstimes(Omega) "with" forall j in I without {i} : P_j = Q_j }$
 
 
 
