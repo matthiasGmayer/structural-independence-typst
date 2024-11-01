@@ -1011,9 +1011,9 @@ It remains to show that generation is closed under chains.
 ]
 
 #lemma[
-  Let $(S,<)$ be a totally ordered set.
+  Let $(S,<=)$ be a totally ordered set.
   Let $(J_s)_(s in S)$ be a family of random index sets that disintegrate $Z$.
-  s.t. $forall s,t in S : s < t => J_s subsetaseq J_t$.
+  s.t. $forall s,t in S : s <= t => J_s subsetaseq J_t$.
   Then $Sect^astext_(s in S) J_s$ disintegrates $Z.$
 ] <lem:disintegration_chain>
 #proof[
@@ -1064,7 +1064,7 @@ It remains to show that generation is closed under chains.
 ]
 
 #lemma[
-  Let $(S,<)$ be a totally ordered set.
+  Let $(S,<=)$ be a totally ordered set.
   Let $(J_s)_(s in S)$ be a family of random index sets that generate $X$ given $Z$.
   s.t. $forall s,t in S : s <= t => J_s subsetaseq J_t$.
   Then $Sect^astext_(s in S) J$ generates $Z$ given $X$
@@ -1132,113 +1132,11 @@ We are now ready to define structural independence in terms of histories.
   $
   X orth Y | Z :<=> history(X|Z) sect history(Y|Z) aseq nothing.
   $
-]
+] <def:structural_independence>
 
 
 // We now want to see that all desiderata from @des:history are fulfilled and determine the history almost surely uniquely.
 In the next section we prove the fundamental theorem of structural independence that is listed in @des:history#[.2] and states that this definition of structural independence characterizes all the independencies that are implied by our assumptions.
-
-// #theorem[
-// + $history(X|Z)$ is a $sigma(Z) ms$ random index set.
-// + Almost sure disjointess of the histories characterizes independence for all product distributions in $distributionstimes$. 
-//   More precisely,
-//   $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
-//   $
-// + Let $J$ be a random index set.
-//   Whenever $U_J$ depends on $U$, it should depend on it through $J$.
-//   Morally, we require that for a.e. $omega in {J != nothing}$ we have
-//   $J(omega) subset.eq history(X|Z) (omega)$.
-//   As we have seen, ${J != nothing}$ and ${J subset.eq history(X|Z)}$ are not measurable in general,
-//   so formalizing this requires some care.
-//   // For a.e. $omega in Omega$, $history(U_i|Z)(omega) != nothing => i in history(U_i|Z)(omega)$.
-//   // for any $i,j in I$, we require for a.e. $omega in {j in J}$, that
-//   // $i in history(U_J|Z)(omega) => j in history(U_J|Z)(omega)$.
-// + Monotonicity: if $sigma(X) subset.eq sigma(Y)$ then $history(X|Z) subsetaseq history(Y|Z)$.
-// + Given $Z$, $Z$ should not depend on $U$: $history(Z|Z) aseq nothing$.
-// ]
-
-// #lemma[
-//   Let $J$ and $K$ be generating random index sets of $X$ given $Z$.
-//   Then $J sect K$ generates $X$ given $Z$.
-// ]
-// #proof[
-//   We first need to prove that $J sect K$ disintegrates $Z$.
-// ]
-
-
-//   Let $P in distributionstimes(F,NS)$.
-//   We first show $pi_(J sect K) indep_P pi_(comp(J sect K)) | ZF$.
-//   For $i ,j in {0,1}$, let $M_(i j) = {J'_i sect K'_j}$ where $ J'_0 = J, J'_1 = comp(J)$, etc.
-//   Let $A_(i j) in M_(i j)$.
-//    We have
-//   $
-//   (pi_M_00, pi_M_01) indep_P (pi_M_10, pi_M_11) |ZF, quad "(1)" \
-//   (pi_M_00, pi_M_10) indep_P (pi_M_01, pi_M_11) |ZF, quad "(2)" \
-//   $
-//   Now $
-//   P(sect.big_(i j) A_(i j) | ZF) 
-//   &=^"(1)" P(A_00 sect A_01 | ZF) dot P(A_10 sect A_11 | ZF) \
-//   &=^"(2)" product_(i j) P(A_(i j) | ZF).
-//   $
-
-//   Now since sets of the form $A_01 sect A_10 sect A_11$ generate $pi_comp(J sect K)$ and are $sect$-stable,
-//   we have that $pi_(J sect K) indep_P pi_comp(J sect K) | ZF$.
-
-//   It remains to show $XF functionOf^* (pi_(J sect K),ZF)$.
-//   Since $pi_(J sect K) indep_P pi_(J without K) | ZF$, we have
-//   $P(pi_(J without K) | ZF) = P(pi_(J without K) | pi_(J sect K), ZF)$.
-//   Since the same holds true for $K without J$, we get
-//   $pi_(J without K) indep_P pi_(K without J) | pi_(J sect K) , ZF $ and therefore
-//   $pi_(J) indep_P pi_(K) | pi_(J sect K) , ZF$.
-  
-
-//   We claim $sigma(pi_J,ZF) sect sigma(pi_K, ZF) =^"a.s." sigma(pi_(J sect K),ZF)$.
-
-//   '$supset.eq$': Trivial. \
-//   '$scripts(subset.eq)^*$':  
-//   Let $A in sigma(pi_J,ZF) sect sigma(pi_K, ZF)$ and $BS = sigma(pi_(J sect K), ZF)$.
-//   Then $A indep_P A | BS$.
-//   Therefore, $P(A|BS) = 1_B$ for a $B in BS$.
-//   We claim $P(A triangle.t C) = 0$.
-//   We have $P(A without C) = E(P(A without C | BS)) = E(1_(C^c) P(A without C | BS)) = E(0)=0$, we have
-//   $P(A without C) = 0$. Similarly, $P(C without A | BS) = 0 $ and therefore $P(C without A) = 0$.
-// ]
-// #lemma[
-//   For $n in NN$, let $J^n generates XF | ZF$.
-//   Let $J = sect.big_(n in NN) J^n$.
-//   Then $J generates XF | ZF$.
-// ]
-// #proof[
-//   Let $K^n = sect.big_(k <= n) J^k$. Clearly, $K^n generates XF | ZF$ and $K^n arrow.b J$.
-
-//   We first show $pi_J indep_P pi_comp(J) | ZF$.
-//   Since $sigma(pi_J) subset.eq sigma(pi_(K^n))$, we have
-//   $pi_J indep_P pi_comp(K^n) | ZF$.
-//   Now $comp(K^n) arrow.t comp(J)$.
-//   Clearly, $union.big_(n in NN) sigma(pi_comp(K^n))$ is $sect$-stable and by 
-//   #tref[index set union] a generator of $comp(J)$.
-//   Therefore, $pi_J indep_P pi_comp(J) | ZF$.
-
-//   We now show $XF functionOf^* (pi_J,ZF)$.
-//   Let $BS = sect.big_(n in NN) sigma(pi_(K^n),ZF)$ and $CS = sigma(pi_J,ZF)$
-  
-//   '$BS supset.eq CS$' : Trivial. \
-//   '$BS scripts(subset.eq)^* CS$': 
-//   From $pi_J indep_P pi_comp(J) | ZF $, we have
-//   $ pi_J &indep_P pi_(K^n without J) | ZF,  \
-//   pi_J &indep_P pi_comp(K^n) | ZF
-//   $
-//   Therefore, $pi_(K^n) indep pi_(comp(K^n) union J) | CS$.
-
-//   Clearly, $union.big_(n in NN) sigma(pi_(comp(K^n) union J))$ is a $sect$-stable generator of $AS$
-//   and therefore $BS indep_P AS | CS$.
-//   Now, since $BS subset.eq AS$, we have $BS indep_P BS | CS$ and therefore $BS subset.eq sigma(CS,NS)$.
-// ]
-
-
-
-
-
 
 
 
@@ -1247,6 +1145,99 @@ In the next section we prove the fundamental theorem of structural independence 
 
 = The Fundamental Theorem of Structural Independence
 <sec:fundamental_theorem>
+
+The goal of this section is to prove that structural independence (@def:structural_independence) characterizes
+independence in all product distributions $P in distributionstimes$.
+
+More precisely, our goal is to prove
+$
+forall P in distributionstimes: X indep_P Y | Z
+<=>
+history(X|Z) sect history(Y|Z) aseq nothing
+.
+$
+This is @des:history#[.2] for the history map.
+
+One direction is essentially implied directly by the definition of generation.
+#theorem[Soundness of structural independence][
+  Structural independence is sound.
+  For any possible realization of a product probability distribution $P in distributionstimes$, structural independence implies independence.
+  More precisely,
+  $X orth Y | Z => forall P in distributionstimes : X indep_P Y | Z$.
+]
+#proof[
+  Let $P in distributionstimes$.
+  Since $J :=history(X|Z)$ generates $X$ given $Z$, we have
+  $sigma(X) subset.eq sigma(U_J,Z,AS|_{J aseq I})$
+  and $U_J indep_P U_comp(J) | Z$.
+  Likewise with @lem:as_union_random_index_set and $history(Y|Z) subsetaseq comp(J)$,
+  $sigma(Y) subset.eq sigma(U_history(Y|Z), Z, AS|_{history(Y|Z) aseq I}) subset.eq sigma(U_comp(J), Z, AS|_{comp(J) aseq I})$.
+  Let $A in sigma(U_J,Z,AS|_{J aseq I})$ and $B in sigma(U_comp(J),Z,AS|_{comp(J) aseq I})$.
+  Clearly, it suffices to show that $A sect C indep_P B sect C | Z$ for $C in {{J aseq I},{comp(J) aseq I},
+  Omega without ({J aseq I} union {J aseq nothing})} subset.eq sigma(Z)$.
+  + If $C = {J aseq I}$, then $B sect C in sigma(U_comp(J),Z,AS|_{comp(J) aseq I})|_C = sigma(Z)|_C$, so the independence is trivial.
+  + Similarly, if $C = {comp(J) aseq I}$, then $A sect C in sigma(Z)|_C$ and the independence is trivial.
+  + If $C = Omega without ({J aseq I} union {comp(J) aseq I})$, then
+    $A sect C in sigma(U_comp(J),Z,AS|_{J aseq I})|_C subset.eq sigma(U_J,Z)$.
+    Similarly, $B sect C in sigma(U_comp(J),Z)$.
+    Since $U_J indep_P U_comp(J) | Z$, the independence follows. #qedhere
+]
+
+
+To prove the other direction, completeness, we define a dual notion to the history and generation, irrelevance.
+While history and generation talk about depending, irrelevance talks about there being no information.
+
+To motivate this notion we look at a simple lemma.
+#notation[
+  For ease of notation, we index $P in distributionstimes$ to
+  refer to the pushforward under $U_J$.
+  More precisely, let $J$ be a random indexset, then
+  $P_J := P_U_J$.
+]
+#lemma[
+  Let $i in I$ and $P, Q in distributionstimes$, s.t.
+// $P$ and $Q$ differ only for $U_i$,
+  // i.e. $P_comp({i}) = Q_comp({i})$.
+  // i.e.
+  there is a $sigma(U_i) ms$ density $f:Omega -> RR$, s.t. $P = f dot Q$.
+  Then for all $A in sigma(X)$ we have
+  $P(A|Z)(omega) = Q(A|Z)(omega)$ for a.e. $omega in {i in comp(history(X|Z))}$.
+]
+#proof[
+  Let $J := history(X|Z)$
+  It suffices to show that $P(A|Z) = Q(A|Z)$
+  for all $A in sigma(U_J,Z,AS|_{J aseq I})|_{i in comp(J)} = sigma(U_J,Z)|_{i in comp(J)}$.
+  Let $A=B sect C$, where $B in sigma(U_J)$ and $C in sigma(Z)|_{i in comp(J)}$.
+  Since sets of this form are sect stable and generate $sigma(U_J,Z)|_{i in comp(J)}$,
+  and ${A in AS: P(A|Z) aseq Q(A|Z)}$ is a dynkin system,
+  it suffices to show the statement for such $A$.
+  Note that $1_C f indep_P B | Z$, since $J$ disintegrates $Z$ and
+  $sigma(1_C f) subset.eq sigma(U_comp(J))$ and 
+  $B in sigma(U_J)$.
+  Let $E$ denote the expectation w.r.t. $Q$.
+  Now
+  $P(A|Z) aseq E(1_C f 1_B|Z)/E(f|Z)  aseq  (E(1_C f|Z)E(1_B|Z))/EE(f|Z)  aseq  1_C E(1_B|Z)  aseq  Q(A|Z)$.
+]
+
+This lemma tells us, that when we change the distribution of $U_i$, we cannot change
+$P(A|Z)$ in the region ${i in.not history(X|Z)}$.
+This is a dual notion to the dependance of history.
+This motivates the following definition.
+
+#definition[
+  Let $distributionstimes2(i) := {(P,Q) in distributionstimes times distributionstimes: exists f : Omega -> RR, sigma(U_i) ms, s.t. P = f dot Q}$.
+]
+
+#definition[
+  Let $J$ be a $sigma(Z) ms$ random index set.
+  We say $J$ is irrelevant to $X$ given $Z$, if for any $i in I$ and
+  $(P,Q) in distributionstimes2(i)$, we have
+  $P(A|Z) = Q(A|Z)$ for all $A in sigma(X)$.
+  $frak("I")$
+]
+
+
+
 
 
 
