@@ -705,7 +705,7 @@ Let $Sigma$ denote the set of all sub sigma algebras of $AS$.
 Our goal is to construct a map we will call history, $history(dot|dot) : Sigma times Sigma -> powerset(I)^Omega$
 that measures the dependence on $U$ of a sigma algebra given another sigma algebra with a random index set.
 We write $history(X|Z)$ for $history(sigma(X)|sigma(Z))$.
-We now give a list of desiderata that will be shown to completely determine $history$ almost surely.
+We now give a list of desiderata that will be shown to completely determine $history$ almost surely in an appropriate sense.
 
 #custombox("Desiderata")([
 + $history(X|Z)$ is a $sigma(Z) ms$ random index set.
@@ -713,11 +713,18 @@ We now give a list of desiderata that will be shown to completely determine $his
   More precisely,
   $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
   $
-+ Whenever $U_i$ depends on $U$, it should depend on $U_i$. More precisely,
-  For a.e. $omega in Omega$, $history(U_i|Z)(omega) != nothing => i in history(U_i|Z)(omega)$.
++ Let $J$ be a random index set.
+  Whenever $U_J$ depends on $U$, it should depend on it through $J$.
+  Morally, we require that for a.e. $omega in {J != nothing}$ we have
+  $J(omega) subset.eq history(X|Z) (omega)$.
+  As we have seen, ${J != nothing}$ and ${J subset.eq history(X|Z)}$ are not measurable in general,
+  so formalizing this requires some care.
+  // For a.e. $omega in Omega$, $history(U_i|Z)(omega) != nothing => i in history(U_i|Z)(omega)$.
+  // for any $i,j in I$, we require for a.e. $omega in {j in J}$, that
+  // $i in history(U_J|Z)(omega) => j in history(U_J|Z)(omega)$.
 + Monotonicity: if $sigma(X) subset.eq sigma(Y)$ then $history(X|Z) subsetaseq history(Y|Z)$.
 + Given $Z$, $Z$ should not depend on $U$: $history(Z|Z) aseq nothing$.
-])
+]) <des:history>
 
 Our construction will mimic the finite case (@def:finite_generation).
 Specifically, we first define what it means for a random indexset $J$
@@ -1117,6 +1124,38 @@ It remains to show that generation is closed under chains.
   @thm:history_exists implies that $history(X|Z)$ generates $X$ given $Z$.
 ]
 
+We are now ready to define structural independence in terms of histories.
+
+#definition[
+  $X$ and $Y$ are structurally independent given $Z$, if their histories are almost surely disjoint.
+  More precisely,
+  $
+  X orth Y | Z :<=> history(X|Z) sect history(Y|Z) aseq nothing.
+  $
+]
+
+
+// We now want to see that all desiderata from @des:history are fulfilled and determine the history almost surely uniquely.
+In the next section we prove the fundamental theorem of structural independence that is listed in @des:history#[.2] and states that this definition of structural independence characterizes all the independencies that are implied by our assumptions.
+
+// #theorem[
+// + $history(X|Z)$ is a $sigma(Z) ms$ random index set.
+// + Almost sure disjointess of the histories characterizes independence for all product distributions in $distributionstimes$. 
+//   More precisely,
+//   $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
+//   $
+// + Let $J$ be a random index set.
+//   Whenever $U_J$ depends on $U$, it should depend on it through $J$.
+//   Morally, we require that for a.e. $omega in {J != nothing}$ we have
+//   $J(omega) subset.eq history(X|Z) (omega)$.
+//   As we have seen, ${J != nothing}$ and ${J subset.eq history(X|Z)}$ are not measurable in general,
+//   so formalizing this requires some care.
+//   // For a.e. $omega in Omega$, $history(U_i|Z)(omega) != nothing => i in history(U_i|Z)(omega)$.
+//   // for any $i,j in I$, we require for a.e. $omega in {j in J}$, that
+//   // $i in history(U_J|Z)(omega) => j in history(U_J|Z)(omega)$.
+// + Monotonicity: if $sigma(X) subset.eq sigma(Y)$ then $history(X|Z) subsetaseq history(Y|Z)$.
+// + Given $Z$, $Z$ should not depend on $U$: $history(Z|Z) aseq nothing$.
+// ]
 
 // #lemma[
 //   Let $J$ and $K$ be generating random index sets of $X$ given $Z$.
