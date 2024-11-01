@@ -13,7 +13,7 @@
 #let supp = "supp"
 #let comp = math.overline
 #let distributions=[$triangle.t$#h(0pt)]
-#let distributionstimes=[$triangle.t^(#h(-0.25em)times)$#h(-4pt)]
+#let distributionstimes=[$triangle.t^(#h(-0.25em)times)$#h(-0.0em)]
 #let indep = math.scripts(math.class("relation")[
   #move(dy:0.045em)[#scale(origin: bottom, y:140%)[#sym.tack.t.double]]
 ])
@@ -28,3 +28,8 @@
 #let Times = math.times.big
 #let And = math.and.big
 #let Or = math.or.big
+
+#let powerset = math.frak("P")
+
+#let subsetaseq = $subset.eq^#text(size:0.7em,baseline: 0.20em)[a.s.]$
+#let aseq = $=^#text(size:0.7em, baseline:0.2em)[a.s.]$

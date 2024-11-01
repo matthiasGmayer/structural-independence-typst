@@ -1,6 +1,6 @@
 #import "@preview/ctheorems:1.1.2": *
 
-#include "symbols.typ"
+#import "symbols.typ": *
 
 #let showrules(body) = {
   show: thmrules.with(qed-symbol: $square$)
@@ -22,6 +22,7 @@
 #let example = _thmbox("Example")
 #let corollary = _thmbox("Corollary")
 #let conjecture = _thmbox("Conjecture")
+#let notation = _thmbox("Notation")
 #let observation = _thmbox("Observation")
 
 #let proof = thmproof("proof","Proof",.._thmargs)
