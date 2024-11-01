@@ -31,5 +31,10 @@
 
 #let powerset = math.frak("P")
 
-#let subsetaseq = $subset.eq^#text(size:0.7em,baseline: 0.20em)[a.s.]$
-#let aseq = $=^#text(size:0.7em, baseline:0.2em)[a.s.]$
+#let astext = text(size:0.7em,baseline: 0.00em)[a.s.]
+#let _astext = text(size:0.7em,baseline: 0.20em)[a.s.]
+#let subsetaseq = $subset.eq^#_astext$
+#let supsetaseq = $supset.eq^#_astext$
+#let aseq = $=^#_astext$
+// #let Sectas = math.class("unary",[#h(0.1em)#text(size:0.4em)[a.s.]#h(-0.75em)#math.sect.big])
+// #let Sectas = math.accent(Sect,[a.s.])

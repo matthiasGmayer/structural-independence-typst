@@ -24,6 +24,7 @@
 #let conjecture = _thmbox("Conjecture")
 #let notation = _thmbox("Notation")
 #let observation = _thmbox("Observation")
+#let custombox(str) = _thmbox(str)
 
 #let proof = thmproof("proof","Proof",.._thmargs)
 
