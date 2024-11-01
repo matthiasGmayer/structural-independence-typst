@@ -730,7 +730,7 @@ Then we show that there exists an almost surely minimal and unique sufficient $J
   $forall s in S: A_s subsetaseq B$.
   Furthermore, there exists a countable set $S_0 subset.eq S$, s.t.
   $Union_(s in S_0) A_s aseq B$.
-] <lem:as_sect_exists>
+] <lem:as_union_exists>
 #proof[
   The proof is trivial if $S$ is countable.
   We will directly construct $S_0 = {s_n : n in NN}$ as a sequence and show
@@ -758,7 +758,7 @@ Then we show that there exists an almost surely minimal and unique sufficient $J
     #qedhere
 ]
 #definition[almost sure union and intersection][
-  We call the set $B$ from @lem:as_sect_exists the almost sure union of
+  We call the set $B$ from @lem:as_union_exists the almost sure union of
   the family $(A_s)_(s in S)$ and write
   $Union^astext_(s in S) A_s := A$.
   We define the almost sure intersection of $(A_s)_(s in S)$
@@ -766,7 +766,7 @@ Then we show that there exists an almost surely minimal and unique sufficient $J
   It then follows immediately
   that the almost sure intersection is the almost surely unique, maximal set that fulfills
   $Sect^astext_(s in S) A_s subsetaseq A_s$ for all $s in S$.
-]
+] <def:as_union>
 
 We have seen in @rem:aseq_random_indexset, that for random index sets $J$ and $K$ in an uncountable index set $I$,
 the set ${J=K}$ is not measurable.
@@ -893,9 +893,32 @@ and use stability under intersections for uniqueness. We start with the latter.
 // ]
 
 #lemma[
+  Let $J$ and $K$ be $sigma(Z) ms$ random index sets.
+  Then
+  $sigma(U_J,Z,AS|_{J aseq I}) sect sigma(U_K,Z,AS|_{K aseq I})
+  =
+  sigma(U_J,Z,AS|_{J sect K aseq I}) sect sigma(U_K,Z,AS|_{J sect K aseq I})$.
+] <lem:underlying_sigma_algebra_sect>
+#proof[
+  Since '$supset.eq$', it suffices to show '$subset.eq$'.
+
+  
+  Let $A_1 = {J sect K aseq I}, A_2 = {J aseq I} without A_1, A_3 = {K aseq I} without A_1$ and $A_4 = Omega without Union_(n=1)^3 A_i$.
+  Clearly, any $sigma(Z) ms$ sub sigma algebras $AS_1$ and $AS_2$ fulfill
+  $AS_1 subset.eq AS_2 <=> forall i in {1,...,4} : AS_1|_A_i subset.eq AS_2|_(A_i)$.
+  The statement now follows directly by comparing on all $A_i$.
+
+  On $A_1$ both sides are equal to $AS|_A_1$
+  On $A_2$ $K subsetaseq I$, so that by @def:as_union_random_index_set,
+  $sigma(U_J,Z)|_A_2 subset.eq sigma(U_K,Z)|_A_2 = sigma(U,Z)|_A_2$.
+  Similarly for $A_3$.
+  $A_4$ is trivial.
+]
+
+#lemma[
   Let $J$ and $K$ generate $X$ given $Z$.
   Then $J sect K$ generates $X$ given $Z$.
-]
+] <lem:generation_sect>
 #proof[
   By @lem:disintegration_intersection, $J sect K$ disintegrates $X$ given $Z$.
   By the definition of generations, we have
@@ -905,7 +928,8 @@ and use stability under intersections for uniqueness. We start with the latter.
 
   Let $A in sigma(U_J, Z, AS|_{J aseq I}) sect sigma(U_K, Z, AS|_{K aseq I})$.
   Clearly, ${J sect K aseq I} aseq {J aseq I} sect {K aseq I}$.
-  Since $AS$ is the underlying algebra, we have
+  
+  By @lem:underlying_sigma_algebra_sect,
   $A in sigma(U_J, Z, AS|_{J sect K aseq I}) sect sigma(U_K, Z, AS|_{J sect K aseq I})$.
 
   Since $U_(J sect K) indep_PP U_(J without K) | Z$, we have
@@ -932,26 +956,27 @@ To apply Zorn's lemma, we want to use the almost sure intersection for random in
   Let $S$ be an index set and
   $(J_s)_(s in S)$ a family of random index sets.
   Then we define the almost sure union by
-  ${i in Sect^astext_(s in S) J_s} = Union^astext_(s in S) {i in J_s}$.
+  ${i in Union^astext_(s in S) J_s} = Union^astext_(s in S) {i in J_s}$.
   Similarly, the almost sure intersection is defined by
   ${i in Sect^astext_(s in S) J_s} = Sect^astext_(s in S) {i in J_s}$.
   These definitions determine the corresponding random index set almost surely uniquely.
-]
+] <def:as_union_random_index_set>
 
 #lemma[
   Let $cal(I)$ be a set of index functions s.t.
-  for any totally ordered set $(S,<)$ and any random index set family $(J_s)_(s in S)$ with
-  $forall s,t in S: s < t => J_s subsetaseq J_t$, we have
+  for any totally ordered set $(S,<=)$ and any random index set family $(J_s)_(s in S)$ with
+  $forall s,t in S: s <= t => J_s subsetaseq J_t$, we have
   $Sect^astext_(s in S) J_s in cal(I)$.
   Then there exists a almost surely subset wise minimal element in $cal(I)$.
-  Furthermore, if $J,K in cal(I)$ implies $J sect K in cal(I)$, this element is almost surely unique.
+  Furthermore, if $J,K in cal(I)$ implies $J sect K in cal(I)$, this element is almost surely unique and is given by
+  $Sect^astext cal(I)$.
 ] <lem:random_index_set_zorn>
 #proof[
   For existence, apply Zorn's lemma to the random index sets modulo almost sure equality where
   the ordering is given by $J <= K :<=> J subsetaseq K$.
   For unqiueness, assume that $J$ and $K$ are minimizers.
   If $J aseq K$ does not hold, $J sect K aseq J$ does not hold and therefore 
-  $J$ is not a minimizer.
+  $J$ is not a minimizer. Similarly, if $Sect^astext cal(I) in.not cal(I)$.
 ]
 
 It remains to show that generation is closed under chains.
@@ -961,19 +986,136 @@ It remains to show that generation is closed under chains.
   Let $(J_s)_(s in S)$ be a family of $sigma(Z) ms$ random index sets.
   Let $J = Union^astext_(s in S) J_s$.
   Then $sigma(U_J, Z) = sigma(U_J_s, Z : s in S)$.
-]
+] <lem:as_union_random_index_set>
 #proof[
-  
+  '$supset.eq$':
+  Follows immediately by @lem:random_index_set_subset
+  and the $sigma(Z)$-measurability of all involved random index sets.
+  \
+  '$subset.eq$':
+  Let $i in I$ and $B subset.eq Val(X_i)$ measurable.
+  It suffices to show that ${i in J, X_i in B} in sigma(U_J_s, Z : s in S)$,
+  since these sets generate $sigma(U_J)$.
+  By @def:as_union_random_index_set and @lem:as_union_exists,
+  there is a countable subset $S_0 subset.eq S$, s.t.
+  ${i in J} aseq Union_(s in S_0) {i in J_s}$.
+  Now clearly,
+  ${i in J, X_i in B} aseq Union_(s in S_0) {i in J_s, X_i in B} in sigma(U_J_s, Z : s in S)$.
 ]
 
 #lemma[
   Let $(S,<)$ be a totally ordered set.
   Let $(J_s)_(s in S)$ be a family of random index sets that disintegrate $Z$.
-  s.t. $forall s,t in S : s < t => J_s subset.eq J_t$.
+  s.t. $forall s,t in S : s < t => J_s subsetaseq J_t$.
+  Then $Sect^astext_(s in S) J_s$ disintegrates $Z.$
+] <lem:disintegration_chain>
+#proof[
+  Let $J := Sect^astext_(s in S) J_s$.
+  Let $P in distributionstimes$.
+  We need to show that $U_J indep_P U_comp(J) | Z$.
+  For this let $A in sigma(U_J,Z)$ and $s in S$ and $B in sigma(U_comp(J_s), Z)$.
+  Since $comp(J) = Union^astext_(s in S) comp(J_s)$ and $Union_(s in S) sigma(U_comp(J_s),Z)$ is a sect stable system that generates $sigma(U_comp(J),Z)$ (@lem:as_union_random_index_set),
+  it suffices to show $A indep_P B | Z$ for all such $B$.
+  Now clearly, $A in sigma(U_(J_s),Z)$ implies $A indep_P B | Z$ because $J_s$ disintegrates $Z$.
 ]
 
 
+#lemma[
+  Let $(S,<=)$ be a totally ordered set.
+  Let $(J_s)_(s in S)$ be a family of $sigma(Z) ms$ random index sets
+  s.t. $forall s, t in S: s <= t => J_s subsetaseq J_t$.
+  Let $J := Sect^astext_(s in S) J_s$.
+  Then
+  $Sect_(s in S) sigma(U_J_s, Z, AS|_{J_s aseq I}) = Sect_(s in S) sigma(U_J_s, Z, AS|_{J aseq I})$.
+] <lem:underlying_sigma_algebra_chain>
+#proof[
+  '$supset.eq$': Follows from $sigma(AS|_J) subset.eq sigma(AS|_J_s)$.
+  \
+  '$subset.eq$':
+  // Let $S_0 subset.eq S$ countable, s.t. $J = $
+  @lem:as_union_exists, there is $S_0 subset.eq S$ countable,
+  s.t. $Sect^astext_(s in S_0) {J_s aseq I} aseq {J aseq I}$.
+  W.l.o.g. $S_0 = {s_n : n in NN}$.
+  // Set $A_0 = Omega$ and for $n in NN$, $A_n = A_(n-1) without {J_n aseq I}$.
+  // Set $A_(oo) = Omega without Union_(n in NN) A_n$.
+  Set $A_n = Union_(m = n)^oo {J_s_n aseq I}^c $.
+  Set $A_* = {J aseq I}$.
+  
+  Let $B in Sect_(s in S) sigma(U_J_s, Z, A|_{J_s aseq I})$.
+  Clearly, it suffices to show that
+  $B sect A_n in Sect_(s in S) sigma(U_J_s,Z, AS|_{AS aseq J})$
+  for all $n in NN union {*}$ (1).
+  
+  Let $n in NN$.
+  Then $B sect A_n in Sect_(s in S:s <= s_(n+1)) sigma(U_J_s, Z, AS|_{J_s aseq I})|_A_n$.
+  Now since $A_n sect {J_s aseq I} aseq nothing$ for all $s <= s_(n+1)$.
+  $sigma(U_J_s, Z, AS|_{J_s aseq I})|_A_n = sigma(U_J_s, Z)|_A_n subset.eq sigma(U_J_s,Z,AS|_{J aseq I})$.
+  This shows the claim (1) for all $n in NN$.
+  \
+  Now let $n = *$.
+  Then $B sect A_n = B sect {J aseq I} in sigma(AS|_{J aseq I}) subset.eq sigma(U_J_s,Z,AS|_{J aseq I})$.
+]
 
+#lemma[
+  Let $(S,<)$ be a totally ordered set.
+  Let $(J_s)_(s in S)$ be a family of random index sets that generate $X$ given $Z$.
+  s.t. $forall s,t in S : s <= t => J_s subsetaseq J_t$.
+  Then $Sect^astext_(s in S) J$ generates $Z$ given $X$
+] <lem:generation_chain>
+
+#proof[
+  Let $J := Sect^astext_(s in S) J_s$.
+  By @lem:disintegration_chain, $J$ disintegrates $X$ given $Z$, therefore
+  $U_J indep_PP U_comp(J) | Z$.
+  By the definition of generation and @lem:underlying_sigma_algebra_chain,
+  we have $sigma(X) subset.eq Sect_(s in S) sigma(U_J_s, Z, AS|_{J_s aseq I}) = Sect_(s in S) sigma(U_J_s, Z, AS|_{J aseq I})$.
+  It suffices to show that the latter is almost surely equal to
+  $sigma(U_J, Z, AS|_{J aseq I})$.
+  
+  Let $s in S$, then by @lem:as_union_random_index_set
+  $sigma(U_comp(J_s),Z) subset.eq sigma(U_comp(J),Z)$ and $sigma(U_comp(J),Z) subset.eq sigma(U_(J_s without J))$. 
+  Therefore
+  $U_J indep_PP U_comp(J_s) | Z$,
+  and
+  $U_J indep_PP U_(J_s without J) | Z$.
+  \
+  This implies
+  $PP(U_comp(J_s) in dot | Z) =
+  PP(U_comp(J_s) in dot | Z, U_J)
+  $ and
+  $PP(U_(J_s without J) in dot | Z) =
+   PP(U_(J_s without J) in dot | Z, U_J).
+  $
+  Since $J_s$ disintegrates $Z$ and by @lem:as_union_random_index_set,
+  we have
+  $U_(J_s without J) indep_PP U_comp(J_s) | Z, U_J$.
+  \
+  Therefore
+  $U_(J_s) indep_PP U_(comp(J_s) union J) | Z, U_J$.
+  Since $AS|_{J aseq I}$ is a restriction of the underlying sigma algebra to a $sigma(U_J) ms$ set,
+  we can condition on it. Therefore
+  $U_(J_s) indep_PP U_(comp(J_s) union J) | Z, U_J, AS|_{J aseq I}$.
+
+  Finally, let $A in Sect_(s in S) sigma(U_J_s, Z, AS|_{J_s aseq I})$.
+  By the last independence statement,
+  $A indep_PP U_(comp(J_s) union J) | Z, U_J, AS|_{J aseq I}$.
+]
+
+#theorem[
+  There exists an almost surely unique minimal generating random index set of $X$ given $Y$
+] <thm:history_exists>
+#proof[
+  Combine @lem:generation_chain, @lem:generation_sect and @lem:random_index_set_zorn.
+]
+
+#definition[history][
+  The almost surely unique minimal generating random index set of $X$ given $Y$ is called the history of $X$ given $Y$.
+  We write
+  $
+  history(X|Z) := Sect^astext {J : Omega -> powerset(I) | J "generates" X "given Z"}
+  $
+  @thm:history_exists implies that $history(X|Z)$ generates $X$ given $Z$.
+]
 
 
 // #lemma[
