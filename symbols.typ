@@ -21,6 +21,7 @@
 #let orth = math.scripts(math.perp)
 
 #let history = math.cal("H")
+#let irrel = math.cal("I")
 #let disintegrates = math.times.div
 #let generates = math.tack
 
