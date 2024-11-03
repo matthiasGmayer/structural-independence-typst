@@ -995,7 +995,7 @@ $P(A|Z)$ in the region ${i in.not history(X|Z)}$.
 This is a dual notion to the dependance of history.
 This motivates the following definition.
 
-== random index set of irrelevance
+== The random index set of irrelevance
 
 #definition[
   Let $distributionstimes2(i) := {(P,Q) in distributionstimes times distributionstimes: exists f : Omega -> RR_(>0), sigma(U_i) ms, "s.t." P = f dot Q}$.
@@ -1150,14 +1150,15 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   $
 ]
 
-== An exurcsion to hilbertspace embeddings of measures
+== An excursion to a Hilbert space embedding of measures
 #lemma[
   Let $P,Q in distributionstimes$.
   Then there is a countable index set $I_0 subset.eq I$,
   a family of positive densities $(phi_i)_(i in I_0 union {*})$, s.t.
 
   + $forall i in I_0: phi_i : Omega -> RR_(>0)$ is $sigma(U_i) ms$,
-  + $product_(i in I_0) phi_i (omega)$ converges for a.e. $omega in Omega$ and $product_(i in I_0) phi_i$ converges in $L^2$.
+  + $product_(i in I_0) phi_i (omega)$ converges for a.e. $omega in Omega$
+  // and $product_(i in I_0) phi_i$ converges in $L^2$.
   + $phi_* : Omega -> RR_(>0)$ that doesn't influence the pushforward under $U$, i.e.
     $integral_A phi_* dif Q = Q(A)$ for all $A in sigma(U)$.
   + $P = (product_(i in I_0 union {*}) phi_i) dot Q$.
@@ -1181,25 +1182,15 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 ]
 
 #lemma[
-  Let $p$ be a density w.r.t. a probability measure $PP$ with expectation $EE$ and let $A in AS$.
-  The w.r.t $A$ regularized density
-  $p_A := 1_A EE(1_A p)/PP(A) + 1_(A^c) EE(1_(A^c) p)/(PP(A^c))$ fulfills $integral_A p_A dif PP = integral_A p dif PP$
-  and $integral sqrt(p_A) >= integral sqrt(p)$.
-
-  $p_Z := EE(p|Z)$.
+  Let $p$ be a probability density w.r.t. a probability measure $PP$ with expectation $EE$.
+  // The w.r.t $A$ regularized density
+  // $p_A := 1_A EE(1_A p)/PP(A) + 1_(A^c) EE(1_(A^c) p)/(PP(A^c))$ fulfills $integral_A p_A dif PP = integral_A p dif PP$
+  // and $integral sqrt(p_A) >= integral sqrt(p)$.
+  Then $EE(sqrt(EE(p|Z))) >= EE(sqrt(p))$.
   
 ] <lem:eucl_density_cond_exp>
 #proof[
-  $EE sqrt(p_Z) = EE sqrt(EE(p|Z)) >=^"Jensen" EE EE(sqrt(p)|Z) = EE(sqrt(p)|Z) $.
-  
-  // $
-  // EE(sqrt(p_A))
-  // &= EE( sqrt(1_A EE(1_A p)/PP(A) + 1_(A^c) EE(1_(A^c)/PP(A^c) p) )) \
-  // &= sqrt(PP(A) EE(1_A p)) + sqrt(PP(A^c) EE(1_(A^c) p)) \
-  // &= PP(A) sqrt(EE(p|A)) + PP(A^c) sqrt(EE(p|A^c)) \
-  // &>=^"Jensen" PP(A) EE(sqrt(p)|A)) + PP(A^c) EE(sqrt(p)|A^c)) \
-  // &= EE(sqrt(p)).
-  // $
+  $EE sqrt(EE(p|Z)) = EE sqrt(EE(p|Z)) >=^"Jensen" EE(EE(sqrt(p)|Z)) = EE(sqrt(p)) $.
 ]
 
 #lemma[
@@ -1211,27 +1202,21 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Let $q_n := EE(p_n|sigma(A))$
   By @lem:eucl_density_cond_exp, $EE(sqrt(q_n)) = PP(A) sqrt(EE(p_n|A)) + PP(A^c) sqrt(EE(p_n|A^c)) -> 1$,
   while $EE(1_A p_n) = EE(1_A q_n)$.
-
   We want to show that $PP_n (A) = PP(A) EE(p_n|A) -> PP(A) <=> EE(p_n|A) -> 1$.
 
   Set $a_n = EE(p_n|A), b_n = EE(p_n|A^c)$
   and $lambda = PP(A), comp(lambda) = (1-lambda)$.
-  
   Then $a_n in [0,1/lambda],b_n in [0,1/(1-lambda)],lambda in [0,1]$, and
   $lambda sqrt(a_n) + comp(lambda) sqrt(b_n) -> 1$ and $lambda a_n + comp(lambda) b_n = 1$.
-
   We want to conclude that $a_n -> 1$.
-  $lambda sqrt(a_n) +  sqrt(comp(lambda)^2 b_n) -> 1$.
-  
-  $lambda sqrt(a_n) +  sqrt(comp(lambda) (1- lambda a_n)) -> 1$.
 
-  Look at the function $f : [0,1] -> RR; x|-> lambda sqrt(x) +  sqrt(comp(lambda)(1 - lambda x))$.
+  Define the function $f : [0,1] -> RR; x|-> lambda sqrt(x) +  sqrt(comp(lambda)(1 - lambda x))$.
+  Then $f(a_n) -> 1$. Moreover,
 
-  Then $
-  f'(x) = lambda 1/(2sqrt(x)) -  lambda sqrt(1-lambda)/(2sqrt(1-lambda x)) \
-  = lambda/2 (1/sqrt(x) -   sqrt((1-lambda)/(1-lambda x))) \
+  $f'(x) = lambda 1/(2sqrt(x)) -  lambda sqrt(1-lambda)/(2sqrt(1-lambda x)) 
+  = lambda/2 (1/sqrt(x) -   sqrt((1-lambda)/(1-lambda x))).
   $
-
+  Now
   $
   f'(x) > 0
   &<=> lambda/2 (1/sqrt(x) -   sqrt((1-lambda)/(1-lambda x))) > 0 \
@@ -1240,9 +1225,8 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   &<=> x < 1\
   $
   Similarly, $f'(x) < 0 <=> x> 1$ and $f'(1) =0$.
-
   Therefore $f(1)=1$ is a global maximum and
-  therefore $f(a_n) -> 1$ implies $a_n -> 1$.
+  so $f(a_n) -> 1$ implies $a_n -> 1$.
 ]
 
 #corollary[
@@ -1253,14 +1237,228 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Now take uniformly approximating simple $X_n$.
 ]
 
+#example[
+  Let $PP_n -> PP$ then $EE_n (X) -> EE(X)$ does not hold in general for $X in Sect_(n in NN) L^1 (PP_n) sect L^1 (PP)$.
+  Indeed let $PP$ be the uniform distribution on $[0,1]$.
+  Let $X(x) = 1/(2sqrt(x))$. Clearly, $integral_0^1 X dif PP = 1$.
+  Let $f_n = 1_[0,1/2^n] n + 1_[n/2^n,1]$.
+  Then $integral f_n dif PP = 1$.
+  and $integral sqrt(f_n) dif PP = sqrt(n)/(2^n) + 1-n/(2^n) -> 1$.
+  Now $integral f_n X = n integral_0^(1/n) 1/(2 sqrt(x)) + integral_(n/(2^n))^1 1/(2 sqrt(x)) >= sqrt(n)$.
+]
+
+
+#conjecture[
+  Let $PP_n -> PP$, then $EE_n (sqrt(X)) -> EE (sqrt(X))$ for all $X in L^1 ( P)$.
+]
+#proof[
+  If $X in L^1$, then $sqrt(X) in L^2$.
+
+  Now $phi$ is a density,
+  $EE(phi)$
+]
+
+
+#pagebreak()
+
 #theorem[
-  Let $PP_n -> PP$, then $EE_n (X|Z) -> EE(X|Z)$?
+  Let $PP_n -> PP$.
+  Then $EE_n (X|Z) dot PP_n -> EE (X|Z) dot PP$.
+  or maybe
+  $EE_n (X|Z) dot PP -> EE (X|Z) dot PP$.
+]
+
+
+#theorem[
+  Let $PP_n -> PP$, then
+  $sqrt(EE_n (X|Z)) -> sqrt(EE(X|Z))$ in $L^2$.
+
+  normed?
+]
+#proof[
+
+  
+  $
+  integral (sqrt(EE_n (X|Z)) - sqrt(EE(X|Z)))^2  dif PP \
+
+  -2 integral sqrt(EE(p_n X|Z)/ EE(p_n|Z) EE(X|Z)) dif PP
+
+  + integral EE(p_n X|Z)/EE(p_n|Z) dif PP
+  + integral EE(X|Z) dif PP
+  // = integral (sqrt(EE(p_n X|Z)/EE(p_n|Z)) - sqrt(EE(X|Z)))^2  dif PP \
+  $
+
+
+  // $
+  // integral sqrt(EE(p_n X|Z)/ EE(p_n|Z) EE(X|Z)) dif PP \
+  // integral EE(p_n X|Z)/ EE(p_n|Z) EE(X|Z) sqrt(EE(p_n|Z)/(EE(p_n X|Z) EE(X|Z))) dif PP \
+  // $
+
+  $
+  integral sqrt(EE(p_n X|Z)/ EE(p_n|Z) EE(X|Z)) dif PP
+  &>= integral EE_n (sqrt(X) | Z) EE(sqrt(X)|Z) \
+  &= integral EE (p_n sqrt(X) | Z) 1/EE(p_n|Z) EE(sqrt(X)|Z) dif PP. \
+  &= integral EE (p_n sqrt(X) | Z) EE(sqrt(X)/EE(p_n|Z)|Z) dif PP. 
+  
+  $
+
+  $
+  integral sqrt(EE(p_n X|Z)/ EE(p_n|Z) EE(X|Z)) dif PP
+  &>= integral EE (sqrt(p_n X) | Z) EE(sqrt(X/EE(p_n|Z))|Z) dif PP \
+  &= integral sqrt(p_n X) EE(sqrt(X/EE(p_n|Z))|Z) dif PP \
+  &= integral sqrt(X) EE(sqrt(X)|Z) sqrt(p_n/EE(p_n|Z)) dif PP \
+  $
+
+  Or
+
+  
+  $
+  integral sqrt(EE(p_n X|Z)/ EE(p_n|Z) EE(X|Z)) dif PP
+  &= integral sqrt(X EE(X|Z)) sqrt(p_n/EE(p_n|Z)) dif PP \
+  &= integral EE(sqrt(X EE(X|Z)) sqrt(p_n/EE(p_n|Z)))|Z dif PP \
+  &= integral EE(sqrt(X EE(X|Z)) sqrt(p_n))|Z) 1/sqrt(EE(p_n|Z)) dif PP \
+  $
+
+
+  $EE(sqrt(p_n)) -> 1$.
+
+  $EE(sqrt(EE(p_n X|Z))) >= EE(sqrt(p_n X)|Z)$.
+  
+]
+
+#definition[
+  $X_n -> X$ if $EE_n (1_A X_n) -> EE(1_A X_n)$ .
+]
+Uniqueness, limit nice
+
+#lemma[
+  If $PP_n -> PP$, then $PP_n (X|Z) -> PP (X|Z)$.
+]
+#proof[
+  Clearly it suffices to show for $C in sigma(Z)$.
+  Let 
+  $integral_C PP_n (X|Z) dif PP_n = integral_C X dif PP_n -> integral_C X dif PP$
+  which is equal to $integral_C PP(X|Z) dif PP$.
+]
+
+#lemma[
+  If $PP_n -> PP$ and $PP'_n -> PP$, then $X_n -> X <=> X_n ->' X$.
+]
+#proof[
+  First use $A_n -> A$.
+  Suppose $A_n ->' B$.
+  Then there is w.l.o.g. $C subset.eq A without B$ nonnull.
+
+  Then
+  $
+  integral_C A_n dif PP_n -> PP(A sect C).
+  $
+
+  and
+  $
+  integral_C A_n dif PP'_n -> 0.
+  $
+
+  Then $PP(C) > 0$.
+  Then $PP(C_n) > 0$.
+  
+]
+
+#lemma[
+  If $PP_n -> PP$. $X_n -> Y$ and $X_n -> Z$, then $Y aseq Z$.
+]
+#proof[
+  Suppose $Y asneq Z$.
+  Then w.l.o.g. ${Y < Z} in.not NS$.
+  Then there is $epsilon$, s.t. $A = {Y + epsilon < Z} in.not NS$.
+
+  Then $PP_n (A) -> PP(A) > 0$, s.t.
+  $integral_A abs(Y - Z) dif PP_n -> integral_A abs(Y-Z) dif PP > epsilon PP(A)$.
+]
+
+#lemma[
+  If $P = f Q$, and $P_n -> P$, $Q_n -> Q$,
+]
+
+! If i show anything for $EE_n (X|Z) -> EE (X|Z)$, then i can choose $Z=AS$ and get for $X$.
+
+I.e. we need to show
+
+#lemma[
+  Let $PP_n -> PP$ in $norm(dot)_2$ then for all bounded $X$, $X -> X$ in averages.
+]
+TRIVIAL!
+
+
+#corollary[
+  Let $PP_n -> PP$ in $norm(dot)_2$ then for all bounded $X$, $sqrt(EE_n (X|Z)) -> sqrt(EE(X|Z))$ in $L^2$.
+]
+#proof[
+  Let $C in sigma(Z)$.
+  Then $integral_C EE_n (X|Z) dif PP$
 ]
 
 
 
 
+#theorem[
+  Let $PP_n -> PP$ in $norm(dot)_2$ then for all bounded $X$, $EE_n (X|Z) -> EE(X|Z)$ in measure.
+]
+#proof[
+  We proceed by measure-theoretic induction over $Z$.
+  W.l.o.g. $X$ is bounded by $1$ and positive. 
+  + Let $C in AS without NS$.
+    Then $EE_n (X|C) = EE_n (1_C X) slash PP_n (C) -> EE (1_C X)slash PP(C) =EE (X|C)$.
+  + Let $sigma(Z)$ be generated by a finite partition $cal(P) subset.eq AS without NS$. \
+    Then $EE_n (X|Z) = sum_(C in cal(P)) EE_n (X|C) -> sum_(C in cal(P)) EE (X|C) = EE(X|Z)$ in $L^oo$.
+    More precisely,
+    $norm(EE_n (X|Z) - EE(X|Z))_oo <= sup_(C in cal(P)) abs(PP_n (C)""^(-1) - PP (C)""^(-1)) -> 0$.
+  + Let $sigma(Z)$ be generated by a sequence $(A_n)_(n in NN)$, where $A_n in AS$.
+    Set $Z_n := sigma(A_1,...,A_n)$.
+    Then $Z_n arrow.t Z$ and by levy's upward theorem, $EE(X|Z_n) -> EE(X|Z)$ both almost surely and in $L^1$.
+    Therefore, there is $n_0 in NN : forall n >= n_0:
+    PP{abs(EE(X|Z_n) - EE(X|Z))>delta} < epsilon$
+    and
+    $PP_n {abs(EE(X|Z_n) - EE(X|Z))>delta} < epsilon 2^(-n)$.
 
+    $norm(EE_n (X|Z) - EE (X|Z))$
+
+    becomes 
+    $
+    norm(EE_n (X|Z) - EE_n (X|Z_m)) \
+    norm(EE_n (X|Z_m) - EE (X|Z_m)) \
+    norm(EE (X|Z_m) - EE (X|Z)) \
+    $
+
+    First fix $m$ last is small.
+    Then for large $n$ second is small.
+    First can be LARGE.
+    
+]
+
+#theorem[
+  Let $P_n -> P, Q_n -> Q$ and $P_n (A|Z) = Q_n (A|Z)$ then
+  $P(A|Z) = Q(A|Z)$.
+]
+#proof[
+  We have $P_n (A|Z) -> P(A|Z)$. for $P_n$.
+  Then also $P_n (A|Z) P_n (q|Z) -> P(A|Z) P_n (q|Z)$. for $P_n$.
+  Then $Q_n (A|Z) ->$
+
+  $
+  integral_C P_n (A|Z) dif P_n -> P(A sect C)
+  $
+
+  $
+  integral_C P_n (A|Z) dif Q_n
+  $
+
+  
+]
+
+
+
+== Fundamental theorem for the random index set of irrelevance.
 
 #theorem[
   If $forall P in distributionstimes: X indep_P Y | Z$, then
@@ -1317,7 +1515,30 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   $Q' = phi dot Q$.
   W.l.o.g. we can assume $I_0 = NN$ and $* = 0$. s.t. $I_0^* = NN_0$.
   Then $phi = product_(n = 0)^oo phi_n$ and this converges in $L^2(Q)$ and therefore also in $L^1(Q)$.
-  
+
+
+
+  Density,
+
+  $P_n (B|Z) aseq Q_n (B|Z)$ for all $n$.
+  $P_n -> P$, $Q_n -> Q$.
+
+
+  $integral_C P (B|Z) dif P = integral_C 1_B dif P
+  = lim_n integral_C P_n (B|Z) dif P_n
+  = lim_n integral_C Q_n (B|Z) dif P_n
+  = lim_n integral_C 1_B dif Q_n = integral_C Q(B|Z) dif Q$.
+
+  $integral_C P (B|Z) dif PP = integral_C 1_B dif P
+  = lim_n integral_C P_n (B|Z) dif P_n
+  = lim_n integral_C Q_n (B|Z) dif P_n
+  = lim_n integral_C 1_B dif Q_n = integral_C Q(B|Z) dif Q$.
+
+  // $integral_C PP(B g |Z)/PP(g|Z) dif P =
+  // lim_n integral PP(B g | Z)/PP(g|Z) dif P_n =
+  // lim_n integral PP(B g | Z)/PP(g|Z) dif Q_n =
+  // $
+
   
   
 
