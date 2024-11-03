@@ -91,7 +91,7 @@ To formalize this question, we let
 $
 distributionstimes := {P : AS' -> RR |& P "is a probability measure,"\
 &(U_i)_(i in I) "is an independent family w.r.t." P \
-&"and" P "is absolutely continuous w.r.t." PP}
+&"and" P "is absolutely continuous w.r.t." PP " and vice versa"}
 $
 
 and ask when it is the case that
@@ -259,10 +259,9 @@ Let $powerset(I)$ denote the powerset of $I$.
   Let $X=(X_i)_(i in I)$ be a family of random elements.
   Let $J subset.eq I$. Then we denote by
   $X_J := (X_i)_(i in J)$, the restriction of this family to $J$.
+  Canonically, $X_J$ is a random element by 
+  $(X_i)_(i in J) (omega) = (X_i (omega))_(i in J)$.
 ]
-
-Canonically, $X_J$ is a random element by 
-$(X_i)_(i in J) (omega) = (X_i (omega))_(i in J)$.
 
 
 #definition[random family][
@@ -418,7 +417,7 @@ Let $(U_i)_(i in I)$ be a family of random elements.
 $
 distributionstimes := {P : AS' -> RR |& P "is a probability measure,"\
 &(U_i)_(i in I) "is an independent family w.r.t." P \
-&"and" P "is absolutely continuous w.r.t." PP}
+&"and" P "is absolutely continuous w.r.t." PP "and vice versa"}
 $
 
 *In the following* $X,Y$ and $Z$ will be arbitrary random elements.
@@ -649,8 +648,8 @@ and use stability under intersections for uniqueness. We start with the latter.
   that generates $sigma(U_234,Z)$.
 
   Now clearly,
-  $P(Sect_(i=1)^4 A_i|Z) =^((1))P(A_1 sect A_2 | Z) P(A_3 sect A_4 | Z)
-  =^((2)) product_(i = 1)^4 P(A_i|Z)$.
+  $P(Sect_(i=1)^4 A_i|Z) =^#[@eq:first_independence]P(A_1 sect A_2 | Z) P(A_3 sect A_4 | Z)
+  =^#[@eq:second_independence] product_(i = 1)^4 P(A_i|Z)$.
 ]
 
 // #lemma[
@@ -679,7 +678,7 @@ and use stability under intersections for uniqueness. We start with the latter.
   sigma(U_J,Z,AS|_{J sect K aseq I}) sect sigma(U_K,Z,AS|_{J sect K aseq I})$.
 ] <lem:underlying_sigma_algebra_sect>
 #proof[
-  Since '$supset.eq$', it suffices to show '$subset.eq$'.
+  Since '$supset.eq$' is trivial, it suffices to show '$subset.eq$'.
 
   
   Let $A_1 = {J sect K aseq I}, A_2 = {J aseq I} without A_1, A_3 = {K aseq I} without A_1$ and $A_4 = Omega without Union_(n=1)^3 A_i$.
@@ -823,13 +822,13 @@ It remains to show that generation is closed under chains.
   Let $B in Sect_(s in S) sigma(U_J_s, Z, A|_{J_s aseq I})$.
   Clearly, it suffices to show that
   $B sect A_n in Sect_(s in S) sigma(U_J_s,Z, AS|_{AS aseq J})$
-  for all $n in NN union {*}$ (1).
+  for all $n in NN union {*}$.
   
   Let $n in NN$.
   Then $B sect A_n in Sect_(s in S:s <= s_(n+1)) sigma(U_J_s, Z, AS|_{J_s aseq I})|_A_n$.
   Now since $A_n sect {J_s aseq I} aseq nothing$ for all $s <= s_(n+1)$.
   $sigma(U_J_s, Z, AS|_{J_s aseq I})|_A_n = sigma(U_J_s, Z)|_A_n subset.eq sigma(U_J_s,Z,AS|_{J aseq I})$.
-  This shows the claim (1) for all $n in NN$.
+  This shows the claim for all $n in NN$.
   \
   Now let $n = *$.
   Then $B sect A_n = B sect {J aseq I} in sigma(AS|_{J aseq I}) subset.eq sigma(U_J_s,Z,AS|_{J aseq I})$.
@@ -960,12 +959,12 @@ To prove the other direction, completeness, we define a dual notion to the histo
 While history and generation talk about depending, irrelevance talks about there being no information.
 
 To motivate this notion we look at a simple lemma.
-#notation[
-  For ease of notation, we index $P in distributionstimes$ to
-  refer to the pushforward under $U_J$.
-  More precisely, let $J$ be a random indexset, then
-  $P_J := P_U_J$.
-]
+// #notation[
+//   For ease of notation, we index $P in distributionstimes$ to
+//   refer to the pushforward under $U_J$.
+//   More precisely, let $J$ be a random indexset, then
+//   $P_J := P_U_J$.
+// ]
 #lemma[
   Let $i in I$ and $P, Q in distributionstimes$, s.t.
 // $P$ and $Q$ differ only for $U_i$,
@@ -996,13 +995,15 @@ $P(A|Z)$ in the region ${i in.not history(X|Z)}$.
 This is a dual notion to the dependance of history.
 This motivates the following definition.
 
+== random index set of irrelevance
+
 #definition[
   Let $distributionstimes2(i) := {(P,Q) in distributionstimes times distributionstimes: exists f : Omega -> RR_(>0), sigma(U_i) ms, "s.t." P = f dot Q}$.
 ]
 
 #definition[
   Let $J$ be a $sigma(Z) ms$ random index set.
-  We say $J$ is irrelevant to $X$ given $Z$, if for any $i in I$,
+  We say $J$ is irrelevant to $X$ given $Z$, if for all $i in I$,
   $(P,Q) in distributionstimes2(i)$ and $A in sigma(X)$, we have
   $P(A|Z) (omega) = Q(A|Z) (omega)$ for a.e. $omega in {i in J}$.
 ]
@@ -1044,7 +1045,372 @@ We will show in this section that it is actually maximal.
   @lem:irrelevance_exists tells us that $irrel(X|Z)$ is irrelevant to $X$ given $Z$.
 ]
 
-To prove the fundamental theorem we proceed as follows.
+We will establish that $irrel(X|Z) = comp(history(X|Z))$,
+so it really is the dual the history.
+Recall that our goal in this section is to prove
+the following direction of the fundamental theorem
+$
+forall P in distributionstimes : X indep_P Y | Z => history(X|Z) sect history(Y|Z) aseq nothing.
+$
+Under the assumption that $irrel(X|Z) = comp(history(X|Z))$, this becomes equivalent to
+the dual notion
+#set math.equation(numbering: "(1)")
+$
+forall P in distributionstimes : X indep_P Y | Z => irrel(X|Z) union irrel(Y|Z) aseq I.
+$ <eq:fthm_irrel>
+
+
+The reason why it is necessary to define $irrel(X|Z)$ is that
+in the definition of $history(X|Z)$ we have to show the measurability
+condition $sigma(X) in sigma(U_history(X|Z),Z,AS_{history(X|Z) aseq I})$
+and the independence $U_history(X|Z) indep_P U_history(Y|Z) | Z$
+for all $P in distributionstimes$.
+This is not in direct connection with the provided assumption
+$forall P in distributionstimes: X indep_P Y | Z$.
+The definition of $irrel(X|Z)$, however, uses only probabilities
+in its definition. So there is in a much more direct connection with this assumption
+that we can exploit.
+
+We might get the idea to define the history directly through
+$history(X|Z) := comp(irrel(X|Z))$.
+But there are a few issues.
+Firstly, the definition of $irrel(X|Z)$ is rather indirect and
+not very telling about what kind of $X$ and $Y$ fulfill
+$irrel(X|Z) union irrel(Y|Z) aseq I$.
+Secondly,
+recall that it was relatively straightforward to prove the direction
+$
+history(X|Z) sect history(Y|Z) aseq nothing => forall P in distributionstimes : X indep_P Y | Z
+$ <eq:fthm_back>
+If we dualize with $irrel(X|Z)$ this is equivalent to
+$
+irrel(X|Z) union irrel(Y|Z) aseq I => forall P in distributionstimes : X indep_P Y | Z
+$ <eq:fthm_back_irrel>
+But now this statement is not easily proven directly. The way to prove @eq:fthm_back_irrel
+moves through showing $history(X|Z) = comp(irrel(X|Z))$ and dualizing back to @eq:fthm_back.
+
+In summary, $history(X|Z)$ and $irrel(X|Z)$ are dual notions that
+more suitable to prove the (4) and (3) directions of the fundamental theorem, respectively.
+The power of them is precisely that they are dual and come together to prove the fundamental theorem in full.
+
+The next theorem proves that @eq:fthm_irrel holds in a weaker form.
+If we unwrap @eq:fthm_irrel, it states that,
+whenever $forall P in distributionstimes : X indep_P Y | Z$, we have
+$comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
+// This condition on the irrelevances is equivalent to
+
+
+// While irrelevance requires that $P(A|Z)=Q(A|Z)$ on ${i in J}$ for all $i in I$ $(P,Q) in distributionstimes2(i)$
+
+#set math.equation(numbering: none)
+
+#theorem[
+  Let $forall P in distributionstimes : X indep_P Y | Z$.
+  Let $i in I$, $(P,Q) in distributionstimes2(i)$ and $A in sigma(X), B in sigma(Y)$.
+  Then $(P(A|Z) - Q(A|Z))(P(B|Z) - Q(B|Z)) aseq 0$.
+  Therefore, for a.e. $omega in Omega$, $P(A|Z)(omega) = Q(A|Z)(omega)$
+  or $P(B|Z)(omega) = Q(A|Z)(omega)$.
+]
+#proof[
+  Let $f : Omega -> RR_(>0)$ $sigma(U_i) ms$ s.t. $P = f dot Q$.
+  We use the fact that for the positive $sigma(U_i) ms$ density $g=(1+f)/2$, we can define
+  $R:= (P+Q)/2 =  g dot Q in distributionstimes$.
+  Therefore $X indep_R Y | Z$.
+  Denoting $E$ the expectation w.r.t $Q$ and noting that $g>0$,
+  $
+  R(A|Z)R(B|Z) aseq R(A,B|Z) \
+  <=> 
+  E (g 1_A|Z) E (g 1_B|Z) aseq E(g|Z) E(g 1_A 1_B|Z) \
+  $
+  We can now substitute $g$ by $(f+1)/2$ and multiply by 4.
+  $
+  <=> (E (f 1_A|Z) + E(1_A|Z)) (E (f 1_B|Z) E(1_B|Z))
+  aseq (E(f|Z) + 1) (E(f 1_A 1_B|Z)+ E(1_A 1_B|Z) \
+  $
+
+  By the independence of $X$ and $Y$ given $Z$ w.r.t. $P$ and $Q$, we have
+  $E(f 1_A|Z) E(f 1_B|Z) aseq E(f|Z) E(f 1_A 1_B|Z)$ and
+  $E(1_A|Z)E(1_B|Z) aseq E(1_A 1_B|Z)$ respectively.
+  Multiplying out and canceling these terms, we get
+  
+  $
+  <=> E(f 1_A|Z) E(1_B|Z) + E(1_A|Z) E(f 1_B|Z) aseq E(f|Z) E(1_A 1_B|Z) + E(f 1_A 1_B|Z)
+  $
+  Dividing by $E(f|Z)$, we get
+  $
+  <=> P(A|Z) Q(B|Z) + Q(A|Z) P(B|Z) aseq Q(A,B|Z) + P(A,B|Z)
+  $
+  Using the independence w.r.t. $P$ and $Q$ again,
+  $
+  <=> P(A|Z) Q(B|Z) + Q(A|Z) P(B|Z) aseq Q(A|Z)Q(B|Z) + P(A|Z)P(B|Z)
+  $
+  which we can factorize as
+  $
+  <=> (P(A|Z)-Q(A|Z))(P(B|Z)-Q(B|Z)) aseq 0. #qedhere
+  $
+]
+
+== An exurcsion to hilbertspace embeddings of measures
+#lemma[
+  Let $P,Q in distributionstimes$.
+  Then there is a countable index set $I_0 subset.eq I$,
+  a family of positive densities $(phi_i)_(i in I_0 union {*})$, s.t.
+
+  + $forall i in I_0: phi_i : Omega -> RR_(>0)$ is $sigma(U_i) ms$,
+  + $product_(i in I_0) phi_i (omega)$ converges for a.e. $omega in Omega$ and $product_(i in I_0) phi_i$ converges in $L^2$.
+  + $phi_* : Omega -> RR_(>0)$ that doesn't influence the pushforward under $U$, i.e.
+    $integral_A phi_* dif Q = Q(A)$ for all $A in sigma(U)$.
+  + $P = (product_(i in I_0 union {*}) phi_i) dot Q$.
+]
+#proof[
+  follows from @kakutani1948equivalence with some care. (TODO).
+]
+
+
+#lemma[
+  $P in distributionstimes$ then $P = phi dot PP$,
+  $P |-> sqrt(phi) in L^2 (PP)$ is an embedding into a hilbert space.
+]
+
+#definition[
+  $angles(P,Q) := angles(sqrt((dif P)/(dif PP)), sqrt((dif Q)/(dif PP)))$.
+
+  $norm(P)_2^2 := angles(P,P)^2+ angles(Q,Q)^2 - 2 angles(P,Q) = 2(1-angles(P,Q))$.
+
+  $P -> Q$ in $norm(dot)_2 <=> angles(P,Q) -> 1$.
+]
+
+#lemma[
+  Let $p$ be a density w.r.t. a probability measure $PP$ with expectation $EE$ and let $A in AS$.
+  The w.r.t $A$ regularized density
+  $p_A := 1_A EE(1_A p)/PP(A) + 1_(A^c) EE(1_(A^c) p)/(PP(A^c))$ fulfills $integral_A p_A dif PP = integral_A p dif PP$
+  and $integral sqrt(p_A) >= integral sqrt(p)$.
+
+  $p_Z := EE(p|Z)$.
+  
+] <lem:eucl_density_cond_exp>
+#proof[
+  $EE sqrt(p_Z) = EE sqrt(EE(p|Z)) >=^"Jensen" EE EE(sqrt(p)|Z) = EE(sqrt(p)|Z) $.
+  
+  // $
+  // EE(sqrt(p_A))
+  // &= EE( sqrt(1_A EE(1_A p)/PP(A) + 1_(A^c) EE(1_(A^c)/PP(A^c) p) )) \
+  // &= sqrt(PP(A) EE(1_A p)) + sqrt(PP(A^c) EE(1_(A^c) p)) \
+  // &= PP(A) sqrt(EE(p|A)) + PP(A^c) sqrt(EE(p|A^c)) \
+  // &>=^"Jensen" PP(A) EE(sqrt(p)|A)) + PP(A^c) EE(sqrt(p)|A^c)) \
+  // &= EE(sqrt(p)).
+  // $
+]
+
+#lemma[
+  Let $PP_n -> PP$ in $norm(dot)_2$, then for all $A in AS$, $PP_n (A) -> PP(A)$.
+]
+#proof[
+  Let $p_n := (dif PP_n)/(dif PP)$.
+  Then $EE(sqrt(p_n)) -> 1$.
+  Let $q_n := EE(p_n|sigma(A))$
+  By @lem:eucl_density_cond_exp, $EE(sqrt(q_n)) = PP(A) sqrt(EE(p_n|A)) + PP(A^c) sqrt(EE(p_n|A^c)) -> 1$,
+  while $EE(1_A p_n) = EE(1_A q_n)$.
+
+  We want to show that $PP_n (A) = PP(A) EE(p_n|A) -> PP(A) <=> EE(p_n|A) -> 1$.
+
+  Set $a_n = EE(p_n|A), b_n = EE(p_n|A^c)$
+  and $lambda = PP(A), comp(lambda) = (1-lambda)$.
+  
+  Then $a_n in [0,1/lambda],b_n in [0,1/(1-lambda)],lambda in [0,1]$, and
+  $lambda sqrt(a_n) + comp(lambda) sqrt(b_n) -> 1$ and $lambda a_n + comp(lambda) b_n = 1$.
+
+  We want to conclude that $a_n -> 1$.
+  $lambda sqrt(a_n) +  sqrt(comp(lambda)^2 b_n) -> 1$.
+  
+  $lambda sqrt(a_n) +  sqrt(comp(lambda) (1- lambda a_n)) -> 1$.
+
+  Look at the function $f : [0,1] -> RR; x|-> lambda sqrt(x) +  sqrt(comp(lambda)(1 - lambda x))$.
+
+  Then $
+  f'(x) = lambda 1/(2sqrt(x)) -  lambda sqrt(1-lambda)/(2sqrt(1-lambda x)) \
+  = lambda/2 (1/sqrt(x) -   sqrt((1-lambda)/(1-lambda x))) \
+  $
+
+  $
+  f'(x) > 0
+  &<=> lambda/2 (1/sqrt(x) -   sqrt((1-lambda)/(1-lambda x))) > 0 \
+  &<=> 1/sqrt(x) >   sqrt((1-lambda)/(1-lambda x))\
+  &<=> 1- lambda x >   (1-lambda)x\
+  &<=> x < 1\
+  $
+  Similarly, $f'(x) < 0 <=> x> 1$ and $f'(1) =0$.
+
+  Therefore $f(1)=1$ is a global maximum and
+  therefore $f(a_n) -> 1$ implies $a_n -> 1$.
+]
+
+#corollary[
+  Let $PP_n -> PP$ in $norm(dot)_2$, then for all bounded $X$, $EE_n (X) -> EE(X)$.
+]
+#proof[
+  It clearly is true for simple $X$.
+  Now take uniformly approximating simple $X_n$.
+]
+
+#theorem[
+  Let $PP_n -> PP$, then $EE_n (X|Z) -> EE(X|Z)$?
+]
+
+
+
+
+
+
+#theorem[
+  If $forall P in distributionstimes: X indep_P Y | Z$, then
+  $irrel(X|Z) union irrel(Y|Z) aseq I$.
+]
+#proof[
+  
+  Look at the continuous $sigma(Z) ms$ function
+  
+  $p_A : distributionstimes2(i) -> L^oo; (P,Q) |-> abs(P(A|Z) - Q(A|Z))$.
+
+  We know $p_A p_B aseq 0$ for any $B in sigma(Y)$.
+
+  Suppose, that there is $i in I$, $C_0 in sigma(Z) without NS$, s.t.
+  $C subsetaseq {i in.not irrel(X|Z) union irrel(Y|Z)}$.
+  Then by the definition of irrelevance, there is $A in sigma(X)$
+  and $(P,Q) in distributionstimes2(i)$
+  and a $C in sigma(Z) without NS$ s.t. $C subsetaseq C_0$
+  and $P(A|Z)(omega) != Q(A|Z)(omega)$ for a.e. $omega in C$.
+  
+  Then $p_(A sect C) (P,Q) asgt 0$
+  Therefore the open set $O := p_A^(-1){f in L^oo :f(omega) > 0 "for a.e." omega in C}$ is nonempty.
+  For all $(P,Q) in O$, we have $p_(A sect C) (P,Q) asgt 0$.
+  Therefore $p_(B sect C) (P,Q) aseq 0$ for any $B in sigma(Y)$.
+
+  Let $(P',Q') in distributionstimes2(i)$.
+  It suffices to show that $p_(B sect C) (P',Q') aseq 0$ for any $B in sigma(Y)$, since this is a contraction
+  to $C subset.eq {i in.not irrel(Y|Z)}$.
+
+  Let $norm(dot)_1 := norm(dot)_(L^1 (Q))$.
+  
+  Let $B in sigma(Y)$. It suffices to show that for any $epsilon > 0$
+  there is $(P'',Q'') in distributionstimes2(i)$ s.t.
+  $p_(B sect C) (P'',Q'') aseq 0$ and with $p' := (dif P')/(dif Q), q' = (dif Q')/(dif Q)$ etc.
+  $
+  norm(p'-p'')_1
+  +
+  norm(q'-q'')_1
+  < epsilon$, since then
+  $norm(p_(B sect C) (P',Q'))_1
+  = integral abs(
+    E(p' B|Z)/E(p'|Z) -
+    E(q' B|Z)/E(q'|Z)
+  )
+  <= 2 epsilon$ for all $epsilon > 0$
+  and therefore $P'(B sect C|Z)aseq Q'(B sect C|Z)$.
+
+
+  
+  There is $I_0 subset.eq I$ and $I_0^* := I_0 union {*}$
+  family
+  $(phi_i)_(i in I_0^*)$, s.t.
+  $phi := product phi_i$,
+  $Q' = phi dot Q$.
+  W.l.o.g. we can assume $I_0 = NN$ and $* = 0$. s.t. $I_0^* = NN_0$.
+  Then $phi = product_(n = 0)^oo phi_n$ and this converges in $L^2(Q)$ and therefore also in $L^1(Q)$.
+  
+  
+  
+
+  
+  // Define $phi_(lambda) := product (lambda phi_i + comp(lambda))$
+
+  // $phi_lambda$ well-defined and $L^oo$ continuous in $lambda$?
+
+  // Idea:
+
+  // $phi_lambda = sum lambda^k$
+
+  // $
+  // product_(n=1)^m (lambda phi_n + comp(lambda))
+  // &= sum_(S subset.eq {1,...,m}) (1-lambda)^(m-|S|) lambda^(abs(S)) product_(s in S) phi_n \
+  // &= sum_(S subset.eq {1,...,m})
+  // (sum_(n = 0)^(m-abs(S)) lambda^(m -abs(S) - n) (-1)^n
+  // lambda^(abs(S)))
+  // product_(s in S) phi_s \
+  // &= sum_(S subset.eq {1,...,m})
+  // sum_(n = 0)^(m - abs(S)) lambda^(m - n) (-1)^n
+  // product_(s in S) phi_s \
+  // $
+
+
+  // $sum_(n =1)^oo log(1 - lambda(1 - phi_n))$
+
+
+  // $product_i integral sqrt(phi_i) dif Q < oo$
+
+  // $
+  // product_i integral sqrt((phi_i+1)/2) dif Q
+  // &= product_i 1/sqrt(2) integral sqrt(phi_i+1) dif Q \
+  // &= product_i integral sqrt((phi_i+1)/2) dif Q \
+  // $
+  
+  
+]
+
+
+
+
+$phi_lambda = sqrt(lambda) phi+ (1-sqrt(lambda))$
+
+$norm(phi_lambda - phi)^2_2
+= integral (sqrt(lambda) - 1)^2 (phi - 1)^2  dif PP \
+= (sqrt(lambda) - 1) norm(phi - 1)_2^2
+$
+
+
+$phi_lambda = lambda phi+ (1-lambda)$
+
+$norm(phi_lambda - phi)^2_2
+= integral (lambda - 1)^2 (phi - 1)^2  dif PP \
+= (lambda - 1) norm(phi - 1)_2^2
+$
+
+
+
+$
+integral sqrt((dif P)/(dif Q)) dif Q > 1- epsilon => norm(P(A|Z) - Q(A|Z)) < epsilon?
+$
+
+
+
+$angle.l a,b angle.r in B_epsilon (1) => norm(a-b) < epsilon$
+
+$epsilon >= norm(sqrt(phi) - sqrt(psi))_2 >= norm(sqrt(phi) - sqrt(psi))_1 $
+
+
+
+$abs(x - y) < epsilon => abs(x^2 - y^2) =$
+
+$
+=> norm(sqrt(P(A|Z)Q(A|Z))) > 1-epsilon?
+$
+
+
+$
+sqrt(P(A|Z)Q(A|Z)) =
+sqrt(EE(p A|Z)/EE(p|Z) EE(q A|Z)/EE(q|Z)) >=^"jensen"
+EE(sqrt(p) A|Z)/sqrt(EE(p|Z)) EE(sqrt(q) A|Z)/sqrt(EE(q|Z))
+>= ^"am/gm"
+2(EE(sqrt(p) A|Z)EE(sqrt(q) A|Z))/(E(p|Z) + E(q|Z)) \
+= 2 P(A slash sqrt(p)|Z) Q(A slash sqrt(q) |Z)
+$
+
+
+Jensen f convex $f(EE(X|Z)) <=EE(f(X)|Z)$.
+
+f concave $-f(EE(X|Z)) <= EE(-f(X)|Z) <=> f(EE(X|Z)) >= EE(f(X)|Z)$.
+Therefore,$X>=0$, $sqrt(EE(X|Z)) >= EE(sqrt(X)|Z)$.
+
 
 
 
