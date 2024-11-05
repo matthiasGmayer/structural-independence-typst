@@ -629,3 +629,125 @@ Therefore,$X>=0$, $sqrt(EE(X|Z)) >= EE(sqrt(X)|Z)$.
 #proof[
   $angles(sqrt(phi_n),X_n) -> angles(1,X) = EE(X)$.
 ]
+
+#lemma[
+  Let $PP_n -> PP$ and $A in AS$.
+  Then $PP_n (A|Z) -> PP(A|Z)$ in measure w.r.t $PP$.
+]
+#proof[
+  Let $phi_n$ be a density, s.t. $PP_n = phi_n dot PP$.
+  Recall that $PP_n (A|Z) = EE(phi_n 1_A|Z) slash EE(phi_n|Z)$.
+  
+  Since $sqrt(phi_n) -> 1$ in $L^2$, we have
+  $sqrt(EE(phi_n|Z)) -> 1$ in $L^2$ by ??.
+
+  
+  Let $delta > 0$.
+  We need to show
+  $PP(abs(EE(phi_n 1_A|Z) slash EE(phi_n|Z) - EE(1_A|Z))> delta) -> 0$.
+
+  Let $epsilon > 0$, to be chosen later.
+  Since $sqrt(phi_n) -> 1$ in $L^2$, we have
+  $sqrt(EE(phi_n|Z)) -> 1$ in $L^2$ by ??.
+
+  Therefore,
+  $EE(phi_n|Z) -> 1$ in $PP$-measure.
+  
+  Now $PP(abs(sqrt(EE(phi_n|Z)) - 1) > epsilon) -> 0$ by $L^2$ convergence
+  and $PP(abs(EE(phi_n A) - EE(A|Z)) > epsilon) -> 0$ by $L^1$ convergence.
+
+  // Now clearly,
+  // $abs(sqrt(a) - 1) <= epsilon => sqrt(a) = 1 + delta => a = 1 + 2 delta + delta^2$.
+  // In conclusion $abs(a - 1) <= 2 epsilon + epsilon^2$
+  
+
+  Now for $tilde(epsilon) = (epsilon^2 + 2 epsilon)/(1 - 2 epsilon)$ and $rho = tilde(epsilon) (1+epsilon) + epsilon > 0$ we have for $a,b,c in [0,oo)$,
+  where $c<=1$ with $abs(sqrt(a)-1) <= epsilon$ and $abs(b-c) <= epsilon$ that
+  $abs(b/a - c) <= rho$.
+  It is clear, that we can choose $epsilon > 0$, s.t. $rho < delta$.
+
+  To prove this bound, note that
+  $abs(sqrt(a) - 1) < epsilon$ implies that there is $xi in [-epsilon,epsilon]$ s.t. $sqrt(a) = 1+xi$.
+  Then $1/a$ = $1/(1+xi^2 + 2 xi)$ and $abs(1/a - 1) = abs((xi^2 + 2 xi)/(1 + xi^2 + 2 xi)) <= (xi^2 + 2 xi)/(1 - 2 xi) <= tilde(epsilon)$.
+  Now $abs(b/a - c) = abs(b/a - b) + abs(b + c) <= abs(1/a - 1) b + epsilon <= tilde(epsilon) b + epsilon$.
+  Since $b <= abs(b-c) + 1 <= 1 + epsilon$,
+  we have $abs(b/a - c) <= tilde(epsilon) (1+epsilon) + epsilon = rho$
+
+  Therefore substituting $a = EE(phi_n|Z)(omega), b = EE(phi_n 1_A|Z)(omega), c= EE(1_A|Z)(omega)$
+  for appropriate $omega$,
+  $
+  &PP(abs(EE(phi_n 1_A|Z) slash EE(phi_n|Z) - EE(1_A|Z))> delta) \
+  <=&
+  PP(abs(sqrt(EE(phi_n|Z)) - 1) > epsilon) +
+  PP(abs(EE(phi_n A) - EE(A|Z)) > epsilon) -> 0. 
+  $
+  This concludes the proof.
+]
+
+#lemma[
+  Let $phi_n -> 1$ in $L^1 (PP)$ and $X in L^oo$.
+  Then $EE(phi_n X|Z)/EE(phi_n|Z) -> EE(X|Z)$ in $PP$-measure.
+]
+#proof[
+  Clearly, $EE(phi_n X|Z) -> EE(phi X|Z)$ and $EE(phi_n|Z) -> EE(phi|Z)$ in $L^1(PP)$ and therefore in $PP$-measure.
+  Therefore, $$
+]
+
+
+
+
+#lemma[
+  Let $PP_n -> PP$ and $X$ be bounded. Then $EE_n (X|Z) -> EE(X|Z)$ in $PP$-measure.
+]
+#proof[
+  WLOG $0 <= X <= 1$.
+  Let $phi_n$ be a density, s.t. $PP_n = phi_n dot PP$.
+  Recall that $PP_n (A|Z) = EE(phi_n 1_A|Z) slash EE(phi_n|Z)$.
+  Since $sqrt(phi_n) -> 1$ in $L^2$, by ?? we have
+  $sqrt(EE(phi_n|Z)) -> 1$ in $L^2$ and in measure.
+  Clearly, $EE(phi_n X|Z) -> EE(X|Z)$ in $L^1$ and in measure.
+  
+  Define $f(x,y) = x/y^2 1_(y > 0.1)$. Then $f$ is continuous on $RR times RR_(>0.1)$
+  while $(EE(phi X|Z),EE(phi|Z))$ is contained in $[0,1] times [0.5,1.5]$ almost surely.
+  By @lem:conv_measure_cont_func
+  $EE_n (X|Z) = f(EE(phi_n X|Z),EE(phi X|Z)) -> f(EE(X|Z),1) = EE(X|Z)$ in measure.
+]
+
+
+
+
+
+po
+
+#lemma[
+  Let $PP_n -> PP$ in $L^1$ and $X$ be bounded.
+  Then $EE_n (X|Z) -> EE(X|Z)$ in $PP$-measure.
+]
+#proof[
+  W.l.o.g. $0<= X <= 1$.
+  Let $phi_n$ be a density, s.t. $PP_n = phi_n dot PP$.
+  Recall that $PP_n (A|Z) = EE(phi_n 1_A|Z) slash EE(phi_n|Z)$.
+  Since $phi_n -> phi$ in $L^1$, we have
+  $EE(phi_n|Z) -> EE(phi|Z)$ in $L^1$ and in measure.
+  Clearly, $EE(phi_n X|Z) -> EE(X|Z)$ in $L^1$ and in measure.
+  Let $epsilon > 0$.
+  Then since $PP(phi < delta) ->^(delta -> 0) 0$.
+  There is $delta > 0$, s.t. $PP(phi > delta) > 1 -epsilon$.
+  Set $C = {phi>delta}$ and let $mu = PP|_C$ be a finite measure on $(C,AS|_C)$.
+  Clearly, $EE(phi_n|Z)|_C -> EE(phi|Z)|_C$ and
+  $EE(phi_n X|Z)|_C -> EE(X|Z)|_C$ in $mu$-measure.
+  
+  Define $f(x,y) = x/y^2 1_(y > 0)$. Then $f$ is continuous on $RR times RR_(>0)$
+  while $(EE(phi X|Z)|_C,EE(phi|Z)|_C)$ is contained in $[0,1] times [delta,2]$ $mu$-a.e.
+  By @lem:conv_measure_cont_func
+  $EE_n (X|Z)|_C = f(EE(phi_n X|Z)|_C,EE(phi X|Z)|_C) -> f(EE(X|Z)|_C,1) = EE(X|Z)|_C$
+  in $mu$-measure.
+  Therefore, for any $xi > 0$,
+  $limsup_(n) PP(abs(EE_n (X|Z) - EE (X|Z)) > xi)
+  <= limsup_(n) mu(abs(EE_n (X|Z) - EE (X|Z)) > xi) + PP(C^c)
+  = PP(C^c) <= epsilon.
+  $
+
+  Since $epsilon$ was arbitrary, we have
+  $forall xi > 0: PP(abs(EE_n (X|Z) - EE (X|Z)) > xi) -> 0$.
+]

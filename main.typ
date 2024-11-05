@@ -4,6 +4,7 @@
 #show "sigma algebra": it => [$sigma$-algebra]
 #show "sect stable": it => [$sect$-stable]
 
+#let radiv(P,Q) = $(dif #P)/(dif #Q)$
 
 
 #align(center)[
@@ -1110,7 +1111,7 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Then $(P(A|Z) - Q(A|Z))(P(B|Z) - Q(B|Z)) aseq 0$.
   Therefore, for a.e. $omega in Omega$, $P(A|Z)(omega) = Q(A|Z)(omega)$
   or $P(B|Z)(omega) = Q(A|Z)(omega)$.
-]
+] <thm:mutual_exclusion>
 #proof[
   Let $f : Omega -> RR_(>0)$ $sigma(U_i) ms$ s.t. $P = f dot Q$.
   We use the fact that for the positive $sigma(U_i) ms$ density $g=(1+f)/2$, we can define
@@ -1212,12 +1213,12 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 
 
 #corollary[
-  Let $PP_n -> PP$ and $X in L^oo (PP)$, then $phi_n X -> X$ in $L^1(PP)$.
-]
+  Let $P_n -> P$ and $X in L^oo (PP)$, then $phi_n X -> phi X$ in $L^1(PP)$
+] <cor:hilbert_bounded_l1>
 #proof[
-  $sqrt(phi_n) -> sqrt(phi)$ in $L^2$.
+  $sqrt(phi_n) -> sqrt(phi)$ in $L^2(PP)$.
   Since $X$ is bounded, $X_n := sqrt(phi_n X) in L^2$ and $X_n -> sqrt(phi X)$ in $L^2$.
-  Therefore $phi_n X = X_n X_n -> X X = phi X$ in $L^1$.
+  Therefore $phi_n X = X_n X_n -> sqrt(phi X) sqrt(phi X) = phi X$ in $L^1$.
 ]
 
 #corollary[
@@ -1225,53 +1226,62 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Then $EE(phi_n A|Z) -> EE(A|Z)$ in $L^1$.
 ]
 #proof[
-  Follows by the linearity of conditional expectation.
+  Follows by the linearity of conditional expectation and @cor:hilbert_bounded_l1.
 ]
 
 #lemma[
-  Let $PP_n -> PP$ and $A in AS$.
-  Then $PP_n (A|Z) -> PP(A|Z)$ in measure w.r.t $PP$.
+  Let $mu$ be a finite measure on $(Omega,AS)$.
+  Let $X_n -> X$ and $Y_n -> Y$ in $mu$-measure.
+  If $(X,Y)$ is contained in a compact set $K subset.eq RR^2$ $mu$-a.e.
+  and
+  $f : RR^2 ->RR$ is continuous on an open set $U supset.eq K$.
+  Then $f(X_n,Y_n) -> f(X,Y)$ in $mu$-measure.
+] <lem:conv_measure_cont_func>
+#proof[
+  There is $K'$ compact and $U'$ open, s.t.
+  $U supset.eq K' supset.eq U' supset.eq K$.
+  The claim now follows by the uniform continuity of $f$ on $K'$.
+]
+
+
+#lemma[
+  Let $PP_n -> PP$ in $L^1$ and $X$ be bounded.
+  Then $EE_n (X|Z) -> EE(X|Z)$ in $PP$-measure.
 ]
 #proof[
   Let $phi_n$ be a density, s.t. $PP_n = phi_n dot PP$.
   Recall that $PP_n (A|Z) = EE(phi_n 1_A|Z) slash EE(phi_n|Z)$.
+  Since $phi_n -> phi$ in $L^1$, we have
+  $EE(phi_n|Z) -> EE(phi|Z)$ in $L^1$ and in measure.
+  Clearly, $EE(phi_n X|Z) -> EE(X|Z)$ in $L^1$ and in measure.
   Let $epsilon > 0$.
-  We need to show
-  $PP(abs(EE(phi_n 1_A|Z) slash EE(phi_n|Z) - EE(1_A|Z))> epsilon) -> 0$.
-
-  Let $delta > 0$ to be chosen later.
-  Since $sqrt(phi_n) -> 1$ in $L^2$, we have
-  $sqrt(EE(phi_n|Z)) -> 1$ in $L^2$ by ??.
-  Now $PP(abs(sqrt(EE(phi_n|Z)) - 1) > delta) -> 0$ by $L^2$ convergence
-  and $PP(abs(EE(phi_n A) - EE(A|Z)) > delta) -> 0$ by $L^1$ convergence.
-
-  // Now clearly,
-  // $abs(sqrt(a) - 1) <= epsilon => sqrt(a) = 1 + delta => a = 1 + 2 delta + delta^2$.
-  // In conclusion $abs(a - 1) <= 2 epsilon + epsilon^2$
+  Then since $PP(phi < delta) ->^(delta -> 0) 0$.
+  There is $delta > 0$, s.t. $PP(phi > delta) > 1 -epsilon$.
+  Set $C = {phi>delta}$ and let $mu = PP|_C$ be a finite measure on $(C,AS|_C)$.
+  Clearly, $EE(phi_n|Z)|_C -> EE(phi|Z)|_C$ and
+  $EE(phi_n X|Z)|_C -> EE(X|Z)|_C$ in $mu$-measure.
   
-
-  
-  Now for $tilde(epsilon) = (epsilon^2 + 2 epsilon)/(1 - 2 epsilon)$ and $rho = tilde(epsilon) (1+epsilon) + epsilon > 0$ we have for $a,b,c in [0,oo)$,
-  where $c<=1$ with $abs(sqrt(a)-1) <= epsilon$ and $abs(b-c) <= epsilon$ that
-  $abs(b/a - c) <= delta$.
-  It is clear, that we can choose $delta > 0$, s.t. $rho < epsilon$.
-
-  To prove this bound, note that
-  $abs(sqrt(a) - 1) < epsilon$ implies that there is $xi in [-epsilon,epsilon]$ s.t. $sqrt(a) = 1+xi$.
-  Then $1/a$ = $1/(1+xi^2 + 2 xi)$ and $abs(1/a - 1) = abs((xi^2 + 2 xi)/(1 + xi^2 + 2 xi)) <= (xi^2 + 2 xi)/(1 - 2 xi) <= tilde(epsilon)$.
-  Now $abs(b/a - c) = abs(b/a - b) + abs(b + c) <= abs(1/a - 1) b + epsilon <= tilde(epsilon) b + epsilon$.
-  Since $b <= abs(b-c) + 1 <= 1 + epsilon$,
-  we have $abs(b/a - c) <= tilde(epsilon) (1+epsilon) + epsilon = rho$
-
-  Therefore substituting $a = EE(phi_n|Z)(omega), b = EE(phi_n 1_A|Z)(omega), c= EE(1_A|Z)(omega)$
-  for appropriate $omega$,
+  Define $f(x,y) = x/y 1_(y > 0)$. Then $f$ is continuous on $RR times RR_(>0)$
+  while $(EE(phi X|Z)|_C,EE(phi|Z)|_C)$ is contained in $[0,1] times [delta,2]$ $mu$-a.e.
+  By @lem:conv_measure_cont_func
+  $EE_n (X|Z)|_C = f(EE(phi_n X|Z)|_C,EE(phi X|Z)|_C) -> f(EE(X|Z)|_C,1) = EE(X|Z)|_C$
+  in $mu$-measure.
+  Therefore, for any $xi > 0$,
+  $limsup_(n) PP(abs(EE_n (X|Z) - EE (X|Z)) > xi)
+  <= limsup_(n) mu(abs(EE_n (X|Z) - EE (X|Z)) > xi) + PP(C^c)
+  = PP(C^c) <= epsilon.
   $
-  &PP(abs(EE(phi_n 1_A|Z) slash EE(phi_n|Z) - EE(1_A|Z))> epsilon) \
-  <=&
-  PP(abs(sqrt(EE(phi_n|Z)) - 1) > delta) +
-  PP(abs(EE(phi_n A) - EE(A|Z)) > delta) -> 0. 
-  $
-  This concludes the proof.
+
+  Since $epsilon$ was arbitrary, we have
+  $forall xi > 0: PP(abs(EE_n (X|Z) - EE (X|Z)) > xi) -> 0$.
+]
+
+#lemma[
+  $sqrt(phi_n) -> sqrt(phi)$ in $L^2 (PP)$.
+  Then $phi_n -> phi$ in $L^1$
+]
+#proof[
+  Hölder.
 ]
 
 
@@ -1281,17 +1291,174 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 
 == Fundamental theorem for the random index set of irrelevance.
 
+
+#lemma[
+  Let $phi$ and $psi$ be densities, s.t.
+  $phi$ is $sigma(U) ms$ and
+  $forall A in sigma(U): integral_A psi dif PP = PP(A)$.
+  Then $phi psi$ is a density and for
+  $phi_i,psi_i$, we have
+  $norm(phi_1 psi_1 - phi_2 psi_2)_1 <= norm(phi_1 - phi_2) + norm(psi_1 - psi_2)$.
+]
+#proof[
+  $integral phi psi dif PP = integral tilde(phi) (U) (psi dot PP)_U =
+  integral tilde(phi) dif PP_U = 1$.
+
+
+
+  $integral
+  EE(abs(phi_1 psi_1 - phi_2 psi_2) |U)
+  $
+  
+  $
+  norm(phi_1 psi_1 - phi_2 psi_2)_1
+  <= norm((phi_1 - phi_2) psi_1)_1 + norm(phi_2 (psi_1 - psi_2))
+  = norm(phi_1 - phi_2) + 
+  $
+
+  $
+  integral phi_2 abs(psi_1 - psi_2) dif PP
+  = integral abs(psi_1 - psi_2) dif phi_2 dot PP.
+  $
+
+
+  $
+  integral phi (x) integral abs(psi_1 (x,y) - psi_2(x, y)) dif x dif y
+  $
+  
+  
+  $
+  // integral abs(phi_1 psi_1 - phi_2 psi_2) dif PP
+  // <= integral abs(tilde(phi_1) (U) psi_1 - tilde(phi_2) (U) psi_2) dif PP
+  $
+]
+
+
+
+#lemma[
+  Let $i in I$.
+  The set ${(P,Q) in distributionstimes2(i) : P(A|Z)(omega) != Q(A|Z)(omega)
+  "for a.e." omega in C}$
+  is either empty or dense in the topology $L^1 (P)$ on $distributionstimes2(i)$ for all $(P,Q) in distributionstimes2(2)$.
+]
+#proof[
+  Let
+  $(P,Q) in distributionstimes2(i)
+  : P(A|Z) (omega) != Q(A|Z) (omega)$ for a.e.
+  $omega in C$.
+  
+  Then $Q=q dot P$ for a $sigma(U_i) ms$ density $q$.
+
+  Let $(P',Q') in distributionstimes2(i)$.
+  
+  Then there is a family of densities $(p'_n)_(n in NN_0)$, s.t.
+  + $forall D in sigma(U) integral_D p_0 dif P' = P'(A)$
+  + $product_(n in NN_0) p'_n$ converges in $L^1$,
+
+  
+
+  + Let $j in I union {*}$ and $h_1,h_2$ be $sigma(U_j) ms$ densities w.r.t. $P$ if $j != *$, s.t.
+    $h_1 asneq h_2$ if $j = i$ and $h_1 = h_2$ if $j != i$.
+    This ensures that $(P',Q') := (h_1 dot P,h_2 dot Q) in distributionstimes2(i)$.
+
+
+
+  + Suppose $exists n_0 in NN: forall n>= n_0 : p_n = 1$.
+    Then set $phi_lambda = product_(n=0)^(n_0) (lambda p_n + comp(lambda))
+    = f(lambda,p_0,...,p_n_0)$.
+    Note that $f_omega (lambda) := f(lambda,p_1(omega),...,p_n_0(omega))$ is a polynomial
+    for every $omega in Omega$.
+    Clearly,
+    $phi_0 = 1$ and $phi_1 = p$.
+    Note that $phi_lambda$ is a density for all $lambda in [0,1]$ by
+    the independence of $U_n$.
+    Set $R_lambda := phi_lambda dot P$.
+    Clearly, $phi_lambda -> p$ in $L^1 (P)$ by independence of $U_n$.
+    Our goal is to show that for $lambda$ near $1$, we
+    have $R_lambda (A|Z) != R'_lambda (B|Z)$ a.s. on $C$.
+
+    For this, note that
+    $
+    &R_lambda (A|Z)(omega) = R'_lambda (A|Z)(omega) \
+    <=>& EE(phi_lambda 1_A|Z) EE(phi'_lambda|Z)(omega)
+    = EE(phi'_lambda 1_A|Z)(omega)
+    EE(phi_lambda|Z)(omega) \
+    <=>&
+    f(lambda,EE(p_0 1_A|Z)(omega),...,EE(p_n_0 1_A|Z)(omega))
+    f'(lambda,EE(p_0 |Z)(omega),...,EE(p_n_0 |Z)(omega)) \
+    &-
+    f(lambda,EE(p_0|Z)(omega),...,EE(p_n_0 |Z)(omega))
+    f'(lambda,EE(p_0 1_A|Z)(omega),...,EE(p_n_0 1_A|Z)(omega)) = 0 \
+    $
+    The left hand side of the last equality is a polynomial $g_omega$
+    for all $omega in Omega$.
+
+    Since the equality holds for $lambda = 0$ and almost all $omega$,
+    $g_omega$ is not the zero polynomial for almost every $omega$.
+    Therefore, by Fubini, the set ${(lambda,omega) in [0,1] times Omega: g_omega (lambda) != 0}$
+    has probability 1 for the probability measure $lambda|_[0,1] times P$.
+    Again, by Fubini, the set ${lambda in [0,1]: g_omega (lambda) != 0 "for a.e." omega in Omega}$
+    has measure $1$.
+    Therefore, we can choose a sequence $lambda_n arrow.t 1$, s.t.
+    $g_omega (lambda_n) != 0$ for all $n in NN$ and a.e. $omega in Omega$.
+    By construction, $R_lambda -> P'$ and $R'_lambda -> Q'$ in $L^1$.
+    
+    
+    
+    
+  
+  
+
+  
+  
+  
+  // Suppose there is a
+  // $(P,Q) in distributionstimes2(i)
+  // : P(A|Z) (omega) != Q(A|Z) (omega)$ for a.e.
+  // $omega in C$.
+  // Let $(P',Q') in distributionstimes2(i)$.
+  // We need to show that $forall epsilon > 0$
+  // there is a $(P'',Q'') in distributionstimes2(i)$, s.t.
+  // $d(P',P'') + d(Q',Q'') < epsilon$ and
+  // $P''(A|Z) (omega) != Q''(A|Z) (omega)$ for a.e.
+  // $omega in C$.
+
+  // // Let $p = radiv(P,PP), p' = radiv(P',PP), q = radiv(Q,PP)$
+  // Let $p,p',q,q'$ be the radon nikodym derivatives of $P,P',Q,Q'$ w.r.t. $PP$ respectively.
+  // By ?? there is a countable set $I_0 = {i_n : n in NN} subset.eq I union {*}$, $i_1=*$,
+  // and families
+  // $(p_n)_(n in NN)$,
+  // $(p'_n)_(n in NN)$,
+  // $(q_n)_(n in NN)$,
+  // $(q'_n)_(n in NN)$, s.t.
+  
+  // + For $n > 1$ and $V = U_i_n$, $p_n = radiv(P_V,PP_V) (V)$.
+  // + $p = product_(n=1)^oo p_n := lim_k product_(n=1)^k p$ in $L^1 (PP)$,
+  // + $integral_(A) p_i_1 dif PP = PP(A)$ for all $A in sigma(U)$,
+  // and likewise for $p',q$ and $q'$.
+
+  // Let $n_0 in NN $ s.t. for all $n >= n_0$ 
+  // we have
+  // $norm(p - product_(k=1)^n p_n)_1, < epsilon$ and likewise for $p',q,q'$.
+  
+  
+]
+
+
 #theorem[
   If $forall P in distributionstimes: X indep_P Y | Z$, then
   $irrel(X|Z) union irrel(Y|Z) aseq I$.
 ]
 #proof[
-  
-  Look at the continuous $sigma(Z) ms$ function
-  
-  $p_A : distributionstimes2(i) -> L^oo; (P,Q) |-> abs(P(A|Z) - Q(A|Z))$.
+  // Look at the continuous $sigma(Z) ms$ function
+  Define the metric $d : distributionstimes times distributionstimes -> RR ; (P,Q) |-> norm(radiv(P,PP)-radiv(Q,PP))_oo$.
+  The function
+  $p_A : distributionstimes2(i) -> L^oo (Omega,sigma(Z),PP); (P,Q) |-> abs(P(A|Z) - Q(A|Z))$
+  is clearly continuous w.r.t. the topology on $distributionstimes2(i)$ induced by $d$.
+  By @thm:mutual_exclusion, we know $p_A p_B aseq 0$ for any $B in sigma(Y)$.
 
-  We know $p_A p_B aseq 0$ for any $B in sigma(Y)$.
+  
+  
 
   Suppose, that there is $i in I$, $C_0 in sigma(Z) without NS$, s.t.
   $C subsetaseq {i in.not irrel(X|Z) union irrel(Y|Z)}$.
