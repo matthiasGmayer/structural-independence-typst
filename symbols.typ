@@ -13,8 +13,8 @@
 #let supp = "supp"
 #let comp = math.overline
 #let distributions=[$triangle.t$#h(0pt)]
-#let distributionstimes=[$triangle.t^(#h(-0.25em)times)$#h(-0.0em)]
-#let distributionstimes2(i)=[$triangle.t^(#h(-0.25em)times 2)_#i$#h(-0.0em)]
+#let distributionstimes=[$triangle.t^(#h(-0.25em)times)$]
+#let distributionstimes2(..args)=[$triangle.t^(#h(-0.25em)times 2)_(#args.pos().join(","))$]
 #let indep = math.scripts(math.class("relation")[
   #move(dy:0.045em)[#scale(origin: bottom, y:140%)[#sym.tack.t.double]]
 ])

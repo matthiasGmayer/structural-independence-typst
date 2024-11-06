@@ -1293,155 +1293,142 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 
 
 #lemma[
-  Let $phi$ and $psi$ be densities, s.t.
-  $phi$ is $sigma(U) ms$ and
-  $forall A in sigma(U): integral_A psi dif PP = PP(A)$.
-  Then $phi psi$ is a density and for
-  $phi_i,psi_i$, we have
-  $norm(phi_1 psi_1 - phi_2 psi_2)_1 <= norm(phi_1 - phi_2) + norm(psi_1 - psi_2)$.
-]
+  Let $phi,phi'$ and $psi,psi'$ be probability densities w.r.t. $PP$ s.t.
+  $phi,phi'$ are $sigma(U) ms$ and
+  $EE(psi|U)=EE(psi'|U)=1$.
+  Then $phi psi$ is a density.
+  And $norm(phi psi - phi' psi')_1 <=  norm(phi' - phi)_1 + norm(EE(abs(psi'-psi) :U))_oo$.
+] <lem:cond_product>
 #proof[
-  $integral phi psi dif PP = integral tilde(phi) (U) (psi dot PP)_U =
-  integral tilde(phi) dif PP_U = 1$.
-
-
-
-  $integral
-  EE(abs(phi_1 psi_1 - phi_2 psi_2) |U)
+  First, note that $integral phi psi dif PP = integral phi EE(psi|U) dif PP = 1$,
+  so $phi psi$ is a density.
+  Second,
   $
-  
-  $
-  norm(phi_1 psi_1 - phi_2 psi_2)_1
-  <= norm((phi_1 - phi_2) psi_1)_1 + norm(phi_2 (psi_1 - psi_2))
-  = norm(phi_1 - phi_2) + 
-  $
-
-  $
-  integral phi_2 abs(psi_1 - psi_2) dif PP
-  = integral abs(psi_1 - psi_2) dif phi_2 dot PP.
-  $
-
-
-  $
-  integral phi (x) integral abs(psi_1 (x,y) - psi_2(x, y)) dif x dif y
-  $
-  
-  
-  $
-  // integral abs(phi_1 psi_1 - phi_2 psi_2) dif PP
-  // <= integral abs(tilde(phi_1) (U) psi_1 - tilde(phi_2) (U) psi_2) dif PP
+  norm(phi' psi' - phi psi)_1 
+  &<= norm(phi' (psi' - psi))_1 + norm((phi' - phi) psi)_1 \
+  &= integral phi' EE(abs(psi'-psi):U) + integral (phi' - phi) EE(psi|U) dif PP \
+  &<= norm(EE(abs(psi'-psi) :U))_oo + norm(phi' - phi)_1
   $
 ]
 
-
-
-#lemma[
+#theorem[
   Let $i in I$.
-  The set ${(P,Q) in distributionstimes2(i) : P(A|Z)(omega) != Q(A|Z)(omega)
-  "for a.e." omega in C}$
-  is either empty or dense in the topology $L^1 (P)$ on $distributionstimes2(i)$ for all $(P,Q) in distributionstimes2(2)$.
+  The set
+  $
+  distributionstimes2(i,C):= {(P,Q) in distributionstimes2(i) : P(A|Z)(omega) != Q(A|Z)(omega)
+  "for a.e." omega in C}
+  $
+  is either empty or dense in the topology $L^1 (P)$ on $distributionstimes2(i)$ for all $(P,Q) in distributionstimes2(i,C)$.
 ]
 #proof[
   Let
-  $(P,Q) in distributionstimes2(i)
-  : P(A|Z) (omega) != Q(A|Z) (omega)$ for a.e.
-  $omega in C$.
-  
-  Then $Q=q dot P$ for a $sigma(U_i) ms$ density $q$.
+  $(P,Q) in distributionstimes2(i,C)$
+  // $
+  // : P(A|Z) (omega) != Q(A|Z) (omega)$ for a.e.
+  // $omega in C$.
+  Then $Q=q dot P$ for a $sigma(U_i) ms$ probability density $q$.
 
   Let $(P',Q') in distributionstimes2(i)$.
-  
-  Then there is a family of densities $(p'_n)_(n in NN_0)$, s.t.
-  + $forall D in sigma(U) integral_D p_0 dif P' = P'(A)$
-  + $product_(n in NN_0) p'_n$ converges in $L^1$,
+  Then there is a family of densities $(phi_n)_(n in NN_0)$ and indices ${i_n}_(n in NN)$, s.t.
+  - $EE(phi_0|U) = 1$.
+  - $forall n in NN : phi_n$ is $sigma(U_i_n) ms$.
+  - $product_(n in NN_0) phi_n$ converges (unconditionally) in $L^1$
+    and a.s. pointwise to $radiv(P',P)$.
+  W.l.o.g. we can assume $i = i_1$.
+  Then there is a $sigma(U_i) ms$ probability density $q'$, s.t.
+  $Q' = q' dot P$. Set $phi'_1 =  q' dot phi_0$ and for $n in NN_0 without {1}$, set $phi'_n = phi_n$.
+  Then $q dot product_(n in NN_0) phi_n = product_(n in NN_0) phi'_n = radiv(Q',P)$
+  by independence of $U$, and @lem:cond_product.
 
-  
-
-  + Let $j in I union {*}$ and $h_1,h_2$ be $sigma(U_j) ms$ densities w.r.t. $P$ if $j != *$, s.t.
-    $h_1 asneq h_2$ if $j = i$ and $h_1 = h_2$ if $j != i$.
-    This ensures that $(P',Q') := (h_1 dot P,h_2 dot Q) in distributionstimes2(i)$.
-
-
-
-  + Suppose $exists n_0 in NN: forall n>= n_0 : p_n = 1$.
-    Then set $phi_lambda = product_(n=0)^(n_0) (lambda p_n + comp(lambda))
-    = f(lambda,p_0,...,p_n_0)$.
-    Note that $f_omega (lambda) := f(lambda,p_1(omega),...,p_n_0(omega))$ is a polynomial
-    for every $omega in Omega$.
-    Clearly,
-    $phi_0 = 1$ and $phi_1 = p$.
-    Note that $phi_lambda$ is a density for all $lambda in [0,1]$ by
-    the independence of $U_n$.
-    Set $R_lambda := phi_lambda dot P$.
-    Clearly, $phi_lambda -> p$ in $L^1 (P)$ by independence of $U_n$.
+  + Suppose $exists m in NN: forall n>= m : phi_n = 1$.
+    Then define
+    $
+    p : &[0,1] times RR^{0,..,m} -> [0,1] \
+    &(lambda, x) |-> product_(n=0)^(m) (lambda x_n + comp(lambda)).
+    $
+    Note that
+    $p(dot,x)$ is a polynomial for $x in RR^{0,...,m}$.
+    Set $Phi = (phi_n)_(n=1)^m$
+    and $Phi' = (phi'_n)_(n=1)^m$.
+    Define $phi_lambda (omega) = p(lambda,Phi(omega))$ and
+    $phi'_lambda (omega) = p(lambda, Phi'(omega))$.
+    The following properties hold for $phi_lambda$ and $phi'_lambda$.
+    // and $phi'_lambda (omega) = f(lambda,tilde(p')(omega))$.
+    #set enum(numbering:"(i)")
+    + We claim that $phi_lambda$ and $phi'_lambda$ are probability densities w.r.t. $P$.
+      Indeed,
+      $integral phi_lambda dif P = integral product_(n=0)^m (lambda phi_n + comp(lambda)) dif P
+      = integral EE(lambda phi_0 + comp(lambda)|U) product_(n=1)^m ((lambda phi_n) + comp(lambda)) dif P
+      = product_(n=1)^m integral ((lambda phi_n) + comp(lambda)) dif P = 1,$
+      because of  $EE(phi_0|U) = 1$ and the independence of $U$.
+      
+    + We claim that $lambda |-> phi_lambda$ and $lambda |-> phi'_lambda$ are continuous maps
+      into $L^1$.
+      Indeed,
+      let $lambda,lambda' in [0,1]$.
+      Then, since $lambda phi_n - comp(lambda) - (lambda' phi_n - comp(lambda')) 
+      // = (lambda - lambda')phi_n - (1-lambda -(1- lambda')) =
+      // (lambda - lambda') phi_n -(lambda'-lambda)
+      = (lambda - lambda') (phi_n - 1)$,
+      $
+      norm(phi_lambda - phi_lambda')_1
+      &= integral abs(product_(n=0)^m (lambda phi_n - comp(lambda)) - product_(n=0)^m (lambda' phi_n - comp(lambda'))) dif P  \
+      &<= norm(EE(abs((lambda - lambda') (phi_0-1)):U))_oo
+      product_(n=1)^m norm((lambda - lambda')(phi_n - 1))_1 \
+      // &= (lambda - lambda')^m norm(EE(abs(phi_0-1):U))_oo product_(n=1)^m norm(phi_n - 1)_1 \
+      &<= (lambda - lambda')^m dot 2 dot product_(n=1)^m 2 \
+      &= (2(lambda - lambda'))^m.
+      $
+    
+    Set $R_lambda := phi_lambda dot P$ and $R'_lambda := phi'_lambda dot P$.
     Our goal is to show that for $lambda$ near $1$, we
     have $R_lambda (A|Z) != R'_lambda (B|Z)$ a.s. on $C$.
+    Set
+    $E_(Phi,A) = (EE(phi_n 1_A|Z))_(n=1)^m$,
+    $E_(Phi',A) = (EE(phi'_n 1_A|Z))_(n=1)^m$.
+    $E_(Phi) = (EE(phi_n|Z))_(n=1)^m$,
+    $E_(Phi') = (EE(phi'_n|Z))_(n=1)^m$.
 
-    For this, note that
+    Now note that
     $
     &R_lambda (A|Z)(omega) = R'_lambda (A|Z)(omega) \
     <=>& EE(phi_lambda 1_A|Z) EE(phi'_lambda|Z)(omega)
     = EE(phi'_lambda 1_A|Z)(omega)
     EE(phi_lambda|Z)(omega) \
+    <=>& EE(p(lambda,Phi) 1_A|Z) EE(p(lambda,Phi')|Z)(omega)
+    = EE(p(lambda,Phi') 1_A|Z)(omega)
+    EE(p(lambda,Phi)|Z)(omega) \
     <=>&
-    f(lambda,EE(p_0 1_A|Z)(omega),...,EE(p_n_0 1_A|Z)(omega))
-    f'(lambda,EE(p_0 |Z)(omega),...,EE(p_n_0 |Z)(omega)) \
-    &-
-    f(lambda,EE(p_0|Z)(omega),...,EE(p_n_0 |Z)(omega))
-    f'(lambda,EE(p_0 1_A|Z)(omega),...,EE(p_n_0 1_A|Z)(omega)) = 0 \
+    p(lambda,E_(Phi,A)(omega)) p(lambda,E_(Phi')(omega))
+    - p(lambda,E_(Phi',A)(omega)) p(lambda,E_(Phi)(omega)) = 0
     $
-    The left hand side of the last equality is a polynomial $g_omega$
-    for all $omega in Omega$.
 
-    Since the equality holds for $lambda = 0$ and almost all $omega$,
-    $g_omega$ is not the zero polynomial for almost every $omega$.
-    Therefore, by Fubini, the set ${(lambda,omega) in [0,1] times Omega: g_omega (lambda) != 0}$
-    has probability 1 for the probability measure $lambda|_[0,1] times P$.
-    Again, by Fubini, the set ${lambda in [0,1]: g_omega (lambda) != 0 "for a.e." omega in Omega}$
-    has measure $1$.
-    Therefore, we can choose a sequence $lambda_n arrow.t 1$, s.t.
-    $g_omega (lambda_n) != 0$ for all $n in NN$ and a.e. $omega in Omega$.
-    By construction, $R_lambda -> P'$ and $R'_lambda -> Q'$ in $L^1$.
-    
-    
-    
-    
-  
-  
+    Let $p'(lambda,omega) = 
+    p(lambda,E_(Phi,A)(omega)) p(lambda,E_(Phi')(omega))
+    - p(lambda,E_(Phi',A)(omega)) p(lambda,E_(Phi)(omega)).
+    $
+    Clearly, $p' : [0,1] times Omega -> RR$ is measurable and
+    $p'(dot,omega)$ is a polynomial for all $omega in Omega$.
+    Then we have just proved that
+    $R_lambda (A|Z)(omega) = R'_lambda (A|Z)(omega) <=> p'(lambda,omega) = 0 .
+    $
+    Therefore, because $(R_0,R'_0) = (P,Q) in distributionstimes2(i,C)$, we have
+    $p'(0,omega) != 0$ for a.e. $omega in C$.
+    Therefore $p'(dot,omega)$ is not the zero polynomial for a.e. $omega in C$
+    and the set ${lambda in [0,1]: p'(lambda,omega)=0}$ is finite for a.e. $omega in C$.
+    Let $cal(L)$ be the lebesgue measure on $[0,1]$.
+    By Fubini, $(cal(L) times P){(lambda,omega) in [0,1] times C : p'(lambda,omega) = 0} = 0$.
+    Again, by Fubini, for $cal(L)$-a.e. $lambda in [0,1]$,
+    we have $P({omega in C: p'(lambda,omega) = 0}) = 0$.
+    So we can choose a sequence $lambda_n in [0,1]$, s.t. $lambda_n arrow 1$ and
+    for $n in NN$,
+    $p'(lambda_n,omega) != 0$ for a.e. $omega in C$.
+    Then by construction, $(R_lambda_n,R'_lambda_n) in distributionstimes2(i,C)$, while
+    $R_lambda_n -> P'$ and $R'_lambda_n -> Q'$ in $L^1 (P)$.
+  + Let now $(p_n)_(n in NN_0)$ be arbitrary.
+    Let $epsilon > 0$.
+    Choose, $m in NN$ s.t. $norm(product_(n=0)^m)$
 
-  
-  
-  
-  // Suppose there is a
-  // $(P,Q) in distributionstimes2(i)
-  // : P(A|Z) (omega) != Q(A|Z) (omega)$ for a.e.
-  // $omega in C$.
-  // Let $(P',Q') in distributionstimes2(i)$.
-  // We need to show that $forall epsilon > 0$
-  // there is a $(P'',Q'') in distributionstimes2(i)$, s.t.
-  // $d(P',P'') + d(Q',Q'') < epsilon$ and
-  // $P''(A|Z) (omega) != Q''(A|Z) (omega)$ for a.e.
-  // $omega in C$.
-
-  // // Let $p = radiv(P,PP), p' = radiv(P',PP), q = radiv(Q,PP)$
-  // Let $p,p',q,q'$ be the radon nikodym derivatives of $P,P',Q,Q'$ w.r.t. $PP$ respectively.
-  // By ?? there is a countable set $I_0 = {i_n : n in NN} subset.eq I union {*}$, $i_1=*$,
-  // and families
-  // $(p_n)_(n in NN)$,
-  // $(p'_n)_(n in NN)$,
-  // $(q_n)_(n in NN)$,
-  // $(q'_n)_(n in NN)$, s.t.
-  
-  // + For $n > 1$ and $V = U_i_n$, $p_n = radiv(P_V,PP_V) (V)$.
-  // + $p = product_(n=1)^oo p_n := lim_k product_(n=1)^k p$ in $L^1 (PP)$,
-  // + $integral_(A) p_i_1 dif PP = PP(A)$ for all $A in sigma(U)$,
-  // and likewise for $p',q$ and $q'$.
-
-  // Let $n_0 in NN $ s.t. for all $n >= n_0$ 
-  // we have
-  // $norm(p - product_(k=1)^n p_n)_1, < epsilon$ and likewise for $p',q,q'$.
-  
-  
 ]
 
 
