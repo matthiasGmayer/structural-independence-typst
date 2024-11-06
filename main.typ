@@ -1247,7 +1247,7 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 #lemma[
   Let $PP_n -> PP$ in $L^1$ and $X$ be bounded.
   Then $EE_n (X|Z) -> EE(X|Z)$ in $PP$-measure.
-]
+] <lem:conditional_expectation_in_measure>
 #proof[
   Let $phi_n$ be a density, s.t. $PP_n = phi_n dot PP$.
   Recall that $PP_n (A|Z) = EE(phi_n 1_A|Z) slash EE(phi_n|Z)$.
@@ -1318,8 +1318,8 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   distributionstimes2(i,C):= {(P,Q) in distributionstimes2(i) : P(A|Z)(omega) != Q(A|Z)(omega)
   "for a.e." omega in C}
   $
-  is either empty or dense in the topology $L^1 (P)$ on $distributionstimes2(i)$ for all $(P,Q) in distributionstimes2(i,C)$.
-]
+  is either empty or dense in the topology $L^1 (P)$ on $distributionstimes2(i)$ for any $(P,Q) in distributionstimes2(i,C)$.
+] <thm:density>
 #proof[
   Let
   $(P,Q) in distributionstimes2(i,C)$
@@ -1340,7 +1340,8 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Then $q dot product_(n in NN_0) phi_n = product_(n in NN_0) phi'_n = radiv(Q',P)$
   by independence of $U$, and @lem:cond_product.
 
-  + Suppose $exists m in NN: forall n>= m : phi_n = 1$.
+  + Finite dimensional case:
+    Suppose $exists m in NN: forall n>= m : phi_n = 1$.
     Then define
     $
     p : &[0,1] times RR^{0,..,m} -> [0,1] \
@@ -1416,7 +1417,7 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
     $p'(0,omega) != 0$ for a.e. $omega in C$.
     Therefore $p'(dot,omega)$ is not the zero polynomial for a.e. $omega in C$
     and the set ${lambda in [0,1]: p'(lambda,omega)=0}$ is finite for a.e. $omega in C$.
-    Let $cal(L)$ be the lebesgue measure on $[0,1]$.
+    Let $cal(L)$ be the Lebesgue measure on $[0,1]$.
     By Fubini, $(cal(L) times P){(lambda,omega) in [0,1] times C : p'(lambda,omega) = 0} = 0$.
     Again, by Fubini, for $cal(L)$-a.e. $lambda in [0,1]$,
     we have $P({omega in C: p'(lambda,omega) = 0}) = 0$.
@@ -1425,10 +1426,30 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
     $p'(lambda_n,omega) != 0$ for a.e. $omega in C$.
     Then by construction, $(R_lambda_n,R'_lambda_n) in distributionstimes2(i,C)$, while
     $R_lambda_n -> P'$ and $R'_lambda_n -> Q'$ in $L^1 (P)$.
-  + Let now $(p_n)_(n in NN_0)$ be arbitrary.
+    
+  + General case:
+    // Let now $(phi_n)_(n in NN_0)$ be arbitrary.
+    #text(size:1em, top-edge:"cap-height",bottom-edge: "descender")[
     Let $epsilon > 0$.
-    Choose, $m in NN$ s.t. $norm(product_(n=0)^m)$
-
+    Choose, $m in NN$ s.t.
+    $norm(product_(n=0)^m phi_n - phi)""_""_1 < epsilon$
+    and
+    $norm(product_(n=0)^m phi'_n - phi')_1 < epsilon$.
+    Set $tilde(phi) = product_(n=0)^m phi_n$
+    and
+    $tilde(phi)' = product_(n=0)^m tilde(phi)_n$.
+    Set $tilde(P) = tilde(phi) dot P$ and
+    $tilde(Q) = tilde(phi)' dot P$.
+    ]
+    Then by the choice of $m$,
+    $d_1 ((tilde(P),tilde(Q)\),(P',Q'\)\) < epsilon$
+    Clearly, $\(tilde(P),tilde(Q)'\)$ fulfills the assumption of finite dimensional case
+    and there is $(P'',Q''\) in distributionstimes2(i,C)$ s.t. $d_1((P'',Q''),(tilde(P),tilde(Q)\)\)< epsilon$.
+    By the triangle inequality,
+    $d_1((P'',Q''),(P',Q')) < epsilon$.
+    Since $epsilon>0$ was arbitrary, we have shown $L^1 (P)$ density
+    of $distributionstimes2(i,C)$ in $distributionstimes2(i)$.
+    #qedhere
 ]
 
 
@@ -1438,61 +1459,53 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 ]
 #proof[
   // Look at the continuous $sigma(Z) ms$ function
-  Define the metric $d : distributionstimes times distributionstimes -> RR ; (P,Q) |-> norm(radiv(P,PP)-radiv(Q,PP))_oo$.
-  The function
-  $p_A : distributionstimes2(i) -> L^oo (Omega,sigma(Z),PP); (P,Q) |-> abs(P(A|Z) - Q(A|Z))$
-  is clearly continuous w.r.t. the topology on $distributionstimes2(i)$ induced by $d$.
-  By @thm:mutual_exclusion, we know $p_A p_B aseq 0$ for any $B in sigma(Y)$.
-
-  
-  
-
+  // Define the metric $d : distributionstimes times distributionstimes -> RR ; (P,Q) |-> norm(radiv(P,PP)-radiv(Q,PP))_oo$.
+  // The function
+  // $p_A : distributionstimes2(i) -> L^oo (Omega,sigma(Z),PP); (P,Q) |-> abs(P(A|Z) - Q(A|Z))$
+  // is clearly continuous w.r.t. the topology on $distributionstimes2(i)$ induced by $d$.
+  // By @thm:mutual_exclusion, we know $p_A p_B aseq 0$ for any $B in sigma(Y)$.
   Suppose, that there is $i in I$, $C_0 in sigma(Z) without NS$, s.t.
   $C subsetaseq {i in.not irrel(X|Z) union irrel(Y|Z)}$.
   Then by the definition of irrelevance, there is $A in sigma(X)$
   and $(P,Q) in distributionstimes2(i)$
   and a $C in sigma(Z) without NS$ s.t. $C subsetaseq C_0$
   and $P(A|Z)(omega) != Q(A|Z)(omega)$ for a.e. $omega in C$.
+
+  Towards a contradiction, we show that
+  $C subset.eq {i in irrel(Y|Z)}$.
+  For this, let $(P',Q') in distributionstimes2(i)$ and $B in sigma(Y)$.
+  It suffices to show that $P'(B|Z)(omega) = Q'(B|Z)(omega)$ for a.e. $omega in C$,
+  since then the random index set $J(omega) := {i}$ if $omega in C$ and $nothing$ else;
+  is irrelevant to $Y$ given $Z$.
+  Restating this, we will prove $P'(B,C|Z) aseq Q'(B,C|Z)$.
   
-  Then $p_(A sect C) (P,Q) asgt 0$
-  Therefore the open set $O := p_A^(-1){f in L^oo :f(omega) > 0 "for a.e." omega in C}$ is nonempty.
-  For all $(P,Q) in O$, we have $p_(A sect C) (P,Q) asgt 0$.
-  Therefore $p_(B sect C) (P,Q) aseq 0$ for any $B in sigma(Y)$.
-
-  Let $(P',Q') in distributionstimes2(i)$.
-  It suffices to show that $p_(B sect C) (P',Q') aseq 0$ for any $B in sigma(Y)$, since this is a contraction
-  to $C subset.eq {i in.not irrel(Y|Z)}$.
-
-  Let $norm(dot)_1 := norm(dot)_(L^1 (Q))$.
-  
-  Let $B in sigma(Y)$. It suffices to show that for any $epsilon > 0$
-  there is $(P'',Q'') in distributionstimes2(i)$ s.t.
-  $p_(B sect C) (P'',Q'') aseq 0$ and with $p' := (dif P')/(dif Q), q' = (dif Q')/(dif Q)$ etc.
-  $
-  norm(p'-p'')_1
-  +
-  norm(q'-q'')_1
-  < epsilon$, since then
-  $norm(p_(B sect C) (P',Q'))_1
-  = integral abs(
-    E(p' B|Z)/E(p'|Z) -
-    E(q' B|Z)/E(q'|Z)
-  )
-  <= 2 epsilon$ for all $epsilon > 0$
-  and therefore $P'(B sect C|Z)aseq Q'(B sect C|Z)$.
-
-
-  
-  There is $I_0 subset.eq I$ and $I_0^* := I_0 union {*}$
-  family
-  $(phi_i)_(i in I_0^*)$, s.t.
-  $phi := product phi_i$,
-  $Q' = phi dot Q$.
-  W.l.o.g. we can assume $I_0 = NN$ and $* = 0$. s.t. $I_0^* = NN_0$.
-  Then $phi = product_(n = 0)^oo phi_n$ and this converges in $L^2(Q)$ and therefore also in $L^1(Q)$.
-
+  In @thm:density, we have $(P,Q) in distributionstimes2(i,C)$ is nonempty
+  and therefore
+  dense in $distributionstimes(i)$ in the topology induced by $d_(L^1(P))$.
+  Let $(P_n,Q_n) in distributionstimes2(i,C)$ s.t. $(P_n,Q_n) -> (P',Q')$.
+  By definition of $distributionstimes2(i,C)$, we have for all $n in NN$ that
+  $P_n (A|Z) (omega) != Q_n (A|Z) (omega)$ for a.e. $omega in C$
+  and therefore by @thm:mutual_exclusion, $P_n (B|Z) (omega) = Q_n (B|Z)(omega)$ for
+  a.e. $omega in C$.
+  Then by @lem:conditional_expectation_in_measure
+  $P_n (B,C|Z) -> P' (B,C|Z)$ in measure, while
+  $P_n (B,C|Z) aseq Q_n (B,C|Z) -> Q'(B,C|Z)$.
+  Since a limit in measure is unique,
+  $P' (B,C|Z) aseq Q'(B,C|Z)$.
 ]
 
+== The duality between History and Irrelevance
+
+
+#theorem[
+  
+]
+
+
+
+#theorem[
+  $history(X|Z) = comp(irrel(X|Z))$.
+]
 
 #bibliography("citations.bib")
 
