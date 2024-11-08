@@ -1,3 +1,5 @@
+#import "template.typ": *
+#show: showrules
 
 #align(center)[Writing notes]
 
@@ -554,7 +556,7 @@ Therefore,$X>=0$, $sqrt(EE(X|Z)) >= EE(sqrt(X)|Z)$.
   Let $p_n := (dif PP_n)/(dif PP)$.
   Then $EE(sqrt(p_n)) -> 1$.
   Let $q_n := EE(p_n|sigma(A))$
-  By @lem:eucl_density_cond_exp, $EE(sqrt(q_n)) = PP(A) sqrt(EE(p_n|A)) + PP(A^c) sqrt(EE(p_n|A^c)) -> 1$,
+  // By @lem:eucl_density_cond_exp, $EE(sqrt(q_n)) = PP(A) sqrt(EE(p_n|A)) + PP(A^c) sqrt(EE(p_n|A^c)) -> 1$,
   while $EE(1_A p_n) = EE(1_A q_n)$.
   We want to show that $PP_n (A) = PP(A) EE(p_n|A) -> PP(A) <=> EE(p_n|A) -> 1$.
 
@@ -709,7 +711,7 @@ Therefore,$X>=0$, $sqrt(EE(X|Z)) >= EE(sqrt(X)|Z)$.
   
   Define $f(x,y) = x/y^2 1_(y > 0.1)$. Then $f$ is continuous on $RR times RR_(>0.1)$
   while $(EE(phi X|Z),EE(phi|Z))$ is contained in $[0,1] times [0.5,1.5]$ almost surely.
-  By @lem:conv_measure_cont_func
+  // By @lem:conv_measure_cont_func
   $EE_n (X|Z) = f(EE(phi_n X|Z),EE(phi X|Z)) -> f(EE(X|Z),1) = EE(X|Z)$ in measure.
 ]
 
@@ -739,7 +741,7 @@ po
   
   Define $f(x,y) = x/y^2 1_(y > 0)$. Then $f$ is continuous on $RR times RR_(>0)$
   while $(EE(phi X|Z)|_C,EE(phi|Z)|_C)$ is contained in $[0,1] times [delta,2]$ $mu$-a.e.
-  By @lem:conv_measure_cont_func
+  // By @lem:conv_measure_cont_func
   $EE_n (X|Z)|_C = f(EE(phi_n X|Z)|_C,EE(phi X|Z)|_C) -> f(EE(X|Z)|_C,1) = EE(X|Z)|_C$
   in $mu$-measure.
   Therefore, for any $xi > 0$,
