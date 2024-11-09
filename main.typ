@@ -1689,6 +1689,107 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   In conclusion, we have $(X,U_comp(irrel(X|Z))) indep_P U_irrel(X|Z)$.
 ]
 
+#lemma[
+  Let $C = {irrel(X|Z) asneq nothing}$.
+  Then $sigma(Z)|_C subset.eq sigma(U)$.
+]
+#proof[
+  Let $A in sigma(Z)|_C$. we want
+  $
+  P(A|U) aseq 1_A
+  $
+
+  $P(A|Z) P(B|Z) = P(A,B|Z)$.
+
+  For any density
+  $
+  E(f P(A|U)|Z) = E(f 1_A|Z) = 1_A E(f|Z). \
+  tilde(E)(P(A|U)|Z) = 1_A.
+  $
+
+
+  If $forall A in sigma(U)$, we have
+  $E(E(1_A|Z)|U) = 1_A$.
+
+  Maybe for $EE(psi|U)=1$ we have
+  $EE(psi|Z) = 1$.??
+
+
+
+  
+  
+]
+
+#lemma[
+  Let $psi$ density with $EE(psi|U) = 1$.
+  Assume $EE(psi|U,Z) asneq 1$.
+  Then $C_< = {EE(psi|U,Z) < 1},C_> = {EE(psi|U,Z) > 1}$ are nonempty (because integral is 1).
+
+
+  Let $A in U_J$, $B in U_comp(J)$.
+
+
+  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$.
+
+
+
+  Let $psi, psi'$ be densities with $EE(psi|U) = 1$.
+
+  Let $phi = (psi + psi')/2$.
+
+  Then
+  $R(A|Z) R(B|Z) = R(A,B|Z)$
+  Following @thm:mutual_exclusion, we get
+
+  $(P(A|Z)-Q(A|Z))(P(B|Z) - Q(B|Z)) = 0$.
+
+
+
+  Then
+  
+  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$
+  $EE(psi 1_A|Z) EE(1_B|Z) = EE(psi 1_A 1_B|Z)$
+  
+  $ EE(1_B|Z) = EE(psi 1_A 1_B|Z)/EE(psi 1_A|Z)$
+  
+
+
+  $EE(psi|U) = 1$ and $psi$ is $sigma(U,Z) ms$
+  
+  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$.
+  
+  $EE(psi 1_A|Z) EE(1_B|Z) = EE(psi 1_A 1_B|Z)$.
+
+  Therefore $psi = 1$ on $EE(1_A|Z),EE(1_B|Z) > 0$.
+
+
+  $EE(psi 1_B|Z)= psi/EE(psi|U) $
+
+
+
+  Different idea
+
+  $EE(|Z) = EE(|EE(Z|U))$.
+
+  
+  
+]
+
+
+
+#lemma[
+  If forall all $psi$ with $EE(psi|U) aseq 1$, we have
+  $EE(psi|U,Z)  aseq 1$, then
+  $sigma(Z) subset.eq sigma(U)$.
+]
+#proof[
+  Let $f$ be positive and $sigma(Z) ms$.
+  Set $f' = f/EE(f|U)$.
+  Then $f' in sigma(U,Z)$.
+  and $EE(f|U) = 1$.
+  Then $EE(f|U) aseq 1$ and so $EE(f'|U,Z) aseq 1$ and so $f/EE(f|U) aseq 1$, and therefore
+  $f = EE(f|U)$. Since $f$ was arbitrary, $sigma(Z) subset.eq sigma(U)$.
+]
 
 #lemma[
   For all $psi$ with $EE(psi|U,Z) = 1$, we have
@@ -1737,7 +1838,7 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   // Let $Q in distributionstimes$ and $tilde(E)$ be the expectation w.r.t $Q$.
 
   By @lem:irrel_combined_indep, we have
-  $(X,U_comp(H)) indep_P U_comp(H)$.
+  $(X,U_H) indep_P U_comp(H)$.
 
   We first show that for all $C in sigma(U)$, we have
   #[
@@ -1756,9 +1857,56 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   arrow.l.double&& E(1_D 1_A|Z)&aseq E(E(1_D 1_A|U_H,Z)|Z) \
   <=>&& E(1_D 1_A|Z)&aseq E(1_D 1_A|Z) \
   $ 
-  Integrating @eq:condition_equality, we have
-  $integral_C 1_A dif P = integral_C E(1_A|U_H,Z) dif P$ for all $C in sigma(U)$.
-  Therefore, $E(1_A|U) aseq E(E(1_A|U_H,Z)|U)$.
+  Integrating @eq:condition_equality, and adding any $F in sigma(Z)$ we have
+  $integral_C 1_A dif P = integral_C E(1_A|U_H,Z) dif P$ for all $C in sigma(U,Z)$.
+  Therefore, $E(1_A|U,Z) aseq E(E(1_A|U_H,Z)|U,Z)$.
+
+
+  Therefore
+  $E(psi 1_A|U) aseq E(psi E(psi 1_A|U_H,Z)/E(psi|U_H,Z)|U)$
+]
+
+
+#lemma[
+  Let $EE (X|U) = EE (Y|U)$ forall $EE$
+  Then $X = Y$.
+]
+#proof[
+  $EE(g|U) = 1$, so
+  $EE(g X|U) = EE(g Y|U)$
+  Integrating, adding any $f sigma(U) ms$,
+  $E(g f Y) = E(g f Y)$.
+
+  Now for general measurable $phi = EE(phi|U) phi/EE(phi|U)$.
+  Therefore $EE(phi X) = EE(phi Y)$ for all $phi$, therefore $X = Y$.
+]
+
+#lemma[
+  Let $B in sigma(U)$.
+  Suppose that
+  for any $EE$ and $EE(g|U)=1$,
+  
+  $EE(B|Z) = EE_g (B|Z)$.
+  Then $sigma(Z)|_{EE(B|Z) in (0,1)} subset.eq sigma(U)$.
+]
+#proof[
+  We want to show that $EE(g|U,Z) = 1$.
+  $EE(B|Z)EE(g|Z) = EE(g B|Z)$
+  $EE(g|Z) = EE(g B|Z)/EE(B|Z)$
+
+  Therefore $g$ depends only on $B$ and on $B^c$ therefore $EE(g|Z)$ is the same for all $g$.
+  Therefore, $EE(g|Z) = 1$.
+  // Therefore $g$ is $sigma(Z) ms$?
+  Therefore,
+  $EE(B|Z) = EE(g B|Z)$.
+
+  Therefore, $EE(f g |Z) = EE(f|Z)$ for all $f$ densities.
+  Therefore, integrating,
+  $integral_C f g = integral_C f$ for all $C in sigma(Z)$.
+
+  Therefore, $EE(g|Z,U)= 1$.
+
+  
 ]
 
 #bibliography("citations.bib")
