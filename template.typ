@@ -1,15 +1,13 @@
-#import "@preview/ctheorems:1.1.2": *
+#import "@preview/ctheorems:1.1.3": *
 
 #import "symbols.typ": *
 
 #let showrules(body) = {
-  show: thmrules.with(qed-symbol: $square$)
+  set page(numbering: "1")
   set par(justify: true)
   set heading(numbering: "1.1 ")
   set text(font: "New Computer Modern", lang: "en")
-  set page(numbering: "1")
   set align(left)
-  
   show ref: it => {
     let eq = math.equation
     let el = it.element
@@ -24,6 +22,7 @@
       it
     }
   }
+  show: thmrules.with(qed-symbol: $square$)
   
   body
   

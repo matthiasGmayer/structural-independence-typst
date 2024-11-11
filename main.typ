@@ -1690,106 +1690,140 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 ]
 
 #lemma[
-  Let $C = {irrel(X|Z) asneq nothing}$.
-  Then $sigma(Z)|_C subset.eq sigma(U)$.
-]
-#proof[
-  Let $A in sigma(Z)|_C$. we want
-  $
-  P(A|U) aseq 1_A
-  $
-
-  $P(A|Z) P(B|Z) = P(A,B|Z)$.
-
-  For any density
-  $
-  E(f P(A|U)|Z) = E(f 1_A|Z) = 1_A E(f|Z). \
-  tilde(E)(P(A|U)|Z) = 1_A.
-  $
-
-
-  If $forall A in sigma(U)$, we have
-  $E(E(1_A|Z)|U) = 1_A$.
-
-  Maybe for $EE(psi|U)=1$ we have
-  $EE(psi|Z) = 1$.??
-
-
-
-  
-  
-]
-
-#lemma[
-  Let $psi$ density with $EE(psi|U) = 1$.
-  Assume $EE(psi|U,Z) asneq 1$.
-  Then $C_< = {EE(psi|U,Z) < 1},C_> = {EE(psi|U,Z) > 1}$ are nonempty (because integral is 1).
-
-
-  Let $A in U_J$, $B in U_comp(J)$.
-
-
-  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$.
-
-
-
-  Let $psi, psi'$ be densities with $EE(psi|U) = 1$.
-
-  Let $phi = (psi + psi')/2$.
-
-  Then
-  $R(A|Z) R(B|Z) = R(A,B|Z)$
-  Following @thm:mutual_exclusion, we get
-
-  $(P(A|Z)-Q(A|Z))(P(B|Z) - Q(B|Z)) = 0$.
-
-
-
-  Then
-  
-  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$
-  $EE(psi 1_A|Z) EE(1_B|Z) = EE(psi 1_A 1_B|Z)$
-  
-  $ EE(1_B|Z) = EE(psi 1_A 1_B|Z)/EE(psi 1_A|Z)$
-  
-
-
-  $EE(psi|U) = 1$ and $psi$ is $sigma(U,Z) ms$
-  
-  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$.
-  
-  $EE(psi 1_A|Z) EE(1_B|Z) = EE(psi 1_A 1_B|Z)$.
-
-  Therefore $psi = 1$ on $EE(1_A|Z),EE(1_B|Z) > 0$.
-
-
-  $EE(psi 1_B|Z)= psi/EE(psi|U) $
-
-
-
-  Different idea
-
-  $EE(|Z) = EE(|EE(Z|U))$.
-
-  
-  
-]
-
-
-
-#lemma[
-  If forall all $psi$ with $EE(psi|U) aseq 1$, we have
-  $EE(psi|U,Z)  aseq 1$, then
-  $sigma(Z) subset.eq sigma(U)$.
+  Let $C in sigma(Z)$.
+  If for all $psi$ with $EE(psi|U) aseq 1$, we have
+  $1_C EE(psi|U,Z) aseq 1_C$, then
+  $C in sigma(U)$ and
+  $sigma(Z)|_C subset.eq sigma(U)|_C$.
 ]
 #proof[
   Let $f$ be positive and $sigma(Z) ms$.
   Set $f' = f/EE(f|U)$.
   Then $f' in sigma(U,Z)$.
   and $EE(f|U) = 1$.
-  Then $EE(f|U) aseq 1$ and so $EE(f'|U,Z) aseq 1$ and so $f/EE(f|U) aseq 1$, and therefore
-  $f = EE(f|U)$. Since $f$ was arbitrary, $sigma(Z) subset.eq sigma(U)$.
+  Then $EE(f|U) aseq 1$ and so $1_C EE(f'|U,Z) aseq 1_C$ and so $1_C f/EE(f|U) aseq 1_C$, and therefore
+  $1_C f = 1_C EE(f|U)$.
+  Approximating, $1_C$, we get
+  $1_C = 1_C EE(1_C|U)$.
+  Since $f$ was arbitrary, we have  $sigma(Z)|_C subset.eq sigma(U)|_C$.
 ]
+
+#lemma[
+  Let $B in sigma(U)$.
+  // Suppose that
+  // ${res in irrel(B|Z)} aseq Omega$.
+  // $EE(B|Z) = EE_g (B|Z)$.
+  Let $C = {EE(B|Z) in (0,1), res in irrel(B|Z)}$.
+  Then $sigma(Z)|_C subset.eq sigma(U)$.
+]
+#proof[
+  It suffices to show that $1_C EE(g|U,Z) aseq 1_C$.
+  Note that $EE(B|Z)(omega) EE(g|Z)(omega) = EE(g B|Z)(omega)$ for a.e.
+  $omega in {res in irrel(B|Z)}$.
+  Therefore, for a.e. $omega in C$, we have
+  $EE(g|Z)(omega) = (EE(g B|Z)(omega))/(EE(B|Z)(omega))$.
+
+  Define $g' = 1_B g + 1_(B^c)$, Then note that $E(g'|U) = 1$.
+  Therefore, since $g$, was arbitrary, for
+  a.e. $omega in C$
+  // {E(B|Z) in {0,1}} aseq {E(B^c|Z) in {0,1}}$,
+  we have
+  $
+  EE(g|Z)(omega)
+  = (EE(g 1_B|Z)(omega))/(EE(1_B|Z)(omega))
+  = (EE(g' 1_B|Z)(omega))/(EE(1_B|Z)(omega))
+  = EE(g'|Z)(omega).
+  $
+  Furthermore, since 
+  ${EE(B|Z) in (0,1)} aseq {EE(B^c|Z) in (0,1)}$, we can continue for a.e. $omega in C$,
+  $
+  EE(g'|Z)(omega)
+  = (EE(g' 1_(B^c)|Z)(omega))/(EE(1_(B^c)|Z)(omega))
+  = (EE(1_(B^c)|Z)(omega))/(EE(1_(B^c)|Z)(omega))
+  = 1
+  $
+  Therefore, $1_C EE(f g |Z) = 1_C EE(f|Z)$ for all $f$ densities.
+  Therefore, integrating,
+  $integral_D f g = integral_D f$ for all $D in sigma(Z)|_C$.
+  Therefore, $1_C EE(g|Z,U)= 1_C$.
+]
+
+
+#lemma[
+  Let $C = {irrel (X|Z) aseq I}^c$.
+  Then $sigma(Z)|_C subsetaseq sigma(U)$.
+]
+#proof[
+  Let $J = irrel(X|Z)$.
+  We have shown 
+  $forall P in distributionstimes: U_J indep_P U_comp(J)$.
+  Therefore,
+  $irrel^res (U_J|Z) union irrel^res (U_comp(J)|Z) = I^res$.
+  
+  First we show
+  $sigma(Z)|_(C^res) subset.eq sigma(U)$ for $C^res = {res in irrel^res (U_J|Z)} sect C$.
+  We claim that $Union^astext_(B in sigma(U_J)) {EE(B|Z) in (0,1)} supsetaseq C^*$.
+
+  Indeed, suppose that there is some $C' subsetaseq C^*$, s.t.
+  for all $B in sigma(U_J)$
+  $EE(B|Z)(omega) in {0,1}$ for a.e. $omega in $
+  Then $B sect C' in sigma(Z)$ and therefore $sigma(U_J)|_C' subset.eq sigma(Z)$.
+
+
+  Contraiction for $comp(J)$.
+]
+
+#lemma[
+  If ${res in irrel(X|Z)} subsetaseq {I subsetaseq irrel(X|Z)}$.
+]
+#proof[
+  Let $i in I$ and $A in sigma(X)$.
+  Let $(P,Q) in distributionstimes2(i)$.
+  It suffices to show $P(A|Z)(omega) = Q(A|Z)(omega)$
+  for a.e. $omega in {res in irrel(X|Z)}$.
+  
+]
+
+
+
+#lemma[
+  For all $A in sigma(U)$, let $C={EE(A|Z) in (0,1)} sect {irrel(X|Z) asneq I}$,
+  we have
+  $sigma(Z)|_C subset.eq sigma(U)$.
+]
+#proof[
+  Let $J = irrel(X|Z)$.
+  Let $A in U_J$ and $B in U_comp(J)$.
+  Then we have either
+  $forall P in distributionstimes: P(A|Z) = P_g (A|Z)$ or
+  $P(B|Z) = P_g (B|Z)$.
+  By arguments,
+  WLOG
+  $P_g (A|Z) = P(A|Z)$, then
+  Then $sigma(Z)|_(EE(B|Z) in (0,1)) subset.eq sigma(U)$.
+
+  Therefore
+  $sigma(Z)|_(EE(A sect B|Z) in (0,1)) subset.eq sigma(U)$.
+
+
+  We show that all $A in sigma(U)$ that fullfill
+  $sigma(Z)|_(EE(A|Z) in (0,1)) subset.eq sigma(U)$ form a Dynkin system.
+  1. $Omega$ yes
+  2. Let $A subset.eq B$ with this property
+     Now $EE(B without A|Z) in {0,1}$
+     only if $EE(B|Z) = 1$ and $EE(A|Z) = 0$. (doesnt happen)
+     or $EE(B|Z) = EE(A|Z)$. so it becomes less
+
+  3. union is clear. since it can become only less
+]
+#lemma[
+  Let $C = {irrel(X|Z) asneq nothing}$.
+  Then $sigma(Z)|_C subset.eq sigma(U)$.
+]
+#proof[
+  
+]
+
 
 #lemma[
   For all $psi$ with $EE(psi|U,Z) = 1$, we have
@@ -1803,16 +1837,32 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 
 #lemma[
   Let $C = {irrel(X|Z) asneq nothing}$.
-  Then $sigma(X,Z)|_C subset.eq sigma(U,Z)$.
+  Then for all positive densities $psi$ with
+  $EE(psi|U) = 1$, we have
+  $(psi dot EE)(1_A|Z) = EE(1_A|Z)$.
+  // Then $sigma(X,Z)|_C subset.eq sigma(U,Z)$.
 ]
 #proof[
   Let $P in distributionstimes$.
   Let $A in sigma(X,Z)|_C$.
-  We have to show that
+  It suffices to show that
   $1_A = E(A|U,Z)$.
-  Let $psi$ be a density, s.t. $EE(psi|U)= 1$.
-  We want that
-  $E(psi 1_A|Z) = E(psi E(1_A|U,Z)|Z)$
+  Let $psi$ be a positive density, s.t. $EE(psi|U)= 1$.
+  We show that
+  $E(psi 1_A|Z) = E(psi E(1_A|U,Z)|Z)$.
+  For every $B in sigma(U_irrel(X|Z))$, we have 
+  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B |Z)$.
+  Since $Z|_C$ is $sigma(U) ms$, we have
+  for 
+  a.e. $omega in {EE(B|Z) in (0,1)} sect C$, that
+  $EE(psi 1_A|Z)(omega) = (EE(psi 1_B 1_A|Z)(omega))/(EE(psi 1_B|Z)(omega))$.
+  Furthermore, $B in sigma(U_irrel(X|Z)) subset.eq sigma(U)$.
+  Choosing $psi' = 1_B psi + 1_(B^c)$, and $psi'' = 1_B + 1_(B^c) = 1$ we get
+  $EE(psi 1_A|Z)(omega) = EE(psi' 1_A|Z)(omega) = EE(psi'' 1_A|Z)(omega) = EE(1_A|Z)(omega)$.
+  Further, note that $1_C EE(psi|Z) aseq 1_C$, since $sigma(Z)|_C subset.eq sigma(U)$
+  and $EE(psi|U) = 1$.
+  In conclusion, we have for a.e. $omega in {EE(B|Z) in (0,1)} sect C$, that
+  $1_C (psi dot EE) (1_A|Z) aseq 1_C (EE(psi 1_A|Z) (omega))/EE(psi|Z) aseq 1_C EE(1_A|Z)$.
 ]
 
 #theorem[
@@ -1881,32 +1931,22 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Therefore $EE(phi X) = EE(phi Y)$ for all $phi$, therefore $X = Y$.
 ]
 
+
+
 #lemma[
-  Let $B in sigma(U)$.
-  Suppose that
-  for any $EE$ and $EE(g|U)=1$,
-  
-  $EE(B|Z) = EE_g (B|Z)$.
-  Then $sigma(Z)|_{EE(B|Z) in (0,1)} subset.eq sigma(U)$.
+  If $EE(A|Z) in {0,1}$ for all $A in sigma(U)$,
+  $sigma(U) subset.eq sigma(Z)$.
 ]
 #proof[
-  We want to show that $EE(g|U,Z) = 1$.
-  $EE(B|Z)EE(g|Z) = EE(g B|Z)$
-  $EE(g|Z) = EE(g B|Z)/EE(B|Z)$
+  trivial
+]
 
-  Therefore $g$ depends only on $B$ and on $B^c$ therefore $EE(g|Z)$ is the same for all $g$.
-  Therefore, $EE(g|Z) = 1$.
-  // Therefore $g$ is $sigma(Z) ms$?
-  Therefore,
-  $EE(B|Z) = EE(g B|Z)$.
-
-  Therefore, $EE(f g |Z) = EE(f|Z)$ for all $f$ densities.
-  Therefore, integrating,
-  $integral_C f g = integral_C f$ for all $C in sigma(Z)$.
-
-  Therefore, $EE(g|Z,U)= 1$.
-
-  
+#lemma[
+  On this $sigma(U) subset.eq sigma(Z)$, we have
+  $irrel(X|Z) = I$.
+]
+#proof[
+  $EE(f 1_A|Z)/EE(f|Z) = f/f EE(1_A|Z)$
 ]
 
 #bibliography("citations.bib")

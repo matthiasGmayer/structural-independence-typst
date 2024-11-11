@@ -753,3 +753,60 @@ po
   Since $epsilon$ was arbitrary, we have
   $forall xi > 0: PP(abs(EE_n (X|Z) - EE (X|Z)) > xi) -> 0$.
 ]
+
+#lemma[
+  Let $psi$ density with $EE(psi|U) = 1$.
+  Assume $EE(psi|U,Z) asneq 1$.
+  Then $C_< = {EE(psi|U,Z) < 1},C_> = {EE(psi|U,Z) > 1}$ are nonempty (because integral is 1).
+
+
+  Let $A in U_J$, $B in U_comp(J)$.
+
+
+  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$.
+
+
+
+  Let $psi, psi'$ be densities with $EE(psi|U) = 1$.
+
+  Let $phi = (psi + psi')/2$.
+
+  Then
+  $R(A|Z) R(B|Z) = R(A,B|Z)$
+  Following @thm:mutual_exclusion, we get
+
+  $(P(A|Z)-Q(A|Z))(P(B|Z) - Q(B|Z)) = 0$.
+
+
+
+  Then
+  
+  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$
+  $EE(psi 1_A|Z) EE(1_B|Z) = EE(psi 1_A 1_B|Z)$
+  
+  $ EE(1_B|Z) = EE(psi 1_A 1_B|Z)/EE(psi 1_A|Z)$
+  
+
+
+  $EE(psi|U) = 1$ and $psi$ is $sigma(U,Z) ms$
+  
+  $EE(psi 1_A|Z) EE(psi 1_B|Z) = EE(psi|Z) EE(psi 1_A 1_B|Z)$.
+  
+  $EE(psi 1_A|Z) EE(1_B|Z) = EE(psi 1_A 1_B|Z)$.
+
+  Therefore $psi = 1$ on $EE(1_A|Z),EE(1_B|Z) > 0$.
+
+
+  $EE(psi 1_B|Z)= psi/EE(psi|U) $
+
+
+
+  Different idea
+
+  $EE(|Z) = EE(|EE(Z|U))$.
+
+  
+  
+]
+
+
