@@ -3,11 +3,12 @@
 #let CS = math.cal("C")
 #let DS = math.cal("D")
 #let NS = math.cal("N")
-#let ms = [#h(0pt)-measurable]
+#let ms = text(weight:"regular")[#h(0pt)-measurable]
 #let Lip = "Lip"
 #let loc = "loc"
 #let Val = "Val"
 #let PA = "PA"
+#let radiv(P,Q) = $(dif #P)/(dif #Q)$
 #let angles(a,b) = $angle.l #a, #b angle.r$
 #let duality = angles
 #let supp = "supp"
@@ -40,21 +41,13 @@
 #let __placeastext = text(size:0.5em)[a.s.]
 // #let Asunion = math.class("large",$Union#place(dx:-0.9em,dy:-0.8em)[#__placeastext]$)
 // #let Assect = math.class("large",$Sect#place(dx:0pt)[#__placeastext]$)
-// #let subsetaseq = $subset.eq^#_astext$
-// #let supsetaseq = $supset.eq^#_astext$
 #let subsetaseq = math.class("relation",$subset.eq#place(dx:-0.7em,dy:-0.8em)[#__placeastext]$)
 #let supsetaseq = math.class("relation",$supset.eq#place(dx:-0.7em,dy:-0.8em)[#__placeastext]$)
-// #let aseq = $=^#_astext$
 #let aseq = math.class("relation",$=#place(dx:-0.7em,dy:-0.6em)[#__placeastext]$)
 #let asneq = math.class("relation",$!=#place(dx:-0.7em,dy:-0.6em)[#__placeastext]$)
-// #let asneq = $!=^#__astext$
-// #let asgt = $>^#_astext$
 #let asgt = math.class("relation",$>#place(dx:-0.7em,dy:-0.7em)[#__placeastext]$)
-// #let asge = $>=^#_astext$
 #let asge = math.class("relation",$>=#place(dx:-0.7em,dy:-0.8em)[#__placeastext]$)
-// #let aslt = $<^#_astext$
 #let aslt = math.class("relation",$<#place(dx:-0.7em,dy:-0.7em)[#__placeastext]$)
-// #let asle = $<=^#_astext$
 #let asle = math.class("relation",$<=#place(dx:-0.7em,dy:-0.8em)[#__placeastext]$)
 
 #let res = $*$

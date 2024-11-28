@@ -1,34 +1,44 @@
 #import "template.typ": *
 #show: showrules 
-
-#show "sigma algebra": it => [$sigma$-algebra]
-#show "sect stable": it => [$sect$-stable]
-
-#let radiv(P,Q) = $(dif #P)/(dif #Q)$
-
-
-#align(center)[
-  #text(size:2em)[A Theory of Structural Independence] \
-  #v(1em)
-  Matthias Georg Mayer
-  #v(1em)
-  [preliminary version]
-]
-#v(1em)
-#emph[
-  We charactize all independencies which are implied by the joint independence
-  of family of random variables $(U_i\)_(i in I)$ for arbitrary $sigma(U)$-measurable random variables. To do this, we introduce the History, a combinatorial object
-  which measures when a random variables uses which random variable depending on the conditional $Z$.
-  More precisely, the History is a random index set $history(X|Z) : Omega -> powerset (I)$, s.t.
+#show: arkheion.with(
+  title : "A Theory of Structural Independence",
+  abstract:[
+  We introduce a theory of structural independence that addresses whether an independence
+  is implied by the structure of an independent family of random elements,
+  rather than being a numerical coincidence.
+  More precisely, let $U = (U_i\)_(i in I)$ be an independent family of random elements
+  on some probability space $(Omega,AS,PP)$.
+  We characterize all independencies of $sigma(U)$-measurable random elements that
+  are implied by the independence of $U$.
+  Formally, these are the independencies which hold in all possible (comparable)
+  probability measures that render $U$ independent and are absolutely continuous
+  w.r.t. $PP$.
+  For this, we first introduce random index sets and random families that generalize
+  canonical families of random elements by allowing the index set of the family to be random.
+  Then, we introduce the history, a combinatorial object
+  that measures the dependance of $sigma(U)$-measurable random elements
+  on $U_i$ for each $i in I$.
+  Let $X,Y$ and $Z$ be $sigma(U) ms$ random elements.
+  // conditional on some $sigma(U)$-measurable random element $Z$.
+  The history of a $X$ given $Z$,
+  is a random index set $history(X|Z) : Omega -> powerset (I)$, s.t.
   the independence of $X$ and $Y$ given $Z$ is implied by the independence of $U$ if and only if
-  $history(X|Z) sect history(Y|Z) aseq nothing$.
+  $history(X|Z) sect history(Y|Z) aseq nothing$ w.r.t. $PP$.
   // More precisely, if and only if 
   // for all $i in I$
   // $i in history(X|Z) (omega) => i in.not history(Y|Z) (omega)$.
   // holds for a.e. $omega in Omega$
   // This can be written as 
-  
-]
+  ],
+  authors: (
+    (name: "Matthias G. Mayer", email: "matthias.georg.mayer@gmail.com", affiliation: none),
+  ),
+  keywords: ("independence", "structural independence", "semigraphoid","d-separation", "random family", "random index set"),
+  MSC: "60A99",
+)
+
+#show "sigma algebra": it => [$sigma$-algebra]
+#show "sect stable": it => [$sect$-stable]
 
 
 = Introduction
@@ -42,50 +52,18 @@
 // #let factorprob = $PP$
 
 // 
-We first review these basic definitions.
-#definition[random element][
-  Let $(Omega,AS)$.
-  A random element on $Omega$ is any measurable mapping
-  $X : Omega -> Omega'$, where $(Omega',AS')$ is any measurable space.
-  We let $Val(X) = (Omega',AS')$ denote the codomain of $X$.
-]
+The purpose of this paper is to investigate
+when the independence of
+random elements is implied by the independence of
+a family of random elements.
+We give a review of basic definitions and
+known theorems in @background that will also be used in the rest of this introduction.
+In @related_work, we review d-separation, what it is used for, and how it
+is a specific version of the phenomenon we investigate.
+In @sec:finite_theory, we review the finite version
+of this theory from earlier work.
 
-#definition[conditional expectation, conditional probability][
-  Let $X : Omega -> RR$ be a random variable on a probability space $(Omega, AS, PP)$
-  and $CS$ be a sub-sigma algebra of $AS$.
-  A conditional expectation $EE(X|CS) : Omega -> RR$ is a $CS$-measurable random variable
-  that fulfills
-  $integral_C EE(X|CS) dif PP = integral_C X dif PP$ for all $C in CS$.
-  Conditional expectations exist and coincide $PP$ almost surely, so we can talk about the conditional expectation $EE(X|CS)$.
-  The conditional probability of $A in AS$ given $CS$ is given by
-  $PP(A|CS) := EE(1_A|CS)$.
-  Let $Z$ be a random element on $Omega$, then we write
-  $EE(X|Z) := EE(X|sigma(Z))$ and $PP(A|Z) := PP(A|sigma(Z))$.
-]
 
-#definition[conditional independence][
-  Let $PP$ be a probability measure on a measurable space $(Omega,AS)$.
-  Let $A,B in AS$ and $CS$ a sub sigma algebra of $AS$.
-  We say that $A$ is independent of $B$ given $CS$ w.r.t. $PP$, if
-  $PP(A|CS)PP(B|CS) aseq PP(A,B|CS)$.
-  We write $A indep_PP B | CS$.
-  We extend conditional independence to set systems.
-  Let $AS_1,AS_2 subset.eq AS$.
-  Then $AS_1 indep_PP AS_2 | CS :<=> forall A in AS_1, B in AS_2 : A indep_PP B | CS$.
-  We also allow the use of random elements.
-  Let $X,Y,Z$ be random elements on $Omega$.
-  Then $X indep_PP Y | Z :<=> sigma(X) indep_PP sigma(Y) | sigma(Z)$.
-  Unconditional independence is written as
-  $X indep_PP Y :<=> X indep_PP Y | nothing$.
-  We use the word 'independence' to refer to both conditional and unconditional independence depending on the context.
-  // We say that $X$ is independent of $Y$ given $Z$ w.r.t. $P$, if for all
-  // $A in sigma(X)$ and $B in sigma(Y)$, we have
-  // $P(A|Z) P(B|Z) aseq P(A,B|Z)$.
-  // We write
-  // $
-  // X indep_P Y | Z.
-  // $
-]
 
 Let $I$ be an arbitrary index set.
 Let $(ground,groundalg, groundprob)$ be a probability space.
@@ -93,21 +71,28 @@ Let $(ground,groundalg, groundprob)$ be a probability space.
 // $(U_i)_(i in I)$ is an independent family of random elements.
 Let $(U_i)_(i in I)$ be an independent family of random elements.
 
-*In the following* $X,Y$ and $Z$ will always refer to $sigma(U) ms$ random elements on $ground$.
+*In the following* $X,Y$ and $Z$ will always refer to $sigma(U) ms$ random elements on $(Omega,AS)$.
 
 
 We ask and answer the question: "Which independencies in $PP$ are implied by $U_i$ being independent?"
 To formalize this, we let
 $
-distributionstimes := {P : AS' -> RR |& P "is a probability measure,"\
+distributionstimes := {P : AS -> RR |& P "is a probability measure,"\
 &(U_i)_(i in I) "is an independent family w.r.t." P \
-&"and" P "is absolutely continuous w.r.t." PP " and vice versa"}
+// &"and" P "is absolutely continuous w.r.t." PP " and vice versa"}
+&"and" P tilde PP}
 $
 
 and ask when it is the case that
 $forall P in distributionstimes: X indep_P Y | Z$.
 More specifically, we want to characterize this statement uniformly over all choices of $X,Y$ and $Z$ without quantifying over $distributionstimes$.
-We want to provide a testable criterion.
+
+#remark[
+The requirement that $P tilde PP$ can be relaxed
+to $P << PP$. It is however convenient for calculations
+to require $P tilde PP$, s.t. $radiv(P,PP)$ can be chosen to be positive.
+The case $P << PP$ follows as a corollary.
+]
 
 From standard probability we can immediately conclude a collection of unconditional independencies.
 For $J subset.eq I$, let $U_J$ denote the family $(U_i)_(i in J)$.
@@ -120,15 +105,15 @@ For $J subset.eq I$, let $U_J$ denote the family $(U_i)_(i in J)$.
 #proof[
   Let $A in sigma(X)$ and $B in sigma(Y)$.
   By assumption $A in sigma(U_J)$ and $B in sigma(U_K)$.
-  $A indep_P B$ follows immediately because $sigma(U_J) indep_P sigma(U_K)$,
-  since $U$ is an independent family w.r.t. $P$.
+  $A indep_P B$ follows immediately because $U_J indep_P U_K$,
+  since $U$ is an independent family w.r.t. $P$, and #lb $J sect K = nothing$.
 ]
 However, it is apriori not clear, that these are the only independencies that follow.
-We want to see, whether $X indep_P Y$ for all $P in distributionstimes$ implies that
+We want to see, whether $forall P in distributionstimes: X indep_P Y$ implies that
 there are $J, K subset.eq I$ disjoint, s.t.
 $sigma(X) subset.eq sigma(U_J)$ and
 $sigma(Y) subset.eq sigma(U_K)$.
-We will later see that this is indeed the case.
+We will later see that this is indeed the case in @thm:fundamental_theorem
 // , whenever $X$ and $Y$ are not constant (since then the independence is trivial).
 
 The interesting theory begins once we condition on a random element $Z$.
@@ -149,14 +134,141 @@ Clearly, using this condition and the same argumentation as in @lem:independence
 @sec:finite_theory gives a brief overview of the finite theory,
 where these ideas are given a formal form.
 Once we start developing the general theory, conditioning on sets is no longer possible.
-We need to choose $J_z$ over all $z$ almost surely simulatenously. To do this we introduce random index sets and random families in @sec:random_index_sets.
+We need to choose $J_z$ over all $z$ almost surely simultaneously. To do this we introduce random index sets and random families in @sec:random_index_sets.
 With these tools in hand, we can give a precursory statement of the fundamental theorem of structural independence at the start of @sec:construction.
 The fundamental theorem characterizes all independencies that are implied by an independent family
-through the $Z$ dependant random index sets.
-In this section we continue to construct these random index sets, called (conditional) history of $X$ given $Z$ and written $history(X|Z) : Omega -> powerset(I)$.
-In @sec:fundamental_theorem, we examine the properties of the history to prove the
+through $Z$ dependent random index sets.
+We continue to construct these random index sets, called (conditional) history of $X$ given $Z$ and written $history(X|Z) : Omega -> powerset(I)$.
+In @sec:fundamental_theorem, we examine the properties of the history and introduce the random index set of irrelevance to prove the
 fundamental theorem of structural independence.
+in @sec:properties, we study properties of the history and structural independence and show that
+the history is determined uniquely by some desiderata.
 
+= Background <background>
+This section is intended to disambiguate notation.
+We don't provide proofs of the commonly known theorems.
+They can be found, for example, in @durrett.
+Furthermore, we will apply the theorems without explicit reference to their appearance here.
+Let $powerset(Omega)$ denote the powerset of $Omega$.
+and for $S subset.eq powerset(Omega)$, let $sigma(S)$ denote the sigma algebra generated by $S$.
+#definition[measurable space][
+  Let $Omega$ be a set and $AS subset.eq powerset(Omega)$ a $sigma$-algebra.
+  We call $(Omega,AS)$ a measurable space.
+]
+#definition[random element][
+  Let $(Omega,AS), (Omega',AS')$ be measurable spaces.
+  We call a function $X : Omega -> Omega'$ that is $AS"-"AS'$-measurable a random element from $(Omega,AS)$ to $(Omega',AS')$.
+  It is convenient to introduce $X$ as a random element without
+  referring explicitly to $(Omega,AS)$ or $(Omega',AS')$, when $(Omega,AS)$ is understood from context.
+  $(Omega',AS')$ is denoted by $(Val(X),cal(V) (X))$.
+]
+
+#definition[Dynkin system][
+  A Dynkin system on $Omega$ is a set $DS subset.eq powerset(Omega)$,
+  s.t. $Omega in DS$, and $A,B in DS : A subset.eq B => B without A in DS$, and
+  for $(A_n)_(n in NN) in DS^NN$ pairwise disjoint, $Union_(n in NN) A_n in DS$.
+]
+#definition[sect stable system][
+  A sect stable system (or $pi$-system), is a set $BS subset.eq powerset(Omega)$, s.t.
+  $A,B in BS => A sect B in BS$.
+]
+
+#theorem[
+  If $S$ is a sect stable system and $DS$ a Dynkin system, then
+  $S subset.eq DS => sigma(S) subset.eq DS$.
+]
+
+#definition[product measurable space][
+  Given a family of measurable spaces $(Omega_i,AS_i)_(i in I)$,
+  the product measurable space is defined by $Times.circle_(i in I) (Omega_i,AS_i) := (Omega,AS)$,
+  where
+  $Omega = Times_(i in I)$ and $AS$ is the sigma algebra on $Omega$ that renders the projections
+  $pi_i : Omega -> Omega_i$ measurable.
+]
+#lemma[
+  Given a product space $(Omega,AS) = Times.circle_(i in I) (Omega_i,AS_i)$,
+  for all $A in AS$, there is a countable set $I_0 subset.eq I$, s.t.
+  $A in sigma(pi_i : i in I_0)$.
+]
+#definition[
+  Given a family of random elements $(X_i)_(i in I)$ defined on a common measurable space $(Omega,AS)$,
+  we associate to $(X_i)_(i in I)$ the random element defined by
+  $(Omega,AS) -> Times.circle_(i in I) (Val(X_i),cal(V) (X_i)); thick omega |-> (X_i (omega))_(i in I)$.
+]
+
+Let $(Omega,AS)$ be a measurable space and $PP$ be a probability distribution on this space.
+Let $EE$ denote the expectations of $PP$.
+
+#definition[density][
+  A measurable function $phi : Omega -> [0,oo]$ is called density.
+  It is called probability density w.r.t. $PP$, if $EE(phi) = 1$.
+  We define the measure $phi dot PP$ by $(phi dot PP) (A) := EE(1_A phi)$.
+]
+
+// #definition[orthogonality][
+//   We call $PP$ and $PP'$ orthogonal and denote this by $PP orth PP'$, if
+//   there is a $C in AS$, s.t. $PP(C) = 0$ and $PP'(Omega without C) = 0$.
+// ]
+#definition[absolute continuity][
+  We call $PP'$ absolutely continuous w.r.t. $PP$ and denote this by $PP' << PP$, if
+  $forall A in AS: PP(A) =0 => PP'(A) = 0$.
+]
+#definition[mutual absolute continuity][
+  We write $PP tilde PP'$, if $PP<<PP'$ and $PP'<<PP$.
+]
+#theorem[Radon-Nikodym derivative][
+  If $PP' << PP$, there exists a density $phi$ w.r.t. $PP$, s.t.
+  $phi dot PP = PP'$. We write $phi =:radiv(PP',PP)$.
+  If $PP' tilde PP$, then $phi$ can be chosen to be $PP$-a.s. positive.
+]
+#definition[conditional expectation][
+  Let $X in L^1(PP)$ and $CS$ a sub-sigma algebra of $AS$.
+  There exists an up to $PP$-nullsets unique, $CS ms$ map,
+  $EE(X|CS) : Omega -> RR$ that fulfills
+  $EE(1_C X) = EE(1_C EE(X|Z))$ for all $C in CS$.
+  Let $Z$ be a random element. We set $EE(X|Z) = EE(X|sigma(Z))$.
+]
+#definition[conditional probability][
+  Let $A in AS$ and $Z$ be a random element.
+  Then $PP(A|Z) := PP(A|sigma(Z)) := EE(A|Z)$.
+]
+// #definition[conditional expectation, conditional probability][
+//   Let $X : Omega -> RR$ be a random variable on a probability space $(Omega, AS, PP)$
+//   and $CS$ be a sub-sigma algebra of $AS$.
+//   A conditional expectation $EE(X|CS) : Omega -> RR$ is a $CS$-measurable random variable
+//   that fulfills
+//   $integral_C EE(X|CS) dif PP = integral_C X dif PP$ for all $C in CS$.
+//   Conditional expectations exist and coincide $PP$ almost surely, so we can talk about the conditional expectation $EE(X|CS)$.
+//   The conditional probability of $A in AS$ given $CS$ is given by
+//   $PP(A|CS) := EE(1_A|CS)$.
+//   Let $Z$ be a random element on $Omega$, then we write
+//   $EE(X|Z) := EE(X|sigma(Z))$ and $PP(A|Z) := PP(A|sigma(Z))$.
+// ]
+#definition[conditional independence][
+  // Let $PP$ be a probability measure on a measurable space $(Omega,AS)$.
+  Let $A,B in AS$ and $CS$ a sub sigma algebra of $AS$.
+  We say that $A$ is independent of $B$ given $CS$ w.r.t. $PP$, if
+  $PP(A|CS)PP(B|CS) aseq PP(A,B|CS)$.
+  We write $A indep_PP B | CS$.
+  We extend conditional independence to set systems.
+  Let $AS_1,AS_2 subset.eq AS$.
+  Then $AS_1 indep_PP AS_2 | CS :<=> forall A in AS_1, B in AS_2 : A indep_PP B | CS$.
+  We also allow the use of random elements.
+  Let $X,Y,Z$ be random elements on $Omega$.
+  Then $X indep_PP Y | Z :<=> sigma(X) indep_PP sigma(Y) | sigma(Z)$.
+  Unconditional independence is written as
+  $X indep_PP Y :<=> X indep_PP Y | {nothing,Omega}$.
+  We use the word 'independence' to refer to both conditional and unconditional independence depending on the context.
+  // We say that $X$ is independent of $Y$ given $Z$ w.r.t. $P$, if for all
+  // $A in sigma(X)$ and $B in sigma(Y)$, we have
+  // $P(A|Z) P(B|Z) aseq P(A,B|Z)$.
+  // We write
+  // $
+  // X indep_P Y | Z.
+  // $
+]
+
+= Related work <related_work>
 
 = Overview of the finite theory
 <sec:finite_theory>
@@ -199,15 +311,15 @@ given $C in sigma(U)$.
 The rectangle condition $U(C) = U_J (C) times U_comp(J) (C)$ is essential
 for the existence of the history and the correctness of the fundamental theorem.
 This condition reflects the requirement of independence of $U_J$ and $U_comp(J)$ given $C$.
-Indeed, if this independence holds, the pushforward of U under $P$ disintegrates into a product
+Indeed, if this independence holds, the pushforward of $U$ under $P$ disintegrates into a product
 $P(U in dot|C) = P(U_J in dot | C) times P(U_comp(J) in dot | C)$.
 If $P$ is chosen s.t. $P_U$ has no nontrivial nullsets, the support of
 $PP(U in dot|C)$ is $U(C)$, while similarly,
 $supp PP(U_J in dot|C) = U_J (C)$ and $supp PP(U_J in dot|C) = U_comp(J) (C)$.
-Now the product structure of $PP(U in dot|C)$ implies that the support forms a cartesian product.
+Now the mentioned product structure of $PP(U in dot|C)$ implies that the support forms a cartesian product.
 This exactly reflects $U(C) = U_J (C) times U_comp(J) (C)$.
 
-#theorem[Fundamental Theorem][
+#theorem[fundamental theorem][
   Let $X,Y$ and $Z$ be random elements with finite codomain.
   Then 
   $
@@ -428,7 +540,7 @@ The other direction is not true in general.
 
 
 
-= Construction of the History
+= Construction of the history
 <sec:construction>
 
 
@@ -585,6 +697,18 @@ Nonetheless, we can define an appropriate generalizing.
 ] <def:generation>
 
 // To see that a minimal generating set exists, we 
+We can see that disintegration is actually a well-behaved notion, and we don't
+need to quantify over all distributions.
+Rather, it suffices to check the condition for any
+distributions, in particular for the reference measure $PP$.
+#lemma[
+  $J$ disintegrates $Z$ if and only if $U_J indep_PP U_comp(J)$.
+]
+#proof[
+  '$=>$' follows from the definition of disintegration.
+  \
+  '$arrow.l.double$': Let $P in distributionstimes$.
+]
 
 #lemma[
   Let $J$ be a random index set s.t. $J aseq nothing$.
@@ -1175,7 +1299,7 @@ determines the limiting conditional expectation uniquely.
 
 
 
-= The Fundamental Theorem of Structural Independence
+= The fundamental theorem of structural independence
 <sec:fundamental_theorem>
 
 The goal of this section is to prove that structural independence (@def:structural_independence) characterizes
@@ -1195,7 +1319,7 @@ One direction is essentially implied directly by the definition of generation.
   For any possible realization of a product probability distribution $P in distributionstimes$, structural independence implies independence.
   More precisely,
   $X orth Y | Z => forall P in distributionstimes : X indep_P Y | Z$.
-]
+] <thm:soundness>
 #proof[
   Let $P in distributionstimes$.
   Since $J :=history(X|Z)$ generates $X$ given $Z$, we have
@@ -1252,7 +1376,7 @@ To motivate this notion we look at a simple lemma.
 This lemma tells us, that when we change the distribution of $U_i$, we cannot change
 $P(A|Z)$ in the region ${i in.not history(X|Z)}$.
 This is a dual notion to the dependance of history.
-This motivates the following definition.
+This motivates the following definitions.
 
 == The random index set of irrelevance
 
@@ -1634,7 +1758,7 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   $P' (B,C|Z) aseq Q'(B,C|Z)$.
 ]
 
-== The duality between History and Irrelevance
+== The duality between history and irrelevance
 
 
 #theorem[
@@ -1788,7 +1912,7 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 
 #theorem[
   $history(X|Z) aseq comp(irrel(X|Z))$.
-]
+] <history_comp_irrel>
 #proof[
   We show both inclusions.
   \
@@ -1831,6 +1955,56 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Since we assumed that $X$ and $Z$ are $sigma(U) ms$, we have
   $1_A aseq E(1_A|U_H,Z)$.
 ]
+
+#theorem[completeness of structural independence][
+  Structural independence is complete.
+  If independence holds in all product probability distributions $P in distributionstimes$,
+  then the independence is structural.
+  More precisely,
+  $forall P in distributionstimes : X indep_P Y | Z => X orth Y | Z$.
+] <thm:completeness>
+#proof[
+  This follows from
+  @thm:fthm_irrel and @history_comp_irrel.
+]
+
+== The fundamental theorem
+
+We now state the fundamental theorem of structural independence with all its assumptions.
+#theorem[the fundamental theorem of structural independence][
+  Let $U=(U_i)_(i in I)$ be an independent family of random elements on a probability space
+  $(Omega,AS,PP)$.
+  Let $X,Y$ and $Z$ be $sigma(U) ms$ random elements.
+  In general, we can conclude that $X indep_PP Y | Z$ if and only if
+  $history(X|Z) sect history(Y|Z) = nothing$ $PP$-a.s.
+  More formally, let
+  $
+  distributionstimes = {P : AS -> RR | &P "is a probability distributions" \
+  &"and" U "is independent w.r.t." P \
+  &"and" P tilde PP
+  }.
+  $
+  Then
+  $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) = nothing$
+  $PP$-a.s.
+  With @def:structural_independence, this can also be written as
+  $forall P in distributionstimes: X indep_P Y | Z <=> X orth Y | Z$.
+  
+] <thm:fundamental_theorem>
+#proof[
+  '$=>$' is @thm:completeness
+  '$arrow.l.double$' is @thm:soundness.
+]
+
+= Properties of the history and structural independence <sec:properties>
+
+TODO: compositional semigraphoid, uniqueness
+
+
+= A Counterexample
+
+TODO: Torus example to show that rectangles are not enough.
+
 
 #bibliography("citations.bib")
 
