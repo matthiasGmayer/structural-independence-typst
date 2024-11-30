@@ -1,16 +1,22 @@
 #import "template.typ": *
 #show: showrules 
+#show "sigma algebra": it => [$sigma$-algebra]
+#show "sect stable": it => [$sect$-stable]
+#show "d-separat": it => [$d$-separat]
+#show "d-connect": it => [$d$-connect]
 #show: arkheion.with(
   title : "A Theory of Structural Independence",
   abstract:[
   We introduce a theory of structural independence that addresses whether an independence
   is implied by the structure of an independent family of random elements,
   rather than being a numerical coincidence.
-  More precisely, let $U = (U_i\)_(i in I)$ be an independent family of random elements
+  This theory is a generalization of Pearl's d-separation, where, instead of having the structure of a graph,
+  we have the structure of an independent family.
+  Let $U = (U_i\)_(i in I)$ be an independent family of random elements
   on some probability space $(Omega,AS,PP)$.
   We characterize all independencies of $sigma(U)$-measurable random elements that
   are implied by the independence of $U$.
-  Formally, these are the independencies which hold in all possible (comparable)
+  Formally, these are the independencies which hold in all possible
   probability measures that render $U$ independent and are absolutely continuous
   w.r.t. $PP$.
   For this, we first introduce random index sets and random families that generalize
@@ -37,8 +43,6 @@
   MSC: "60A99",
 )
 
-#show "sigma algebra": it => [$sigma$-algebra]
-#show "sect stable": it => [$sect$-stable]
 
 
 = Introduction
@@ -258,6 +262,10 @@ Let $EE$ denote the expectations of $PP$.
   Then $X indep_PP Y | Z :<=> sigma(X) indep_PP sigma(Y) | sigma(Z)$.
   Unconditional independence is written as
   $X indep_PP Y :<=> X indep_PP Y | {nothing,Omega}$.
+  Furthermore, independence given $Z$ holds for a family of random
+  elements $(X_k)_(k in K)$, if for all finite $K_0 subset.eq K$ and choices of
+  $A_k in sigma(X_k)$ where $k in K_0$, we have
+  $PP(Sect_(k in K) A_k|Z) = product_(k in K) PP(A_k|Z)$.
   We use the word 'independence' to refer to both conditional and unconditional independence depending on the context.
   // We say that $X$ is independent of $Y$ given $Z$ w.r.t. $P$, if for all
   // $A in sigma(X)$ and $B in sigma(Y)$, we have
@@ -268,13 +276,185 @@ Let $EE$ denote the expectations of $PP$.
   // $
 ]
 
+
+In the following, let $X,Y$ and $Z$ be random elements on $(Omega,AS)$.
+Let $A,B in AS$.
+Let $PP' << PP$ with expectation $EE'$.
+Let $phi$ be the density s.t. $PP' = phi dot PP$.
+
+#definition[
+  $A aseq B :<=> 1_A aseq 1_B$.
+]
+
+#lemma[
+  $X indep_PP Y | Z <=> (X,Z) indep_PP (Y,Z) | Z$.
+]
+#proof[
+  Trivial.
+]
+
+#lemma[
+  Let $A in AS$.
+  $A indep_PP Y | Z <=> PP(A|Y,Z) = PP(A|Z)$.
+]
+#proof[
+  '$=>$': Clearly, $PP(A|Z)$ is $sigma(Y,Z) ms$. Let $C in sigma(Y,Z)$, then
+  $EE(1_C PP(A|Z)) = EE(PP(A|Z)PP(C|Z)) = EE(PP(A sect C|Z)) = PP(1_C 1_A)$.
+  '$arrow.l.double$':
+  Let $B in sigma(Y)$ and $C in sigma(Z)$.
+  Then $EE(1_C PP(A|Z)PP(B|Z)) = EE(1_C EE(1_B PP(A|Z))) = EE(1_C 1_B PP(A|Y,Z)) = EE(1_C PP(A sect B|Y,Z))$.
+]
+#lemma[
+  If $X>=0$ and $EE(X|Z) = 0$ then $X aseq 0$.
+]
+#proof[
+  $EE(X) = EE(EE(X|Z)) = 0$.
+]
+#lemma[
+  If $PP(A|Z) aseq 1_A$, then $exists C in sigma(Z)$ s.t. $C aseq A$.
+]
+#proof[
+  $C = {PP(A|Z) > 0} in sigma(Z)$. Then $C aseq {1_A > 0}$.
+  // Let $C = {PP(A|Z) > 0} in sigma(Z)$.
+  // Then $PP(A without C) = EE(1_(C^c)PP(A|Z)) = 0$
+  // and $PP(A^c|Z) = 1_(A^c)$, therefore $PP(C without A) = EE(1_C PP(A^c|Z)) = EE(1_C 1_(A^c)) $
+]
+#lemma[
+  $EE'(X|Z)EE(phi|Z) = EE(phi X|Z)$
+]
+#proof[
+  Clearly, the left hand side is $sigma(Z) ms$. Let $C in sigma(Z)$.
+  Then
+  $EE(1_C EE'(X|Z)EE(phi|Z)) = EE(1_C phi EE'(X|Z)) = EE'(EE'(1_C X|Z))= EE'(1_C X) = EE(1_C phi X)$.
+]
+#lemma[
+  If $PP tilde PP'$, then
+  $A indep_PP' B | Z <=> EE(phi 1_A|Z)EE(phi 1_B|Z) = EE(phi|Z)EE(phi 1_A 1_B|Z)$ #lb $PP$-a.s.
+]
+#proof[
+  $PP'(A|Z)PP'(B|Z) = PP'(A,B|Z)
+  <=>
+  PP'(A|Z)EE(phi|Z)PP'(B|Z)EE(phi|Z) = PP'(A,B|Z)EE(phi|Z)
+  $#lb $<=> PP(A|Z)PP(B|Z) = PP(A,B|Z).
+  $
+]
+
+
 = Related work <related_work>
+
+Structural independence is a generalization of
+$d$-separation.
+// In the following let $G$ be a directed acyclic graph
+// with nodes $X$ that represent random variables on a probability space.
+Just like we, in this paper, consider probability distributions
+that render a family $U$ independent, Pearl's theory of Causality
+introduces a set of probability distributions that satisfy certain independence constraints.
+Then $d$-separation is a graphical criterion that characterizes which independencies are implied by these constraints. We make this more precise in the following definitions.
+
+In the following let $G=(V,E)$ be a directed acyclic graph,
+where the nodes $V$ represent random variables.
+For nodes $X,Y in V$, we write $X->Y$ for $(X,Y) in E$.
+We write $PA(X) = {Y : Y->X}$ for the parents of a node $X$ in $G$.
+#definition[
+  A probability distribution $P$ is compatible with $G$, if it fulfills the Markov condition.
+  This is the case, if any node $X$ is independent (w.r.t. $P$) of all its non-descendants given $PA(X)$.
+  Let $distributions(G)$ denote the set of all probability distributions compatible with $G$.
+]
+We can now ask the question what independences of nodal variables
+are implied by the Markov condition.
+More formally, let $X,Y,Z$ be collections of nodes, interpreted as random variables.
+When is it the case that
+$forall P in distributions(G): X indep_P Y | Z$ ?
+Pearl gives a nice graphical characterization of this statement
+in @pearl2009causality, Section 1.2.3, also @verma1990causal.
+
+#definition[A walk in a graph is a path in the corresponding undirected graph.
+More precisely, a walk $w$ (from $w_1$ to $w_n$) is a tuple of nodes $(w_i)_(i=1)^n$, s.t.
+for all $i in {1,...,n-1}$, we have $w_i -> w_(i+1)$ or $w_(i+1) <- w_(i)$.
+]
+#definition[Let $w=(w_i)_(i=1)^n$ be a walk in $G$. For $1 < i < n$, $w_i$ is a collider in $w$, if #lb
+$w_(i-1) -> w_(i) <- w_(i+1)$.
+]
+
+#definition[d-separation][
+  $X$ and $Y$ are $d$-connected given $Z$ (in $G$), if there is a walk $w=(w_i)_(i=1)^n$ from a node in $X$ to a node in $Y$, s.t. $w_i$ is a collider in $w$ if and only if $w_i in Z$.
+  $X$ and $Y$ are $d$-separated if they are not $d$-connected.
+  In this case, we write $X orth_d Y | Z$. ($d$ is for directional).
+]
+
+This graphical criterion, $d$-separation, fully characterizes the independence structure
+of nodal variables (that is implied by the Markov condition).
+
+#theorem[soundness and completeness of d-separation][
+  $ X orth_d Y | Z <=> forall P in distributions(G) : X indep_P Y | Z. $
+]
+#proof[
+  See @pearl2009causality, Theorem 1.2.4.
+  or @verma1990causal for the original proof.
+]
+
+This characterization makes it very useful for the problem of causal discovery, see @huber2024introduction or @pearl2009causality, Chapter 2, for an introduction.
+Causal discovery is the problem of inferring the simplest graphs
+that are compatible with a given probability distribution.
+It is called 'causal', because the graphs are imbued with a causal meaning,
+where the arrows correspond to proximal causality.
+Informally, a node $X$ is a probabilistic (noisy) function of its parents,
+where the noise is interpreted as all the factors in the world that
+are not included in this particular model.
+This can be made formal by structural (or functional) causal models, see @pearl2009causality, Section 1.4.
+
+Classical causal discovery, as in @pearl2009causality, Chapter 2,
+can simplified be described as follows.
+Given a distribution $P$ on a measurable space with random variables $V$,
+extract all (conditional) independencies between nodes and
+interpret them a the d-separation relation on a graph.
+The set of all graphs whose d-separation relations
+are exactly the independence relations is the set of inferred graphs,
+our possible probabilistic models of the data.
+In general, this set will have more than one element,
+and graph with the same implied independence relations
+(i.e. $distributions(G_1)=distributions(G_2)$)
+are called a Markov equivalence class.
+
+A crucial aspect is that we only used the independence relations
+between nodal variables for discovery.
+This work, @FFS, and @garrabrant2021temporal, take first steps towards
+relaxing this assumption.
+More specifically, we generalize
+d-separation to structural independence,
+a 'structural' criterion 
+that characterizes independencies between
+_all_ possible random variables.
+Through this we advance our understanding of probabilistic models as such.
+We are confident that
+this and further work will lead to better statistical methods 
+for causal discovery
+and principled new probabilistic models.
+In @sec:finite_theory we talk more about the relationship to graphs.
+
+Finally, we note that while @geiger1990identifying 
+introduces deterministic nodes in a bayesian network
+and a corresponding notion $D$-separation that captures
+structural independence for these models,
+$D$-separation leaves the functions that determine these nodes
+in general position.
+In the theory presented here, we fix a family of independent
+random elements and define structural independence for all random element that dependent only 
+on this independent family.
+To further highlight this difference, our theory
+can be leveraged to define a d-separation criterion
+for arbitrary random variables defined on a graph, while @geiger1990identifying
+does not do so.
+This can already seen in @FFS, where we convert a graph
+into an independent family, but will be made more precise in further work.
+
+
+
 
 = Overview of the finite theory
 <sec:finite_theory>
 
 We follow the exposition of @FFS closely.
-
 The following definitions are valid throughout this section.
 
 Let $I$ be a finite index set.
@@ -292,7 +472,7 @@ distribution $PP$ s.t. the pushforward $PP_U$ is the uniform distribution, s.t. 
 
 We will now introduce the history and state the fundamental theorem without proofs.
 Proofs follow immediately from the general theory. Direct proofs can be read in @FFS,
-where everything is stated in the canonical space w.r.t. $U$ and without measure theory.
+where everything is stated in the canonical space w.r.t. $U$ and without the use of measure theory.
 
 
 First, we introduce generation, a sufficient condition for $X$ to be determined by $U_J$
@@ -339,6 +519,22 @@ We can therefore define structural independence.
   X orth Y | Z :<=> forall z in Val(Z): history(X|{Z=z}) sect history(X|{Z=z}) = nothing.
   $
 ]
+
+From this theory we can already embed causal graphs.
+More precisely, in @FFS, from a directed acyclic graph $G$ we construct
+a set of random variables on a family of random variables, s.t. 
+the d-separation criterion on the graph is equivalent to
+structural independence of these random variables.
+Furthermore, $history(X) subset.eq history(Y)$ corresponds to $Y$ being an ancestor of $X$.
+In @FFS, this is called structural time.
+It is known that d-separation specifies a graph up to
+its skeleton (the undirected version of the graph), and certain
+arrows @pearl2009causality Theorem 1.2.8. Therefore, $d$-separation and the ancestor relationship fully determines
+the graph.
+Here, we now have structural time and structural independence
+that generalize the ancestor relationship and $d$-separation respectively.
+In this sense, this theory also generalizes Pearl's theory.
+
 
 
 
@@ -538,6 +734,256 @@ The other direction is not true in general.
 
 
 
+= Infinite product probability measures
+
+In the next sections we want to define the history and prove the fundamental theorem of structural independence.
+For this, we need to characterize the elements in $distributionstimes$ further.
+We first recall Kakutani's characterization of equivalent probability measures in countable
+product spaces @kakutani1948equivalence, and apply it to our setting.
+
+
+*In the following*
+Let $(Omega,AS,PP)$ be a probability space.
+Let $distributions$ be the set of probability distributions on $(Omega,AS)$
+  that are absolutely continuous w.r.t. $PP$.
+
+#definition[
+  There is an embedding $e: distributions -> L^2 (Omega,AS,P)$, defined by
+  $e (P) := sqrt(radiv(P,PP))$.
+  $e$ induces a Hilbert space structure on $distributions$ with inner product
+  $angles(P,Q)= integral sqrt(radiv(P,PP) radiv(Q,PP)) dif PP = integral sqrt(radiv(P,Q)) dif Q$.
+  We denote the induced metric on $distributions$ by $d_2 = d_2^distributions$.
+  For more details, see @kakutani1948equivalence.
+]
+
+#definition[
+  We define the metric $d_1$ on $distributions$ by
+  $d_1 (P,Q) := integral abs(radiv(P,PP)-radiv(Q,PP)) dif PP$.
+]
+#lemma[
+  $d_1 (P,Q) = integral abs(radiv(P,Q)-1) dif Q$.
+]
+#proof[
+  $d_1 (P,Q) = integral abs(radiv(P,PP)-radiv(Q,PP)) radiv(PP,Q) dif Q
+  = integral abs(radiv(P,PP)radiv(PP,Q)-radiv(Q,PP)radiv(PP,Q))  dif Q
+  = integral abs(radiv(P,Q)-1)  dif Q
+  $.
+]
+
+#definition[
+  Measures $mu$ and $nu$ defined on the same measurable space are called 
+  equivalent, if they are mutually absolutely continuous.
+]
+
+#theorem[
+  Let $(mu_n)_(n in NN)$ and $(nu_n)_(n in NN)$ be families of probability measures.
+  Then $mu = Times_(n in NN) mu_n$ is equivalent to $nu = Times_(n in NN) nu_n$ if and only if
+  $product_(n in NN) d_2 (mu_n, nu_n) = product_(n in NN) integral sqrt(radiv(mu_n,nu_n)) dif nu_n > 0$.
+  This condition is equivalent to the convergence of the series
+  $sum_(n in NN) log integral sqrt(radiv(mu_n,nu_n)) dif nu_n$.
+  In this case, we have
+  $product_(n in NN) sqrt(radiv(mu_n,nu_n)) -> radiv(mu,nu)$ in $d_2$ and pointwise $nu$-almost everywhere.
+] <thm:countable_products>
+#proof[
+  see @kakutani1948equivalence.
+]
+
+#lemma[
+  $X_n -> X, Y_n -> Y$ in $L^2(PP)$,
+  Then $X_n Y_n -> X Y$ in $L^1 (PP)$.
+] <lem:hölder_seqence>
+#proof[
+  This is an immediate consequence of the Hölder inequality.
+]
+
+#corollary[
+  If $P_n ->^(d_2) P$, then $P_n ->^(d_1) P$.
+]
+#proof[
+  We have $sqrt(radiv(P_n,PP)) ->^(L^2 (PP)) sqrt(radiv(P,PP))$.
+  By @lem:hölder_seqence,
+  $radiv(P_n,PP) ->^(L^1(PP)) radiv(P,PP)$.
+]
+
+#lemma[
+  Let $phi,phi'$ and $psi,psi'$ be probability densities w.r.t. $PP$ s.t.
+  $phi,phi'$ are $sigma(U) ms$ and
+  $EE(psi|U)=EE(psi'|U)=1$.
+  Then $phi psi$ is a density,
+  and $norm(phi psi - phi' psi')_1 <=  norm(phi' - phi)_1 + norm(EE(abs(psi'-psi) :U))_oo$.
+] <lem:cond_product>
+#proof[
+  First, note that $integral phi psi dif PP = integral phi EE(psi|U) dif PP = 1$,
+  so $phi psi$ is a density.
+  Second,
+  $
+  norm(phi' psi' - phi psi)_1 
+  &<= norm(phi' (psi' - psi))_1 + norm((phi' - phi) psi)_1 \
+  &= integral phi' EE(abs(psi'-psi):U) + integral (phi' - phi) EE(psi|U) dif PP \
+  &<= norm(EE(abs(psi'-psi) :U))_oo + norm(phi' - phi)_1
+  $
+  #v(-25pt)
+]
+
+
+We now apply these definitions and Kakutani's result to our setting with uncountably infinite products.
+
+#lemma[
+  Let $P,Q in distributionstimes$.
+  Then there is
+  a family of positive densities $(phi_n)_(n in NN_0)$ and a sequence of indices in $I$,
+  $(i_n)_(n in NN)$, s.t.
+
+  - $EE(phi_0|U) aseq 1$.
+  - $forall n in NN : phi_n$ is $sigma(U_i_n) ms$.
+  - $product_(n in NN_0) phi_n$ converges (unconditionally) in $L^1$
+    and a.s. pointwise to $radiv(P,Q)$.
+] <lem:decomposition>
+#proof[
+  Let $E$ denote the expectation w.r.t. $Q$.
+  Let $phi = radiv(P,Q)$,
+  and set $phi_0 = phi/E(phi|U)$ and $psi = E(phi|U)$.
+  Then $EE(phi_0|U) = 1$, while $phi = phi_0 psi$ and $psi in sigma(U)$.
+  By standard measure theory arguments, there exists
+  $psi' : Val(U) -> RR$, s.t. $psi'(U) = psi$.
+  We claim that $psi' dot Q_U = P_U$.
+  Let $A subset.eq Val(U)$ measurable, then
+  $psi' dot Q_U (A)= integral_A psi' dif Q_U = integral_(U^(-1) (A)) psi' (U) dif Q
+  = integral_(U^(-1) (A)) psi dif Q
+  = integral_(U^(-1) (A)) psi EE(phi_0|U) dif Q
+  = integral_(U^(-1) (A)) EE(phi|U) dif Q
+  = integral_(U^(-1) (A)) phi dif Q
+  = integral_(U^(-1) (A)) dif P
+  = P_U (A).
+  $
+  Now $P_U$ and $Q_U$ are equivalent product probability measures on $Val(U)$.
+  More precisely, $P_U = Times_(i in I) P_(U_i)$ and
+  $Q_U = Times_(i in I) Q_(U_i)$.
+  
+  Let $delta(i) := log (integral sqrt(radiv(P_U_i,Q_U_i)) dif Q_U_i)$.
+  Clearly, for each $J subset.eq I$, we have
+  $Q_U_J$ is equivalent to $P_U_J$.
+  By @thm:countable_products, we have
+  $sum_(i in J) delta_i < oo$ for all $J subset.eq I$.
+  Therefore, there can only be countably many $i$, s.t.
+  $delta_i != 0$.
+  Define a sequence of indices by ${i_n : n in NN} := {i in I: delta_i != 0}$
+  and set $phi_n = radiv(P_U_i,Q_U_i) (U_i)$.
+  Since $P_U$ and $Q_U$ are product measures, we have
+  $product_(n in NN) phi_n= radiv(P_U,Q_U)(U) = psi$.
+  Finally, $phi = phi_0 psi = product_(n in NN_0) phi_n$.
+  The convergence properties of $product_(n in NN) phi_n$ follow from @thm:countable_products
+  or @kakutani1948equivalence.
+  
+]
+
+
+// #lemma[
+//   $P in distributionstimes$ then $P = phi dot PP$,
+//   $P |-> sqrt(phi) in L^2 (PP)$ is an embedding into a hilbert space.
+// ]
+
+// #definition[
+//   $angles(P,Q) := angles(sqrt((dif P)/(dif PP)), sqrt((dif Q)/(dif PP)))$.
+
+//   $norm(P)_2^2 := angles(P,P)^2+ angles(Q,Q)^2 - 2 angles(P,Q) = 2(1-angles(P,Q))$.
+
+//   $P -> Q$ in $norm(dot)_2 <=> angles(P,Q) -> 1$.
+// ]
+
+// #lemma[
+//   Let $p$ be a probability density w.r.t. a probability measure $PP$ with expectation $EE$.
+//   // The w.r.t $A$ regularized density
+//   // $p_A := 1_A EE(1_A p)/PP(A) + 1_(A^c) EE(1_(A^c) p)/(PP(A^c))$ fulfills $integral_A p_A dif PP = integral_A p dif PP$
+//   // and $integral sqrt(p_A) >= integral sqrt(p)$.
+//   Then $EE(sqrt(EE(p|Z))) >= EE(sqrt(p))$.
+  
+// ] <lem:eucl_density_cond_exp>
+// #proof[
+//   $EE sqrt(EE(p|Z)) = EE sqrt(EE(p|Z)) >=^"Jensen" EE(EE(sqrt(p)|Z)) = EE(sqrt(p)) $.
+// ]
+
+
+#corollary[
+  Let $P_n ->^(d_1) P$ and $X in L^oo (PP)$, then $phi_n X -> phi X$ in $L^1(PP)$
+] <cor:hilbert_bounded_l1>
+#proof[
+  $sqrt(phi_n) -> sqrt(phi)$ in $L^2(PP)$.
+  Since $X$ is bounded, $X_n := sqrt(phi_n X) in L^2 (PP)$ and $X_n -> sqrt(phi X)$ in $L^2 (PP)$.
+  Therefore $phi_n X = X_n X_n -> sqrt(phi X) sqrt(phi X) = phi X$ in $L^1 (PP)$.
+]
+
+#corollary[
+  Let $P_n ->^(d_1) P$ and $A in AS$.
+  Then $E(phi_n A|Z) -> E(A|Z)$ in $L^1 (P)$.
+]
+#proof[
+  Follows by the linearity of conditional expectation and @cor:hilbert_bounded_l1.
+]
+
+// #lemma[
+//   Let $mu$ be a finite measure on $(Omega,AS)$.
+//   Let $X_n -> X$ and $Y_n -> Y$ in $mu$-measure.
+//   If $(X,Y)$ is contained in a compact set $K subset.eq RR^2$ $mu$-a.e.
+//   and
+//   $f : RR^2 ->RR$ is continuous on an open set $U supset.eq K$.
+//   Then $f(X_n,Y_n) -> f(X,Y)$ in $mu$-measure.
+// ] <lem:conv_measure_cont_func>
+// #proof[
+//   There is $K'$ compact and $U'$ open, s.t.
+//   $U supset.eq K' supset.eq U' supset.eq K$.
+//   The claim now follows by the uniform continuity of $f$ on $K'$.
+// ]
+
+Finally, it is important that a converging sequence of probability measures
+determines the limiting conditional expectation uniquely.
+
+#lemma[
+  Let $P_n ->^(d_1) P$ and $X$ be bounded.
+  Let $E$ and $E_n$ denote the expectation w.r.t $P$ and $P_n$.
+  Then $E_n (X|Z) -> E(X|Z)$ in $P$-measure.
+] <lem:conditional_expectation_in_measure>
+#proof[
+  Since convergence in $P$-measure is metrizable, it suffices to show that
+  any subsequence of $E_n (X|Z)$ has a subsequence that converges in $P$-measure.
+  W.l.o.g. it suffices to show that $E_n (X|Z)$ has a subsequence that converges in $P$-measure.
+  Let $E$ and $E_n$ denote the expectation w.r.t $P$ and $P_n$ respectively.
+  Let $phi_n$ be a positive density, s.t. $P_n = phi_n dot P$.
+  // Since $P_n ->^(d_1) P$, we have $phi_n -> 1$ in $L^1 (P)$.
+  Recall that $E_n (X|Z) = E(phi_n X|Z) slash E(phi_n|Z)$.
+  Since $phi_n -> 1$ in $L^1 (P)$ and $X$ is bounded, we have
+  $E(phi_n|Z) -> 1$ and $E(phi_n X|Z) -> E(X|Z)$ in $L^1$.
+  Therefore, we can assume, w.l.o.g. that 
+  $E(phi_n|Z) -> 1$ and $E(phi_n X|Z) -> E(X|Z)$ $P$-a.s.
+  Then clearly, $E_n (X|Z) -> E(X|Z)$ $P$-a.s.
+  // Let $phi_n$ be a density, s.t. $P_n = phi_n dot P$.
+  // // Let $phi$ be a density, s.t. $P = phi dot PP$.
+  // Let $E,E_n,EE$ denote the expectation w.r.t $P,P_n$ and $PP$ respectively.
+  // Recall that $E_n (X|Z) = EE(phi_n X|Z) slash EE(phi_n|Z)$.
+  // Since $phi_n -> phi$ in $L^1 (PP)$, we have
+  // $EE(phi_n|Z) -> EE(phi|Z)$ in $L^1$ and in measure.
+  // Let $epsilon > 0$.
+  // Then since $PP(phi < delta) ->^(delta -> 0) 0$.
+  // There is $delta > 0$, s.t. $PP(phi > delta) > 1 -epsilon$.
+  // Set $C = {phi>delta}$ and let $mu = PP|_C$ be a finite measure on $(C,AS|_C)$.
+  // Clearly, $EE(phi_n|Z)|_C -> EE(phi|Z)|_C$ and
+  // $EE(phi_n X|Z)|_C -> EE(phi X|Z)|_C$ in $mu$-measure.
+  // Define $f(x,y) = x/y 1_(y > 0)$. Then $f$ is continuous on $RR times RR_(>0)$
+  // while $(EE(phi X|Z)|_C,EE(phi|Z)|_C)$ is contained in $[0,1] times [delta,2]$ $mu$-a.e.
+  // By @lem:conv_measure_cont_func
+  // $E_n (X|Z)|_C = f(EE(phi_n X|Z)|_C,EE(phi_n X|Z)|_C) -> f(EE(phi X|Z)|_C,EE(phi|Z)|_C) = E(X|Z)|_C$
+  // in $mu$-measure.
+  // Therefore, for any $xi > 0$,
+  // $limsup_(n) PP(abs(E_n (X|Z) - E (X|Z)) > xi)
+  // <= limsup_(n) mu(abs(E_n (X|Z) - E (X|Z)) > xi) + P(C^c)
+  // = P(C^c) <= epsilon.
+  // $
+  // Since $epsilon$ was arbitrary, we have
+  // $forall xi > 0: PP(abs(E_n (X|Z) - E (X|Z)) > xi) -> 0$.
+]
+
+
+
 
 
 = Construction of the history
@@ -548,9 +994,9 @@ Let $(Omega,AS,PP)$ be a complete probability space.
 Let $I$ be an arbitrary index set.
 Let $(U_i)_(i in I)$ be a family of random elements.
 $
-distributionstimes := {P : AS' -> RR |& P "is a probability measure,"\
+distributionstimes := {P : AS -> RR |& P "is a probability measure,"\
 &(U_i)_(i in I) "is an independent family w.r.t." P \
-&"and" P "is absolutely continuous w.r.t." PP "and vice versa"}
+&"and" P tilde PP}
 $
 
 *In the following* $X,Y$ and $Z$ will be arbitrary random elements.
@@ -708,6 +1154,27 @@ distributions, in particular for the reference measure $PP$.
   '$=>$' follows from the definition of disintegration.
   \
   '$arrow.l.double$': Let $P in distributionstimes$.
+  By @lem:decomposition there is a density $phi$, s.t. $P = phi dot PP$.
+  Furthermore, there is a family of densities $(phi_n)_(n in NN_0)$ and a family of indices $(i_n)_(n in NN)$
+  s.t.
+  $EE(phi_0|U) = 1$, and $phi_n$ is $U_i_n ms$.
+  Furthermore, $product_(n in NN_0) phi_n$ converges $PP$-a.s.
+  Let $J' = J sect {i_n : n in NN}$
+  and $comp(J)' = comp(J) sect {i_n : n in NN}$
+  We define
+  $phi_J = product_(i in J') phi_i$ and 
+  $phi_comp(J) = product_(i in comp(J)') phi_i$.
+  Since $phi_J = product_(n in NN) (1_{i_n in J} phi_(i_n) + 1_{i_n in.not J})$, $phi_J$ is $sigma(U_J) ms$ and 
+  $phi_comp(J)$ is $sigma(U_comp(J)) ms$.
+  Let $EE$ be the expectation w.r.t. $PP$.
+  Let $A in sigma(U_J)$ and $B in sigma(U_comp(J))$.
+  Then
+  $P(A|Z) P(B|Z) = P(A,B|Z) <=> EE(phi 1_A|Z) EE(phi 1_B|Z) = EE(phi|Z)EE(phi 1_A 1_B|Z)$.
+  The claim follows by $U_J indep_PP U_comp(J) | Z$ through the equalities
+  $EE(phi 1_A|Z) = EE(phi_J 1_A|Z) EE(phi_comp(J))$,
+  $EE(phi 1_B|Z) = EE(phi_J|Z) EE(phi_comp(J)1_B|Z)$
+  and $EE(phi 1_A 1_B|Z) = EE(phi_J 1_A|Z) EE(phi_comp(J) 1_B|Z)$.
+  
 ]
 
 #lemma[
@@ -1057,246 +1524,6 @@ We are now ready to define structural independence in terms of histories.
 // We want to see that all desiderata from @des:history are fulfilled and determine the history almost surely uniquely.
 // In the next section we prove the fundamental theorem of structural independence that is listed in @des:history#[.2] and states that this definition of structural independence characterizes all the independencies that are implied by our assumptions.
 
-= Infinite product probability measures
-
-In the next section we want to prove the fundamental theorem of structural independence.
-For this, we need to characterize the elements in $distributionstimes$ further.
-We first recall Kakutani's characterization of equivalent probability measures in countable
-product spaces @kakutani1948equivalence, and apply it to our setting.
-
-
-*In the following*
-Let $(Omega,AS,PP)$ be a probability space.
-Let $distributions$ be the set of probability distributions on $(Omega,AS)$
-  that are absolutely continuous w.r.t. $PP$.
-
-#definition[
-  There is an embedding $e: distributions -> L^2 (Omega,AS,P)$, defined by
-  $e (P) := sqrt(radiv(P,PP))$.
-  $e$ induces a Hilbert space structure on $distributions$ with inner product
-  $angles(P,Q)= integral sqrt(radiv(P,PP) radiv(Q,PP)) dif PP = integral sqrt(radiv(P,Q)) dif Q$.
-  We denote the induced metric on $distributions$ by $d_2 = d_2^distributions$.
-  For more details, see @kakutani1948equivalence.
-]
-
-#definition[
-  We define the metric $d_1$ on $distributions$ by
-  $d_1 (P,Q) := integral abs(radiv(P,PP)-radiv(Q,PP)) dif PP$.
-]
-#lemma[
-  $d_1 (P,Q) = integral abs(radiv(P,Q)-1) dif Q$.
-]
-#proof[
-  $d_1 (P,Q) = integral abs(radiv(P,PP)-radiv(Q,PP)) radiv(PP,Q) dif Q
-  = integral abs(radiv(P,PP)radiv(PP,Q)-radiv(Q,PP)radiv(PP,Q))  dif Q
-  = integral abs(radiv(P,Q)-1)  dif Q
-  $.
-]
-
-#definition[
-  Measures $mu$ and $nu$ defined on the same measurable space are called 
-  equivalent, if they are mutually absolutely continuous.
-]
-
-#theorem[
-  Let $(mu_n)_(n in NN)$ and $(nu_n)_(n in NN)$ be families of probability measures.
-  Then $mu = Times_(n in NN) mu_n$ is equivalent to $nu = Times_(n in NN) nu_n$ if and only if
-  $product_(n in NN) d_2 (mu_n, nu_n) = product_(n in NN) integral sqrt(radiv(mu_n,nu_n)) dif nu_n > 0$.
-  This condition is equivalent to the convergence of the series
-  $sum_(n in NN) log integral sqrt(radiv(mu_n,nu_n)) dif nu_n$.
-  In this case, we have
-  $product_(n in NN) sqrt(radiv(mu_n,nu_n)) -> radiv(mu,nu)$ in $d_2$ and pointwise $nu$-almost everywhere.
-] <thm:countable_products>
-#proof[
-  see @kakutani1948equivalence.
-]
-
-#lemma[
-  $X_n -> X, Y_n -> Y$ in $L^2(PP)$,
-  Then $X_n Y_n -> X Y$ in $L^1 (PP)$.
-] <lem:hölder_seqence>
-#proof[
-  This is an immediate consequence of the Hölder inequality.
-]
-
-#corollary[
-  If $P_n ->^(d_2) P$, then $P_n ->^(d_1) P$.
-]
-#proof[
-  We have $sqrt(radiv(P_n,PP)) ->^(L^2 (PP)) sqrt(radiv(P,PP))$.
-  By @lem:hölder_seqence,
-  $radiv(P_n,PP) ->^(L^1(PP)) radiv(P,PP)$.
-]
-
-#lemma[
-  Let $phi,phi'$ and $psi,psi'$ be probability densities w.r.t. $PP$ s.t.
-  $phi,phi'$ are $sigma(U) ms$ and
-  $EE(psi|U)=EE(psi'|U)=1$.
-  Then $phi psi$ is a density,
-  and $norm(phi psi - phi' psi')_1 <=  norm(phi' - phi)_1 + norm(EE(abs(psi'-psi) :U))_oo$.
-] <lem:cond_product>
-#proof[
-  First, note that $integral phi psi dif PP = integral phi EE(psi|U) dif PP = 1$,
-  so $phi psi$ is a density.
-  Second,
-  $
-  norm(phi' psi' - phi psi)_1 
-  &<= norm(phi' (psi' - psi))_1 + norm((phi' - phi) psi)_1 \
-  &= integral phi' EE(abs(psi'-psi):U) + integral (phi' - phi) EE(psi|U) dif PP \
-  &<= norm(EE(abs(psi'-psi) :U))_oo + norm(phi' - phi)_1
-  $
-  #v(-25pt)
-]
-
-
-We now apply these definitions and Kakutani's result to our setting with uncountably infinite products.
-
-#lemma[
-  Let $P,Q in distributionstimes$.
-  Then there is
-  a family of positive densities $(phi_n)_(n in NN_0)$ and a sequence of indices in $I$,
-  $(i_n)_(n in NN)$, s.t.
-
-  - $EE(phi_0|U) aseq 1$.
-  - $forall n in NN : phi_n$ is $sigma(U_i_n) ms$.
-  - $product_(n in NN_0) phi_n$ converges (unconditionally) in $L^1$
-    and a.s. pointwise to $radiv(P,Q)$.
-]
-#proof[
-  Let $E$ denote the expectation w.r.t. $Q$.
-  Let $phi = radiv(P,Q)$,
-  and set $phi_0 = phi/E(phi|U)$ and $psi = E(phi|U)$.
-  Then $EE(phi_0|U) = 1$, while $phi = phi_0 psi$ and $psi in sigma(U)$.
-  By standard measure theory arguments, there exists
-  $psi' : Val(U) -> RR$, s.t. $psi'(U) = psi$.
-  We claim that $psi' dot Q_U = P_U$.
-  Let $A subset.eq Val(U)$ measurable, then
-  $psi' dot Q_U (A)= integral_A psi' dif Q_U = integral_(U^(-1) (A)) psi' (U) dif Q
-  = integral_(U^(-1) (A)) psi dif Q
-  = integral_(U^(-1) (A)) psi EE(phi_0|U) dif Q
-  = integral_(U^(-1) (A)) EE(phi|U) dif Q
-  = integral_(U^(-1) (A)) phi dif Q
-  = integral_(U^(-1) (A)) dif P
-  = P_U (A).
-  $
-  Now $P_U$ and $Q_U$ are equivalent product probability measures on $Val(U)$.
-  More precisely, $P_U = Times_(i in I) P_(U_i)$ and
-  $Q_U = Times_(i in I) Q_(U_i)$.
-  
-  Let $delta(i) := log (integral sqrt(radiv(P_U_i,Q_U_i)) dif Q_U_i)$.
-  Clearly, for each $J subset.eq I$, we have
-  $Q_U_J$ is equivalent to $P_U_J$.
-  By @thm:countable_products, we have
-  $sum_(i in J) delta_i < oo$ for all $J subset.eq I$.
-  Therefore, there can only be countably many $i$, s.t.
-  $delta_i != 0$.
-  Define a sequence of indices by ${i_n : n in NN} := {i in I: delta_i != 0}$
-  and set $phi_n = radiv(P_U_i,Q_U_i) (U_i)$.
-  Since $P_U$ and $Q_U$ are product measures, we have
-  $product_(n in NN) phi_n= radiv(P_U,Q_U)(U) = psi$.
-  Finally, $phi = phi_0 psi = product_(n in NN_0) phi_n$.
-  The convergence properties of $product_(n in NN) phi_n$ follow from @thm:countable_products
-  or @kakutani1948equivalence.
-  
-]
-
-
-// #lemma[
-//   $P in distributionstimes$ then $P = phi dot PP$,
-//   $P |-> sqrt(phi) in L^2 (PP)$ is an embedding into a hilbert space.
-// ]
-
-// #definition[
-//   $angles(P,Q) := angles(sqrt((dif P)/(dif PP)), sqrt((dif Q)/(dif PP)))$.
-
-//   $norm(P)_2^2 := angles(P,P)^2+ angles(Q,Q)^2 - 2 angles(P,Q) = 2(1-angles(P,Q))$.
-
-//   $P -> Q$ in $norm(dot)_2 <=> angles(P,Q) -> 1$.
-// ]
-
-// #lemma[
-//   Let $p$ be a probability density w.r.t. a probability measure $PP$ with expectation $EE$.
-//   // The w.r.t $A$ regularized density
-//   // $p_A := 1_A EE(1_A p)/PP(A) + 1_(A^c) EE(1_(A^c) p)/(PP(A^c))$ fulfills $integral_A p_A dif PP = integral_A p dif PP$
-//   // and $integral sqrt(p_A) >= integral sqrt(p)$.
-//   Then $EE(sqrt(EE(p|Z))) >= EE(sqrt(p))$.
-  
-// ] <lem:eucl_density_cond_exp>
-// #proof[
-//   $EE sqrt(EE(p|Z)) = EE sqrt(EE(p|Z)) >=^"Jensen" EE(EE(sqrt(p)|Z)) = EE(sqrt(p)) $.
-// ]
-
-
-#corollary[
-  Let $P_n ->^(d_1) P$ and $X in L^oo (PP)$, then $phi_n X -> phi X$ in $L^1(PP)$
-] <cor:hilbert_bounded_l1>
-#proof[
-  $sqrt(phi_n) -> sqrt(phi)$ in $L^2(PP)$.
-  Since $X$ is bounded, $X_n := sqrt(phi_n X) in L^2 (PP)$ and $X_n -> sqrt(phi X)$ in $L^2 (PP)$.
-  Therefore $phi_n X = X_n X_n -> sqrt(phi X) sqrt(phi X) = phi X$ in $L^1 (PP)$.
-]
-
-#corollary[
-  Let $P_n ->^(d_1) P$ and $A in AS$.
-  Then $E(phi_n A|Z) -> E(A|Z)$ in $L^1 (P)$.
-]
-#proof[
-  Follows by the linearity of conditional expectation and @cor:hilbert_bounded_l1.
-]
-
-#lemma[
-  Let $mu$ be a finite measure on $(Omega,AS)$.
-  Let $X_n -> X$ and $Y_n -> Y$ in $mu$-measure.
-  If $(X,Y)$ is contained in a compact set $K subset.eq RR^2$ $mu$-a.e.
-  and
-  $f : RR^2 ->RR$ is continuous on an open set $U supset.eq K$.
-  Then $f(X_n,Y_n) -> f(X,Y)$ in $mu$-measure.
-] <lem:conv_measure_cont_func>
-#proof[
-  There is $K'$ compact and $U'$ open, s.t.
-  $U supset.eq K' supset.eq U' supset.eq K$.
-  The claim now follows by the uniform continuity of $f$ on $K'$.
-]
-
-Finally, it is important that a converging sequence of probability measures
-determines the limiting conditional expectation uniquely.
-
-#lemma[
-  Let $P_n ->^(d_1) P$ and $X$ be bounded.
-  Let $E,E_n$ denote the expectation w.r.t $P$ and $P_n$.
-  Then $E_n (X|Z) -> E(X|Z)$ in $PP$-measure,
-  where $PP in distributions$.
-] <lem:conditional_expectation_in_measure>
-#proof[
-  Let $phi_n$ be a density, s.t. $P_n = phi_n dot PP$.
-  Let $phi$ be a density, s.t. $P = phi dot PP$.
-  Let $E,E_n,EE$ denote the expectation w.r.t $P,P_n$ and $PP$ respectively.
-  Recall that $E_n (X|Z) = EE(phi_n X|Z) slash EE(phi_n|Z)$.
-  Since $phi_n -> phi$ in $L^1 (PP)$, we have
-  $EE(phi_n|Z) -> EE(phi|Z)$ in $L^1$ and in measure.
-  Let $epsilon > 0$.
-  Then since $PP(phi < delta) ->^(delta -> 0) 0$.
-  There is $delta > 0$, s.t. $PP(phi > delta) > 1 -epsilon$.
-  Set $C = {phi>delta}$ and let $mu = PP|_C$ be a finite measure on $(C,AS|_C)$.
-  Clearly, $EE(phi_n|Z)|_C -> EE(phi|Z)|_C$ and
-  $EE(phi_n X|Z)|_C -> EE(phi X|Z)|_C$ in $mu$-measure.
-  
-  Define $f(x,y) = x/y 1_(y > 0)$. Then $f$ is continuous on $RR times RR_(>0)$
-  while $(EE(phi X|Z)|_C,EE(phi|Z)|_C)$ is contained in $[0,1] times [delta,2]$ $mu$-a.e.
-  By @lem:conv_measure_cont_func
-  $E_n (X|Z)|_C = f(EE(phi_n X|Z)|_C,EE(phi_n X|Z)|_C) -> f(EE(phi X|Z)|_C,EE(phi|Z)|_C) = E(X|Z)|_C$
-  in $mu$-measure.
-  Therefore, for any $xi > 0$,
-  $limsup_(n) PP(abs(E_n (X|Z) - E (X|Z)) > xi)
-  <= limsup_(n) mu(abs(E_n (X|Z) - E (X|Z)) > xi) + P(C^c)
-  = P(C^c) <= epsilon.
-  $
-  Since $epsilon$ was arbitrary, we have
-  $forall xi > 0: PP(abs(E_n (X|Z) - E (X|Z)) > xi) -> 0$.
-]
-
-
-
 
 
 = The fundamental theorem of structural independence
@@ -1304,8 +1531,11 @@ determines the limiting conditional expectation uniquely.
 
 The goal of this section is to prove that structural independence (@def:structural_independence) characterizes
 independence in all product distributions $P in distributionstimes$.
+The proof simplifies in the finite case and was presented in @FFS.
+In the finite case, it is also possible
+to prove the statement using polynomials, see @garrabrant2021temporal.
 
-More precisely, our goal is to prove
+Our goal is to prove
 $
 forall P in distributionstimes: X indep_P Y | Z
 <=>
@@ -1407,7 +1637,7 @@ Of course, irrelevance extends to arbitrary index sets.
 ] <lem:irrelevance_index_set>
 #proof[
   Let $phi$ be the probability density of $Q$ w.r.t. $P$.
-  By ?? and the fact that $E(phi|U_K) = 1$, there is a family of probability densities $(phi_n)_(n in NN)$ and a family of indices in $K$, $(k_n)_(n in NN)$, s.t.
+  By @lem:decomposition and the fact that $E(phi|U_K) = 1$, there is a family of probability densities $(phi_n)_(n in NN)$ and a family of indices in $K$, $(k_n)_(n in NN)$, s.t.
   $phi_n$ is $sigma(U_k_n) ms$ and
   $product_(n in NN_0) phi_n$ converges (unconditionally) in $L^1 (P)$ and a.s. to $phi$.
   For $n in NN$ define $ (P_n,Q_n) = ((product_(m=1)^(n-1) phi) dot P, (product_(m=1)^(n) phi) dot P)$.
@@ -1604,7 +1834,10 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
   Then $q dot product_(n in NN_0) phi_n = product_(n in NN_0) phi'_n = radiv(Q',P)$
   by independence of $U$, and @lem:cond_product.
 
-  + Finite dimensional case:
+  + Finite dimensional case #footnote[I acknowledge Scott Garrabrant, who simplified the proof
+    of the finite dimensional case, in the finite case @FFS, from an induction to one step.
+    These ideas are used to simplify the proof here.
+  ]:
     Suppose $exists m in NN: forall n>= m : phi_n = 1$.
     Then define
     $
@@ -1998,12 +2231,206 @@ We now state the fundamental theorem of structural independence with all its ass
 
 = Properties of the history and structural independence <sec:properties>
 
-TODO: compositional semigraphoid, uniqueness
+
+First, we take a look at the properties of structural independence.
+More precisely, the induced independence structure is a compositional semigrapoid.
+
+In this section let $X,Y,Z,W$ be $sigma(U) ms$ random elements.
+Otherwise, the setting is taken from @sec:fundamental_theorem.
+
+
+// #theorem[
+//   Let $Sigma$ be the set of sub-sigma algebras of $AS$.
+//   The map $Sigma -> Omega^powerset(I); BS |-> history(BS|Z)$
+//   is a lattice homomorphism.
+// ]
+
+#lemma[monotonicity][
+  If $sigma(X) subset.eq sigma(Y)$, then
+  $history(X|Z) subsetaseq history(Y|Z)$.
+] <lem:history_subset>
+#proof[
+  It suffices to show that $history(Y|Z)$ generates $X$ given $Z$.
+  Firstly, by definition $history(Y|Z)$ disintegrates $Z$,
+  secondly, $sigma(X) subset.eq sigma(Y) subset.eq sigma(pi_history(Y|Z),Z)$.
+]
+
+#lemma[compositionality][
+  $history((X,Y)|Z) aseq history(X|Z) union history(Y|Z)$.
+] <lem:history_compositionality>
+#proof[
+  '$supsetaseq$' follows by @lem:history_subset.
+  \ '$subsetaseq$'
+  Firstly, $H_1 = history(X|Z)$ and $H_2 = history(Y|Z)$ disintegrate
+  $Z$ by definition.
+  By the symmetry of disintegration, $H_1^c$ and $H_2^c$ disintegrate $Z$.
+  By @lem:disintegration_intersection, we have $H_1^c sect H_2^c$ disintegrates $Z$.
+  Again, by symmetry, $H_1 union H_2$ disintegrate $Z$.
+  Now $sigma(X,Y) = sigma(sigma(X) union sigma(Y)) subset.eq sigma (sigma((U_H_1,Z) union sigma(U_H_2 , Z)) = sigma(U_(H_1 union H_2), Z)$ by @lem:as_union_random_index_set.
+]
+
+#lemma[
+  Let $J$ disintegrate $Z$
+  and $K = 
+  Union^astext {K' : K' "is a "sigma(Z) ms "random "$#lb$" index set": sigma(U_K') subset.eq sigma(Z)}$.
+  Then $history(U_J|Z) = J without K$.
+] <lem:history_U_J>
+#proof[
+  '$subsetaseq$':
+  By @lem:as_union_random_index_set, $U_K subset.eq sigma(Z)$.
+  Then clearly $K$ disintegrates $Z$.
+  By @lem:disintegration_intersection and the symmetry of disintegration,
+  $J without K$ disintegrates $Z$.
+  Clearly, $sigma(U_J,Z) = sigma(U_(J without K),Z)$.
+  \
+  '$supsetaseq$':
+  Let $L= (J without K) without history(U_J|Z)}$.
+  By @lem:disintegration_intersection and the symmetry of disintegration,
+  $L$ disintegrates $Z$.
+  By '$subsetaseq$', we have $history(U_L|Z) subsetaseq L$.
+  By @thm:fundamental_theorem, we have
+  $U_L indep U_J | Z$ and therefore
+  $U_L indep U_L | Z$, therefore
+  $sigma(U_L,Z) subset.eq sigma(Z)$.
+  Therefore, $L subsetaseq K$.
+  But by definition, $L sect K aseq nothing$, therefore $L aseq nothing$.
+]
+
+
+
+#theorem[
+  Structural independence forms a compositional semigraphoid.
+  More precisely, the following relations hold.
+  #let given = math.bar
+  $
+  &"1." quad&& X perp Y given Z <=> Y perp X given Z &"(symmetry)" \
+  &"2."&& X perp (Y,W) given Z => X perp Y given Z  &#h(-100pt)"(decomposition)"\
+  &"3."&& X perp (Y,W) given Z => X perp Y given (Z,W) &"(weak union)"\
+  &"4."&& X perp Y given Z and X perp W given (Z,Y) =>
+  X perp (Y,W) given Z & "(contraction)" \
+  &"5."&& X perp Y given Z and X perp W given Z =>
+  X perp (Y,W) given Z &"(composition)"\
+  $
+  Here, 1-4. correspond to the semigraphoid axioms and 5 corresponds to
+  the prefix 'compositional'.
+] <thm:comp_semigraphoid>
+#proof[
+  It is well known that 1-4. hold for probability independence,
+  see @pearl2022graphoids, Section 2 (6a)-(6e).
+  By @thm:fundamental_theorem, we immediately obtain 1-4.
+  We only prove 1. exemplary.
+  It suffices to prove '$=>$'
+  Let $X orth Y | Z$.
+  Then $forall P in distributionstimes: X indep_PP Y | Z$.
+  Since 1. holds for $indep_PP$ in place of $orth$, we have
+  $forall P in distributionstimes: Y indep_PP X | Z$ and therefore
+  $Y orth X | Z$.
+  2-4. are proved in the same way.
+
+  Finally, for $5.$ let $X orth Y | Z$ and $X orth W | Z$.
+  Then $history(X|Z) sect history(Y|Z) aseq nothing$
+  and 
+  $history(X|Z) sect history(W|Z) aseq nothing$.
+  Since $history(Y,W|Z) aseq history(Y|Z) union history(W|Z)$ by @lem:history_compositionality,
+  it follow that
+  $history(X|Z) sect history(Y,W|Z) aseq nothing$
+  and therefore $X orth (Y,W) | Z$.
+]
+
+Here it is important to point out that the composition axiom does not
+hold for probabilistic independence.
+This is because we will now see that
+structural independence does not differentiate between
+pairwise and 'full' independence of a vector.
+
+#definition[structural independence of a vector][
+  Let $(X_k)_(k in K)$ be a family of $sigma(U) ms$
+  random elements.
+  We say that $(X_k)_(k in K)$ is structurally independent given $Z$, if
+  for $k_1!=k_2 in K$, we have $X_k_1 orth X_k_2 | Z$.
+  // We write $Orth_(k in K) X_k$
+]
+#theorem[the fundamental theorem of structural independence for vectors][
+  Let $X=(X_k)_(k in K)$ be a family of $sigma(U) ms$
+  random elements.
+  Then $X$ is structurally independent given $Z$ if and only if
+  $X$ is independent given $Z$ for all distributions in $distributionstimes$.
+]
+#proof[
+  '$=>$': W.l.o.g. $K$ is finite.
+  Let $P in distributionstimes$.
+  Then, by induction, we can assume $K={1,...,n}$ and $X' = (X_k)_(k=1)^(n-1)$ is independent.
+  Let $A_k in sigma(X_k)$ for $k in K$.
+  Then by @thm:comp_semigraphoid,
+  $X_n orth X' | Z$.
+  and therefore
+  $P(Sect_(k in K) A_k|Z)=P(A_n|Z)P(Sect_(k=1)^(n-1)A_k|Z) = product_(k in K) P(A_k|Z)$.
+  \
+  '$arrow.l.double$':
+  By decomposition of probabilistic independence, we have
+  $forall P in distributionstimes : X_k_1 indep X_k_2 | Z$ for all $k_1 != k_2 in K$.
+  By @thm:fundamental_theorem, $X_k_1 orth X_k_2$.
+]
+
+We will now prove that
+@des:history
+uniquely determines the history.
+#theorem[uniqueness of the history][
+  Let $Sigma$ be the set of sub-sigma algebras of $AS$.
+  The history is the unique map $history(dot|dot) : Sigma times Sigma -> powerset(I)^Omega$
+  that fulfills
++ $history(X|Z)$ is a $sigma(Z) ms$ random index set.
++ Characterizes independence: $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
+  $
++ Monotonicity: If $sigma(X) subset.eq sigma(Y)$ then $history(X|Z) subsetaseq history(Y|Z)$.
++ $sigma(U_(J without history(U_J|Z))) subset.eq sigma(Z)$.
++ $history(Z|Z) aseq nothing$.
+// Let $J$ be a random index set and
+//   $C = {i in J without history(U_J|Z)}$.
+//   Then $sigma(U_J|_C) subset.eq sigma(Z)$.
+
+Condition 4 is needed to disallow permutation of $I$.
+]
+#proof[
+  The history fulfills $1.$ by definition, $2.$ by @thm:fundamental_theorem and 
+  $3.$ by @lem:history_subset.
+  Let $J$ be a random index set and
+  $C = {i in J without history(U_J|Z)}$.
+  Then by @thm:fundamental_theorem,
+  $U_i|_C indep_PP U_J | Z$ and therefore
+  $U_i|_C indep_PP U_i|_C | Z$ which implies
+  $sigma(U_i_|C) subset.eq sigma(Z)$  \
+  'Uniqueness'.
+  Let $history'$ be a map that fulfills 1-4.
+  Let $Z$ be fixed.
+  First, let $J$ disintegrate $Z$.
+  Let $K = 
+  Union^astext {K' : K' "is a "sigma(Z) ms "random "$$" index set": sigma(U_K') subset.eq sigma(Z)}$.
+  We want to show that $history'(U_J|Z) = J without K$.
+  // We mirror @lem:history_U_J, where we only used the properties 1-4. of the history.
+  \
+  '$subsetaseq$':
+  By @lem:as_union_random_index_set, $U_K subset.eq sigma(Z)$.
+  By @lem:history_U_J and @thm:fundamental_theorem,
+  $U_(J without K) orth U_(J union K) | Z$.
+  \
+  '$supsetaseq$':
+  Let $L= (J without K) without history(U_J|Z)}$.
+  By @thm:fundamental_theorem, we have
+  $U_L|_C indep U_J | Z$ and therefore
+  $U_L|_C indep U_L|_C | Z$, therefore
+  $sigma(U_L|_C,Z) subset.eq sigma(Z)$.
+  Therefore, $L subsetaseq K$.
+  But by definition, $L sect K aseq nothing$, therefore $L aseq nothing$.
+  
+]
+
 
 
 = A Counterexample
 
 TODO: Torus example to show that rectangles are not enough.
+Probably no time for it. / should do it last.
 
 
 #bibliography("citations.bib")

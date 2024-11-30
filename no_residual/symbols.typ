@@ -20,6 +20,7 @@
   #move(dy:0.045em)[#scale(origin: bottom, y:140%)[#sym.tack.t.double]]
 ])
 #let orth = math.scripts(math.perp)
+#let Orth = scale(110%)[#math.scripts(math.perp)]
 
 #let history = math.cal("H")
 #let irrel = math.cal("I")

@@ -71,7 +71,6 @@
   set text(font: "New Computer Modern", lang: "en")
   show math.equation: set text(weight: 400)
   show math.equation: set block(spacing: 0.65em)
-  set math.equation(numbering: "(1)")
   set heading(numbering: "1.1")
 
   // Set run-in subheadings, starting at level 4.
