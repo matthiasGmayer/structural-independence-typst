@@ -22,7 +22,7 @@
 #show: thmrules.with(qed-symbol: $square$)
 
 #let _thmargs = (inset:0pt,padding:(top:0pt,bottom:0pt))
-#let _thmbox(str) = thmbox("theorem",str,.._thmargs)
+#let _thmbox(str,breakable:false) = thmbox("theorem",str,.._thmargs,breakable:breakable)
 #let theorem = _thmbox("Theorem")
 #let definition = _thmbox("Definition")
 #let exercise = _thmbox("Exercise")

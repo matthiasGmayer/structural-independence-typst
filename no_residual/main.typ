@@ -1,4 +1,5 @@
 #import "template.typ": *
+#import "@preview/cetz:0.3.1"
 #show: showrules 
 #show "sigma algebra": it => [$sigma$-algebra]
 #show "sect stable": it => [$sect$-stable]
@@ -43,6 +44,9 @@
   MSC: "60A99",
 )
 
+#text(size:1.3em,weight: "bold")[Contents]
+#v(-0.8em)
+#outline(title: none)
 
 
 = Introduction
@@ -1058,22 +1062,34 @@ We write $history(X|Z)$ for $history(sigma(X)|sigma(Z))$.
 We now give a list of desiderata that will be shown to completely determine $history$ almost surely in an appropriate sense.
 
 #custombox("Desiderata")([
+  // Let $Sigma$ be the set of sub-sigma algebras of $AS$.
+  // The history is the (up to nullsets) unique map  $history(dot|dot) : Sigma times Sigma -> powerset(I)^Omega$
+  // that fulfills the following,
+  Let $J$ is an arbitrary random index set.
 + $history(X|Z)$ is a $sigma(Z) ms$ random index set.
-+ Almost sure disjointess of the histories characterizes independence for all product distributions in $distributionstimes$. 
-  More precisely,
-  $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
++ Characterizes independence: $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
   $
-+ Let $J$ be a random index set.
-  Whenever $U_J$ depends on $U$, it should depend on it through $J$.
-  Morally, we require that for a.e. $omega in {J != nothing}$ we have
-  $J(omega) subset.eq history(X|Z) (omega)$.
-  As we have seen, ${J != nothing}$ and ${J subset.eq history(X|Z)}$ are not measurable in general,
-  so formalizing this requires some care.
-  // For a.e. $omega in Omega$, $history(U_i|Z)(omega) != nothing => i in history(U_i|Z)(omega)$.
-  // for any $i,j in I$, we require for a.e. $omega in {j in J}$, that
-  // $i in history(U_J|Z)(omega) => j in history(U_J|Z)(omega)$.
-+ Monotonicity: if $sigma(X) subset.eq sigma(Y)$ then $history(X|Z) subsetaseq history(Y|Z)$.
-+ Given $Z$, $Z$ should not depend on $U$: $history(Z|Z) aseq nothing$.
++ Monotonicity: If $sigma(X,Z) subset.eq sigma(Y,Z)$ then $history(X|Z) subsetaseq history(Y|Z)$.
++ If we remove $history(U_J|Z)$ from $J$, the result does not dependent on anything: $history(U_(J without history(U_J|Z))|Z) aseq nothing$.
++ If $U_J$ does not depend on anything, then nothing depends on $J$: If $history(U_J|Z) aseq nothing$, then $history(X|Z) sect J aseq nothing$.
++ $Z$ does not depend on anything given $Z$: $history(Z|Z) aseq nothing$.
+// + $history(X|Z)$ is a $sigma(Z) ms$ random index set.
+// 
+// + Almost sure disjointess of the histories characterizes independence for all product distributions in $distributionstimes$. 
+//   More precisely,
+//   $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
+//   $
+// + Let $J$ be a random index set.
+//   Whenever $U_J$ depends on $U$, it should depend on it through $J$.
+//   Morally, we require that for a.e. $omega in {J != nothing}$ we have
+//   $J(omega) subset.eq history(X|Z) (omega)$.
+//   As we have seen, ${J != nothing}$ and ${J subset.eq history(X|Z)}$ are not measurable in general,
+//   so formalizing this requires some care.
+//   // For a.e. $omega in Omega$, $history(U_i|Z)(omega) != nothing => i in history(U_i|Z)(omega)$.
+//   // for any $i,j in I$, we require for a.e. $omega in {j in J}$, that
+//   // $i in history(U_J|Z)(omega) => j in history(U_J|Z)(omega)$.
+// + Monotonicity: if $sigma(X) subset.eq sigma(Y)$ then $history(X|Z) subsetaseq history(Y|Z)$.
+// + Given $Z$, $Z$ should not depend on $U$: $history(Z|Z) aseq nothing$.
 ]) <des:history>
 
 Our construction will mimic the finite case (@def:finite_generation).
@@ -1149,7 +1165,7 @@ Rather, it suffices to check the condition for any
 distributions, in particular for the reference measure $PP$.
 #lemma[
   $J$ disintegrates $Z$ if and only if $U_J indep_PP U_comp(J)$.
-]
+] <lem:disintegration_PP>
 #proof[
   '$=>$' follows from the definition of disintegration.
   \
@@ -1802,7 +1818,7 @@ $comp(irrel(X|Z)) subsetaseq irrel(Y|Z)$.
 
 
 
-== Fundamental theorem for the random index set of irrelevance.
+== The fundamental theorem for the random index set of irrelevance
 
 
 #theorem[
@@ -2246,13 +2262,13 @@ Otherwise, the setting is taken from @sec:fundamental_theorem.
 // ]
 
 #lemma[monotonicity][
-  If $sigma(X) subset.eq sigma(Y)$, then
+  If $sigma(X,Z) subset.eq sigma(Y,Z)$, then
   $history(X|Z) subsetaseq history(Y|Z)$.
 ] <lem:history_subset>
 #proof[
   It suffices to show that $history(Y|Z)$ generates $X$ given $Z$.
   Firstly, by definition $history(Y|Z)$ disintegrates $Z$,
-  secondly, $sigma(X) subset.eq sigma(Y) subset.eq sigma(pi_history(Y|Z),Z)$.
+  secondly, $sigma(X,Z) subset.eq sigma(Y,Z) subset.eq sigma(pi_history(Y|Z),Z)$.
 ]
 
 #lemma[compositionality][
@@ -2267,33 +2283,6 @@ Otherwise, the setting is taken from @sec:fundamental_theorem.
   By @lem:disintegration_intersection, we have $H_1^c sect H_2^c$ disintegrates $Z$.
   Again, by symmetry, $H_1 union H_2$ disintegrate $Z$.
   Now $sigma(X,Y) = sigma(sigma(X) union sigma(Y)) subset.eq sigma (sigma((U_H_1,Z) union sigma(U_H_2 , Z)) = sigma(U_(H_1 union H_2), Z)$ by @lem:as_union_random_index_set.
-]
-
-#lemma[
-  Let $J$ disintegrate $Z$
-  and $K = 
-  Union^astext {K' : K' "is a "sigma(Z) ms "random "$#lb$" index set": sigma(U_K') subset.eq sigma(Z)}$.
-  Then $history(U_J|Z) = J without K$.
-] <lem:history_U_J>
-#proof[
-  '$subsetaseq$':
-  By @lem:as_union_random_index_set, $U_K subset.eq sigma(Z)$.
-  Then clearly $K$ disintegrates $Z$.
-  By @lem:disintegration_intersection and the symmetry of disintegration,
-  $J without K$ disintegrates $Z$.
-  Clearly, $sigma(U_J,Z) = sigma(U_(J without K),Z)$.
-  \
-  '$supsetaseq$':
-  Let $L= (J without K) without history(U_J|Z)}$.
-  By @lem:disintegration_intersection and the symmetry of disintegration,
-  $L$ disintegrates $Z$.
-  By '$subsetaseq$', we have $history(U_L|Z) subsetaseq L$.
-  By @thm:fundamental_theorem, we have
-  $U_L indep U_J | Z$ and therefore
-  $U_L indep U_L | Z$, therefore
-  $sigma(U_L,Z) subset.eq sigma(Z)$.
-  Therefore, $L subsetaseq K$.
-  But by definition, $L sect K aseq nothing$, therefore $L aseq nothing$.
 ]
 
 
@@ -2375,65 +2364,550 @@ pairwise and 'full' independence of a vector.
 We will now prove that
 @des:history
 uniquely determines the history.
+In the following let $J$ be a random index set.
+
+#lemma[
+  Let $J$ disintegrate $Z$
+  and $K = 
+  Union^astext {K' : K' "is a "sigma(Z) ms "random "$#lb$" index set": sigma(U_K') subset.eq sigma(Z)}$.
+  Then $history(U_J|Z) = J without K$.
+] <lem:history_U_J>
+#proof[
+  '$subsetaseq$':
+  By @lem:as_union_random_index_set, $U_K subset.eq sigma(Z)$.
+  Then clearly $K$ disintegrates $Z$.
+  By @lem:disintegration_intersection and the symmetry of disintegration,
+  $J without K$ disintegrates $Z$.
+  Clearly, $sigma(U_J,Z) = sigma(U_(J without K),Z)$.
+  \
+  '$supsetaseq$':
+  Let $L= (J without K) without history(U_J|Z)$.
+  By @lem:disintegration_intersection and the symmetry of disintegration,
+  $L$ disintegrates $Z$.
+  By '$subsetaseq$', we have $history(U_L|Z) subsetaseq L$.
+  By @thm:fundamental_theorem, we have
+  $U_L indep U_J | Z$ and therefore
+  $U_L indep U_L | Z$, therefore
+  $sigma(U_L) subset.eq sigma(Z)$.
+  Therefore, $L subsetaseq K$.
+  But by definition, $L sect K aseq nothing$, therefore $L aseq nothing$.
+]
+
+#lemma[
+  $history(X|Z) aseq nothing <=> sigma(X) subset.eq sigma(Z) $.
+] <lem:historyZZ>
+#proof[Follows immediately by the definition of the history.]
+
+#lemma[
+  $history(U_(J without history(U_J|Z))|Z) aseq nothing$
+] <lem:U_Jwithout>
+#proof[
+  Let $K = J without history(U_J|Z)$.
+  By @lem:history_subset and
+  @lem:history_U_J,
+  we have $history(U_K|Z) subsetaseq history(U_comp(history(U_J|Z))|Z) subsetaseq comp(history(U_J|Z))$.
+  By @thm:fundamental_theorem,
+  $U_K orth U_J | Z$. Since $K subset.eq J$, we have
+  $U_K orth U_K | Z$, therefore $sigma(U_K) subset.eq sigma(Z)$.
+  By @lem:historyZZ and @lem:history_subset, $history(U_K) aseq nothing$.
+]
+#lemma[
+  If $history(U_J|Z) aseq nothing$, then $history(X|Z) sect J aseq nothing$.
+] <lem:U_Jnothing>
+#proof[
+  By @lem:historyZZ, $sigma(U_J) subset.eq sigma(Z)$.
+  Then it is clear that $comp(J)$ generates $X$ given $Z$.
+]
+
+
+
 #theorem[uniqueness of the history][
   Let $Sigma$ be the set of sub-sigma algebras of $AS$.
-  The history is the unique map $history(dot|dot) : Sigma times Sigma -> powerset(I)^Omega$
-  that fulfills
+  The history is the (up to nullsets) unique map  $history(dot|dot) : Sigma times Sigma -> powerset(I)^Omega$
+  that fulfills the following,
+  where $J$ is an arbitrary random index set.
+  
 + $history(X|Z)$ is a $sigma(Z) ms$ random index set.
 + Characterizes independence: $forall P in distributionstimes: X indep_P Y | Z <=> history(X|Z) sect history(Y|Z) aseq nothing.
   $
-+ Monotonicity: If $sigma(X) subset.eq sigma(Y)$ then $history(X|Z) subsetaseq history(Y|Z)$.
-+ $sigma(U_(J without history(U_J|Z))) subset.eq sigma(Z)$.
-+ $history(Z|Z) aseq nothing$.
-// Let $J$ be a random index set and
-//   $C = {i in J without history(U_J|Z)}$.
-//   Then $sigma(U_J|_C) subset.eq sigma(Z)$.
-
-Condition 4 is needed to disallow permutation of $I$.
++ Monotonicity: If $sigma(X,Z) subset.eq sigma(Y,Z)$ then $history(X|Z) subsetaseq history(Y|Z)$.
++ If we remove $history(U_J|Z)$ from $J$, the result does not dependent on anything: $history(U_(J without history(U_J|Z))|Z) aseq nothing$.
++ If $U_J$ does not depend on anything, then nothing depends on $J$: If $history(U_J|Z) aseq nothing$, then $history(X|Z) sect J aseq nothing$.
++ $Z$ does not depend on anything given $Z$: $history(Z|Z) aseq nothing$.
 ]
 #proof[
-  The history fulfills $1.$ by definition, $2.$ by @thm:fundamental_theorem and 
-  $3.$ by @lem:history_subset.
-  Let $J$ be a random index set and
-  $C = {i in J without history(U_J|Z)}$.
-  Then by @thm:fundamental_theorem,
-  $U_i|_C indep_PP U_J | Z$ and therefore
-  $U_i|_C indep_PP U_i|_C | Z$ which implies
-  $sigma(U_i_|C) subset.eq sigma(Z)$  \
+  The history fulfills $1.$ by definition, $2.$ by @thm:fundamental_theorem,  
+  $3.$, by @lem:history_subset, 4. by @lem:U_Jwithout, 5. by @lem:U_Jnothing, 6. by @lem:historyZZ.
+  
+  // Let $J$ be a random index set and
+  // $C = {i in J without history(U_J|Z)}$.
+  // Then by @thm:fundamental_theorem,
+  // $U_i|_C indep_PP U_J | Z$ and therefore
+  // $U_i|_C indep_PP U_i|_C | Z$ which implies
+  // $sigma(U_i_|C) subset.eq sigma(Z)$  \
   'Uniqueness'.
   Let $history'$ be a map that fulfills 1-4.
   Let $Z$ be fixed.
   First, let $J$ disintegrate $Z$.
-  Let $K = 
-  Union^astext {K' : K' "is a "sigma(Z) ms "random "$$" index set": sigma(U_K') subset.eq sigma(Z)}$.
-  We want to show that $history'(U_J|Z) = J without K$.
+  Let $K_0 = 
+  Union^astext {K : K "is a "sigma(Z) ms "random "$$" index set": sigma(U_K) subset.eq sigma(Z)}$.
+  We first show that $history'(U_J|Z) aseq J without K_0$.
   // We mirror @lem:history_U_J, where we only used the properties 1-4. of the history.
   \
   '$subsetaseq$':
-  By @lem:as_union_random_index_set, $U_K subset.eq sigma(Z)$.
-  By @lem:history_U_J and @thm:fundamental_theorem,
-  $U_(J without K) orth U_(J union K) | Z$.
+  First we show $history(U_J|Z) subsetaseq J$.
+  By definition of disintegration, we have $U_J orth U_comp(J) | Z$ and by 2. that
+  $history'(U_J|Z) sect history'(U_comp(J)|Z) aseq nothing$.
+  Let $K = (history'(U_J|Z) without J)$.
+  Now by monotonicity (3.),
+  $history'(U_(history'(U_J|Z) without J)|Z) subsetaseq history'(U_comp(J)|Z)$.
+  By definition of $K$, we have $K sect history'(U_comp(J)|Z) aseq nothing$ and
+  therefore $K subset.eq comp(J)$ and $K without history'(U_comp(J)|Z) aseq K$.
+  By 4. and monotonicity (3.),
+  $history'(U_K|Z) aseq nothing$.
+  Therefore, by 5.
+  $history'(U_J|Z) sect comp(J) aseq nothing$.
   \
+  Now we show $history(U_J|Z) subsetaseq comp(K_0)$.
+  By definition, $sigma(U_K_0) subset.eq sigma(Z)$.
+  Therefore, by 6. $history(U_K_0) aseq nothing$ and
+  by 5. $history(U_J|Z) sect K_0 aseq nothing$.
+  
+  
   '$supsetaseq$':
-  Let $L= (J without K) without history(U_J|Z)}$.
-  By @thm:fundamental_theorem, we have
-  $U_L|_C indep U_J | Z$ and therefore
-  $U_L|_C indep U_L|_C | Z$, therefore
-  $sigma(U_L|_C,Z) subset.eq sigma(Z)$.
+  Let $L= (J without K) without history(U_J|Z)$.
+  By @lem:disintegration_intersection and the symmetry of disintegration,
+  $L$ disintegrates $Z$.
+  By '$subsetaseq$', we have $history'(U_L|Z) subsetaseq L$.
+  By 2. we have
+  $U_L indep U_J | Z$ and therefore
+  $U_L indep U_L | Z$, therefore
+  $sigma(U_L) subset.eq sigma(Z)$.
   Therefore, $L subsetaseq K$.
   But by definition, $L sect K aseq nothing$, therefore $L aseq nothing$.
-  
+
+  Therefore, $history(U_J|Z) = history'(U_J|Z)$ whenever $J$ disintegrates $Z$.
+  Now let $X$ be arbitrary.
+  Let $J$ be the smallest disintegrating random index set of $X$ given $Y$.
+  Then by definition,
+  $history(X|Z) = J$.
+  Furthermore, $J sect K_0 aseq nothing$, since otherwise, $J without K_0$
+  is a smaller disintegrating random index set.
+  Now, by monotonicy (3.),
+  $history'(U_J|Z) subsetaseq J$.
+  Let $L = J without history'(U_J|Z)$.
+  Then, by 2. $U_L orth U_J | Z$ and therefore $U_L orth U_L | Z$.
+  This implies $sigma(U_L) subset.eq sigma(Z)$ and
+  therefore $L subsetaseq K_0$.
+  Since $K_0 sect J aseq nothing$, this implies $L aseq nothing$.
 ]
 
 
 
 = A Counterexample
 
-TODO: Torus example to show that rectangles are not enough.
-Probably no time for it. / should do it last.
+In this section,
+we introduce a example
+that shows that
+disintegrates cannot be
+characterized by rectangular atoms in general, in contrast to the finite case,
+see @sec:finite_theory.
+Furthermore, it illustrates that the choice of
+a reference measure (or an equivalence class of mutually absolutely continuous probability measures)
+is necessary for the history to exist.
+For this we introduce a certain $Z$ on a two-dimensional product space.
+#example(breakable:true)[
+  Let $S = [0,1)$ denote the unit circle,
+  represented by the unit interval with joined endpoints.
+  Let $I = {1,2}$ and $i in I$.
+  Let $Omega_i = S union.sq S$,
+  where $union.sq$ denotes the disjoint union, i.e.
+  $A union.sq B = A times {1} union B times {2}$.
+  To access the two parts of $Omega_i$, we write
+  $S_i = S times {i}$.
+  Let $AS_i$ be the borel sigma algebra on $Omega_1$.
+  Set $(Omega,AS) = (Omega_1 times Omega_2, AS_1 times.circle AS_2)$.
+  We set $U_i = pi_i : Omega -> Omega_i$, the canonical projection.
+
+
+  #let x = 2
+  #let y = 2
+  #let w = 1
+  #let h = 1
+  #let s = 0.5
+  #let rectw(x,y,w:w,h:h) = cetz.draw.rect((x,y),(x+w,y+h))
+
+  #let bracket = scale(y:250%,x:80%)[${$]
+  #let bracket2 = scale(y:650%,x:100%)[${$]
+#figure(caption: [An illustration of $Omega= Omega_1 times Omega_2$])[
+  #cetz.canvas({
+  import cetz.draw: *
+  // content((-3,s/2+h),$Omega = Omega_1 times Omega_2:$)
+  stroke(0.05em + color.black)
+  rectw(0,0)
+  rectw(0,s+h)
+  rectw(s+w,s+h)
+  rectw(s+w,0)
+  
+  content((w/2,-0.1),$underbrace("       ",S_1)$)
+  content((s+3*w/2,-0.1),$underbrace("       ",S_2)$)
+  content((s/2+w,-0.65),$underbrace("                   ",Omega_1)$)
+  // content((0,0),[#scale(y:100%)[ah]])
+  content((-0.15,h/2+0.05),bracket)
+  content((-0.5,h/2+0.05),[$""_S_1$])
+  content((-0.15,4*h/2+0.05),bracket)
+  content((-0.5,4*h/2+0.05),[$""_S_2$])
+  content((-0.8,2.5*h/2+0.05),bracket2)
+  content((-1.2,2.5*h/2-0.05),[$""_Omega_2$])
+
+  
+  // content((s+3*w/2,-0.1),$ov("       ",S_2)$)
+})
+]<fig:counter>
+  We now construct the random element $Z:Omega -> S^2$ on which we will condition.
+  For $i,j in I$, set $S_(i j) = S_i times S_j$.
+  Then $Omega = Union_(i,j in I) S_(i j )$.
+  Therefore it suffices to define $Z$ on each of $S_(i j)$,
+  we write $Z_(i j)$ for $Z|_S_(i j )$.
+
+  Let $alpha in (0,1)$ and $beta in (0,1)$.
+  // Let $f_1 : S_(1,1) -> S_1 ; (s,1) |-> $
+  Let
+  #align(center)[
+    #table(columns:2,stroke:none, column-gutter: 1em)[
+      $Z_(12) vec(a,b) &= mat(1 ,0; alpha, 1) vec(a,b) = vec(a,alpha dot a + b) \
+      Z_(11) vec(a,b) &= mat(1,0;0,1) vec(a,b) = vec(a,b)$
+    ][
+      $Z_(22) vec(a,b) &= mat(1,alpha;beta,1) vec(a,b) = vec(a + beta dot b,alpha dot a + b) \
+      Z_(21) vec(a,b) &= mat(1,beta;0,1) vec(a,b) = vec(a + beta dot b,b)$
+    ]
+  ]
+  where multiplication and addition is defined on $S$, i.e.
+  $a + b = a + b thick mod thick 1$.
+
+#figure(caption: [An illustration of $Z$ for $alpha=beta = 1/4$.
+The cells correspond to the partition #lb
+${Z in [a-epsilon,a+epsilon) times [b-epsilon, b +epsilon) : a,b in {epsilon(n+1/2) : n in NN}}$
+#lb
+For $epsilon = 1/4$.
+The numbers inscribed in the cells illustrate which cells are in the same part
+of the partition.
+])[
+  #v(1em)
+  #cetz.canvas({
+    let scaling = 1.8
+  import cetz.draw: *
+  // content((-3,s/2+h),$Omega = Omega_1 times Omega_2:$)
+
+  scale(scaling)
+  
+  stroke(0.05em + color.black)
+  rectw(s+w,s+h)
+  grid((0,0),(w,h),step:0.25)
+  grid((s+w,0),(s+2*w,h),step:(1,0.25))
+  grid((0,s+h),(w,s+2*h),step:(0.25,1))
+
+  for y in (0,s+h) {
+    for x in range(4){
+      line((0.25*x+s+w,y),(0.25*(x+1)+s+w,1+y))
+    }
+  }
+  
+  for x in (0,s+w) {
+    for y in range(4){
+      line((x,0.25*y+s+w),(1+x,0.25*(y+1)+s+w))
+    }
+  }
+  content((1/8,1/8),text(size:0.5em*scaling)[1])
+  content((1/4+1/8,1/4+1/8),text(size:0.5em*scaling)[2])
+  content((2/4+1/8,2/4+1/8),text(size:0.5em*scaling)[3])
+  content((1/8+w+s+0.03,1/8),text(size:0.5em*scaling)[1])
+  content((2/4+1/8+w+s - 0.15,1/4+1/8),text(size:0.5em*scaling)[2])
+  content((3/4+1/8+w+s -0.1,2/4+1/8),text(size:0.5em*scaling)[3])
+  content((1/8,1/8+w+s+0.03),text(size:0.5em*scaling)[1])
+  content((1/4+1/8, 2/4+1/8+w+s - 0.15),text(size:0.5em*scaling)[2])
+  content((2/4+1/8,3/4+1/8+w+s -0.1),text(size:0.5em*scaling)[3])
+  content((1/8+w+s+0.04,1/8+w+s+0.04),text(size:0.5em*scaling)[1])
+  content((2/4+1/8+w+s - 0.13,2/4+1/8+w+s - 0.12),text(size:0.5em*scaling)[2])
+  content((3/4+1/8+w+s -0.05,3/4+1/8+w+s -0.05),text(size:0.5em*scaling)[3])
+  
+  
+  // content((s+3*w/2,-0.1),$ov("       ",S_2)$)
+})
+#v(1em)
+]<fig:Z>
+  #v(1em)
+
+  
+  Note that $Z$ has rectangular atoms.
+  and $Z_(i j)$ is bijective, since
+  // $Z_22 (a,b) = (c, d)$
+  // is equivalent to
+  // $
+  // mat(alpha,1;1,beta) dot vec(a,b) =(c,d)
+  // $
+  $det mat(1,beta;alpha,1) = 1- alpha beta != 0$, etc.
+
+  Now let $PP = PP_1 times PP_2$, where
+  $PP_i$ is the uniform distribution over $S union.sq S$.
+  I.e. $PP|_(S_(i j)) = 1/4 lambda$, where
+  $lambda$ is the Lebesgue measure over $S_(i j)$.
+  We claim that the constant random index set
+  ${1}$ does not disintegrate $Z$.
+
+  Let $A = S_1 times Omega_2$ and $B = Omega_1 times S_1$.
+  Then $A sect B = S_(11)$.
+  It suffices to show that
+  $PP(A|Z)PP(B|Z) asneq PP(S_(11)|Z)$.
+  We use the Lebesgue differentiation theorem to calculate the conditional expectations,
+  cf @wheeden1977measure, Section 7.2.
+  For $(a,b) in S^2, epsilon in RR$, let $B_epsilon (a,b) = (a-epsilon,a+epsilon) times
+  (b-epsilon,b+epsilon)$
+  denote the $epsilon$ ball around $(a,b)$ in $S^2$.
+  For $z in S^2$, let $B^z_epsilon = {Z in (B_epsilon (z)))}$.
+
+  In @fig:Z, we can already see that the volume the partition corresponding to 1, as
+  $epsilon -> 0$ is not of a product structure:
+  Let $P$ denote the part in the partition corresponding to $1$.
+  Then, in the bottom left ($P sect S_11$), the volume is 1, and so is
+  the top left ($P sect S_12$) and bottom right ($P sect S_21$).
+  On the other hand, the top right
+  $(P sect S_22)$ is of a diamond shape, so that
+  the volume is not 1.
+  Therefore $A$ and $B$ will not be independent given $Z$.
+  We make this more precise now.
+  
+
+  Let $L$ be a linear invertible map and $B$ a borel set.
+  Let $lambda$ be the Lebesgue measure.
+  Then $lambda (L in B) = lambda(B)/abs(det(L))$
+  Using this formula, and noting that $det Z_(i,j) = 1$ for $i j != 22$ and
+  $Z_22 = 1 - alpha beta$, we have, for $z in (0,1)^2$ and $epsilon$ small enough, that
+  $PP(S_(i j) sect B^z_epsilon) = 1/4 lambda(B_epsilon (z)) = epsilon^2/4$
+  for $i j != 22$ and
+  $PP(S_(22) sect B^z_epsilon) = epsilon^2/(4(1-alpha beta))$
+
+  Therefore the following holds for almost all $z in S^2$
+  $
+  PP(A|Z=z) = lim_(epsilon -> 0) PP(A sect B^z_epsilon) slash PP(B^z_epsilon)
+  =
+  lim_(epsilon -> 0) (2/4 epsilon^2)/((3/4+1/(4(1-alpha beta))) epsilon^2) =
+   2/(3 + (1-alpha beta)^(-1)).
+  $
+  Similarly,
+  $PP(B|Z=z) =
+   2/(3 + (1-alpha beta)^(-1))
+  $
+  and
+  $PP(A,B|Z=z) =
+   1/(3 + (1-alpha beta)^(-1)).$
+   Now,
+   setting $x= (1-alpha beta)^(-1)$
+   $
+   PP(A|Z=z) PP(B|Z=z) = PP(A,B|Z=z)
+   &<=>
+   (2/(3 + x))^2 = 1/(3 + x) \
+   &<=>
+   12 + 4 x = 9 + 6x + x^2 \
+   &<=>
+   x^2 + 2 x - 3 = 0 \
+$
+This is clearly false, since $x = (1-alpha beta)^(-1) > 1$.
+Therefore,
+$PP(A|Z)PP(B|Z) != P(A,B|Z)$ a.s.
+
+In conclusion, we have seen that there is a $Z$, s.t.
+$Z^(-1)(z)$ is a rectangle for all $z$ in the codomain of $Z$, but
+also ${1}$ does not disintegrate $Z$.
+] <ex:1>
+
+#example[
+  We continue the previous example.
+  Let $Sigma$ be the set of sub-sigma algebras of $AS$.
+  Let $history_P (X|Z)$ denote the history, defined through
+  the reference measure $P$.
+  We use the example to show
+  that we there is no map
+  $history(dot,dot): Sigma times Sigma -> powerset(I)^Omega$, s.t.
+  $history(X|Z) = history_P (X|Z)$ $P$-a.s. for all $P$
+  s.t. $U$ is independent w.r.t. $P$.
+  Suppose there is such a map $history$.
+
+  Recall that $PP$ is the uniform distribution.
+  Clearly, $sigma(U_1|_C) cancel(subset.eq) sigma(Z)$
+  for any $PP$-non-nullset $C$.
+  With the same arguments as in the previous example, we can see that
+  the only disintegrating random index sets (w.r.t. $PP$) are $nothing$ and $I$.
+  Therefore,
+  $history(U_1|Z) = I$ $PP$-a.s.
+  
+  We will now show that $history(U_1|Z) = nothing$ everywhere,
+  contradiction the existence of $history$, by the previous paragraph.
+  Let $z in Val(Z)$ and let $C = Z^(-1) {z}$.
+  Since $C$ is a rectangle with four elements,
+  $P  = 1/4 sum_(c in C) delta_c$, where $delta_c$
+  is the Dirac measure,
+  is a product probability measure on $(Omega,AS)$.
+  By @def:finite_generation,
+  ${1}$ disintegrates $Z$ (w.r.t. $P$).
+  Therefore, clearly,
+  $history_P (U_1|Z) = 1$ $P$-a.s.
+  Now $history(U_1|Z) = history_P (U_1|Z)$ $P$-a.s.
+  and therefore $history(U_1|Z)(omega) = 1$
+  for $omega in C$.
+  But since $z$ was arbitrary and
+  ${Z^(-1){z}:z in Val(z)}$ covers $Omega$, we have
+  $history(U_1|Z)(omega) = 1$ for all $omega in Omega$.
+  But then clearly, $history(U_1|Z) != history_PP (U_1|Z)$ $PP$-a.s.
+  This is a contradiction to the existence of $history$.
+]
+
+
+= Further work
+
+#set heading(outlined:false)
+
+In this section we discuss further work that can be done on the theory of structural independence.
+We continue the setting of @sec:fundamental_theorem.
+
+== Disintegration
+In @lem:disintegration_PP, we have
+seen that it suffices to check the disintegration condition
+for one $P in distributionstimes$.
+Therefore this criterion is testable once we have any
+probability distribution for which we want to test
+which independencies are structural.
+Nonetheless, in the finite case, @sec:finite_theory, there is a elegant characterization of
+disintegration, namely that atoms of the sigma algebra of the conditional $Z$
+are rectangles w.r.t. the random index set $J$, i.e.
+$U (C) = U_J (C) times U_comp(J) (C)$ for all atoms $C$ of $sigma(Z)$.
+It is possible that a similar characterization is possible
+for the infinite setting.
+We provide a necessary but not sufficient condition.
+#lemma[
+  If $J$ disintegrates $Z$, then
+  for all $A in sigma(U_J|Z)$ and $B in sigma(U_comp(J)|Z)$,
+  s.t. $A sect B aseq nothing$ , there is a $C in sigma(Z)$,
+  s.t. $A subset.eq C$ and $B subset.eq C^c$.
+]
+#proof[
+  We have $PP(A|Z)PP(B|Z) = PP(A,B|Z) aseq 0$.
+  Let $C = {PP(A|Z) > 0}$.
+  Then $A subsetaseq C$.
+  Furthermore, $PP(B|Z)(omega) = 0$ for a.e. $omega in C$.
+  Therefore, $B subsetaseq {PP(B|Z) > 0} subsetaseq C^c$.
+]
+It can be seen that in the finite
+case, this fully characterizes disintegration,
+since it encodes the rectangle condition mentioned before.
+However, in the general case, it does not.
+It can be seen that in @ex:1,
+the condition holds for $J = {1}$,
+but ${1}$ does not disintegrate $Z$.
+The condition can be morally understood as every
+interaction between $U_J$ and $U_comp(J)$ being
+mediated by $Z$.
+We contend that it fails to capture
+disintegration since in the infinite theory,
+a conditional probability can be understood
+as a limit procedure, while
+the condition only talks about sets.
+
+It could be that we need to introduce limiting objects to capture these phenomena.
+#lemma[
+  Let $(A_n)_(n in NN)$ be a sequence in $AS$.
+  Let $A in AS$.
+  We define $A_n -> A$ if $1_A_n -> 1_A$ $PP$-a.s.
+  Then this clearly does not dependent
+  anything but the nullsets of $PP$.
+  In other words, this is a sense of convergence w.r.t. nullsets.
+]
+
+#conjecture[
+  Let $Omega$ be a polish space.
+  There is a suitable sense of
+  convergence of sigma algebras
+  that only depends on the nullsets of $PP$, s.t.
+  $J$ disintegrates $Z$, if and only if
+  there is a sequence of 
+  sigma algebras $AS_n$ that converges to $sigma(Z)$
+  that fulfill the following.
+  $AS_n$ is finitely generated and has rectangular atoms.
+]
+
+
+== Conditional systems
+In this paper, we have focused
+on the independencies that are implied
+by a family of random element $U$ being independent.
+It seems highly likely that the theory can be extended
+to a family that fulfills certain conditional independencies instead.
+More precisely, let $I= NN$.
+For $i in I$, choose a set $J_i subset.eq {j in I: j < i}$.
+Let $PP$ be a reference measure.
+Then we can define
+$distributionstimes$
+to be the closure of the set
+${phi dot PP: I_0 subset.eq I, phi = product_( i in I_0) phi_i, "for" i in I_0,
+phi_i "is a conditional density from" sigma(U_J_i) "to" sigma(U_i)}$.
+Here a conditional density $psi$ from $sigma(X)$ to $sigma(Y)$
+is a $sigma(X,Y)$-measurable probability density, s.t.
+$EE(psi|X)= 1$.
+For example, a discrete Markov process fulfills this property
+with $J_i = {i-1}$.
+The proofs in section @sec:fundamental_theorem only
+us properties of $distributionstimes$ that also hold in this case.
+Therefore it is highly likely that the whole theory generalizes to this case.
+
+== Continuous, ordered systems
+In the previous section, we still had a discrete system.
+We could choose conditional densities independently.
+In continuous systems, we are not able to choose
+conditional densities independently.
+In a continuous time Markov process,
+the conditional probabilities are entangled.
+Let $PP$ be the law of a continuous time Markov process $M$
+and $phi$ be a conditional density from time $M_t$ to $M_s$
+Then $phi dot PP$ is no longer a Markov process.
+Therefore it is unclear how the theory can be generalized to this case.
+
+
+== Constraints
+It could also be possible to extend the theory to allow for certain constraints
+on the probability distributions under considerations.
+For example, @richardsonqualitative
+introduces a set of probability distributions compatible with a hypergraph.
+This can be seen as putting a further constraint on $distributionstimes$.
+More precisely, we let $distributionstimes$ be the set of all
+product probability distributions $P$ that are absolutely continuous
+w.r.t. a reference measure $PP$,
+that also fulfill $N in NS => P(N)=0$ for some set system $N$
+that might be larger than the nullsets of $PP$.
+It is unclear if there is a generalization of the theory
+to this case.
+
+
+== Discovery
+Finally, we want to apply the theory to
+discovery problem.
+For example
+in @garrabrant2021temporal, it is shown
+that in the case of two binary variables
+we can infer a temporal property
+that corresponds to the ancestor relationship in graphs.
+Once we have a theory for conditional systems, it seems likely
+that we can use this theory to infer more arrows
+of a graph, since we have access
+to all conditional independence relationships between random variables on a graph.
+In other words, it should be possible to break up Markov equivalence classes
+in certain cases since these models might not agree
+for independence relationships for random variables other than nodes.
+
+
 
 
 #bibliography("citations.bib")
+
 
 
 

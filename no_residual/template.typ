@@ -147,17 +147,17 @@
   // Abstract.
   pad(
     x: 3em,
-    top: 1em,
-    bottom: 0.4em,
+    top: 0em,
+    bottom: 0.2em,
     align(center)[
       #heading(
         outlined: false,
         numbering: none,
         text(0.85em, smallcaps[Abstract]),
       )
+      #v(-0.1em)
       #set par(justify: true)
       #set text(hyphenate: false)
-
       #align(left)[
       #abstract
       
