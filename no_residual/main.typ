@@ -42,7 +42,7 @@
   // we have the structure of an independent family.
   More formally, let $U = (U_i\)_(i in I)$ be an independent family of random elements
   on some probability space $(Omega,AS,PP)$ and
-  let $X,Y$ and $Z$ be arbitary $sigma(U) ms$ random elements.
+  let $X,Y$ and $Z$ be arbitrary $sigma(U) ms$ random elements.
   We characterize all independencies $X indep Y | Z$
   implied by the independence of $U$.
   Formally, these are the independencies which hold in all
