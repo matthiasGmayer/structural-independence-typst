@@ -2517,8 +2517,8 @@ a reference measure (or an equivalence class of mutually absolutely continuous p
 is necessary for the history to exist.
 For this we introduce a certain $Z$ on a two-dimensional product space.
 #example(breakable:true)[
-  Let $S = [0,1)$ denote the unit circle,
-  represented by the unit interval with joined endpoints.
+  Let $S = [0,1]$,
+  // represented by the unit interval with joined endpoints.
   Let $I = {1,2}$ and $i in I$.
   Let $Omega_i = S union.sq S$,
   where $union.sq$ denotes the disjoint union, i.e.
@@ -2571,29 +2571,40 @@ For this we introduce a certain $Z$ on a two-dimensional product space.
   we write $Z_(i j)$ for $Z|_S_(i j )$.
 
   Let $alpha in (0,1)$ and $beta in (0,1)$.
+  Let $D = {(a,b) in S^2 : a + beta dot b ,alpha alpha + beta in [0,1]}$.
   // Let $f_1 : S_(1,1) -> S_1 ; (s,1) |-> $
-  Let
+  Let for $(a,b) in D$
+  // corresponding to $Z_(i j)$, let
   #align(center)[
     #table(columns:2,stroke:none, column-gutter: 1em)[
-      $Z_(12) vec(a,b) &= mat(1 ,0; alpha, 1) vec(a,b) = vec(a,alpha dot a + b) \
-      Z_(11) vec(a,b) &= mat(1,0;0,1) vec(a,b) = vec(a,b)$
+      $Z_(12)^(-1) vec(a,b) &= mat(1 ,0; alpha, 1) vec(a,b) = vec(a,alpha dot a + b) in S_(12) \
+      Z_(11)^(-1) vec(a,b) &= mat(1,0;0,1) vec(a,b) = vec(a,b) in S_11$
     ][
-      $Z_(22) vec(a,b) &= mat(1,alpha;beta,1) vec(a,b) = vec(a + beta dot b,alpha dot a + b) \
-      Z_(21) vec(a,b) &= mat(1,beta;0,1) vec(a,b) = vec(a + beta dot b,b)$
+      $Z_(22)^(-1) vec(a,b) &= mat(1,alpha;beta,1) vec(a,b) = vec(a + beta dot b,alpha dot a + b)  in S_22 \
+      Z_(21)^(-1) vec(a,b) &= mat(1,beta;0,1) vec(a,b) = vec(a + beta dot b,b) in S_21$
     ]
   ]
-  where multiplication and addition is defined on $S$, i.e.
-  $a + b = a + b thick mod thick 1$.
+  $Z_(i j)$ is well defined, since $Z^(-1)_(i j)$ is bijective, because
+  // $Z_22 (a,b) = (c, d)$
+  // is equivalent to
+  // $
+  // mat(alpha,1;1,beta) dot vec(a,b) =(c,d)
+  // $
+  $det mat(1,beta;alpha,1) = 1- alpha beta != 0$, etc.
+  // where we interpret $Z^(-1)_(i j) $
+  On $(a,b) in E = Union_(i, j in I) Z^(-1)_(i j) (D))$, we set $Z(a,b) = (a,b,0)$.
+  Therefore $sigma(Z|_(E^c)) = sigma(AS|_(E^c))$.
+  // where multiplication and addition is defined on $S$, i.e.
+  // $a + b = a + b thick mod thick 1$.
 
-#figure(caption: [An illustration of $Z$ for $alpha=beta = 1/4$.
-The cells correspond to the partition #lb
-${Z in [a-epsilon,a+epsilon) times [b-epsilon, b +epsilon) : a,b in {epsilon(n+1/2) : n in NN}}$
+#figure(caption: [An illustration of $Z$ for $alpha=beta = 1/4$ in the region $Z^(-1)[0,3/4]^2$.
+The cells correspond to the partition
+${Z in [a-epsilon,a+epsilon) times [b-epsilon, b +epsilon) : a,b in {epsilon(n+1/2) : n in {0,1,2}}}$
 #lb
-For $epsilon = 1/4$.
+for $epsilon = 1/4$.
 The numbers inscribed in the cells illustrate which cells are in the same part
 of the partition.
 ])[
-  #v(1em)
   #cetz.canvas({
     let scaling = 1.8
   import cetz.draw: *
@@ -2602,22 +2613,26 @@ of the partition.
   scale(scaling)
   
   stroke(0.05em + color.black)
+  rect((0,0),(w,h),step:0.25)
   rectw(s+w,s+h)
-  grid((0,0),(w,h),step:0.25)
-  grid((s+w,0),(s+2*w,h),step:(1,0.25))
-  grid((0,s+h),(w,s+2*h),step:(0.25,1))
+  rect((s+w,0),(s+2*w,h),step:(1,0.25))
+  rect((0,s+h),(w,s+2*h),step:(0.25,1))
 
-  for y in (0,s+h) {
-    for x in range(4){
-      line((0.25*x+s+w,y),(0.25*(x+1)+s+w,1+y))
-    }
-  }
+  // for y in (0,) {
+  //   for x in range(4){
+  //     line((0.25*x+s+w,y),(0.25*(x+1)+s+w,1+y))
+  //   }
+  // }
   
-  for x in (0,s+w) {
-    for y in range(4){
-      line((x,0.25*y+s+w),(1+x,0.25*(y+1)+s+w))
-    }
-  }
+  // for x in (0,) {
+  //   for y in range(4){
+  //     line((x,0.25*y+s+w),(1+x,0.25*(y+1)+s+w))
+  //   }
+  // }
+
+  
+
+  
   content((1/8,1/8),text(size:0.5em*scaling)[1])
   content((1/4+1/8,1/4+1/8),text(size:0.5em*scaling)[2])
   content((2/4+1/8,2/4+1/8),text(size:0.5em*scaling)[3])
@@ -2627,9 +2642,84 @@ of the partition.
   content((1/8,1/8+w+s+0.03),text(size:0.5em*scaling)[1])
   content((1/4+1/8, 2/4+1/8+w+s - 0.15),text(size:0.5em*scaling)[2])
   content((2/4+1/8,3/4+1/8+w+s -0.1),text(size:0.5em*scaling)[3])
+
+
+  let x = 1
+  let y = 1
+  let alpha = 1/4
+  let beta = 1/4
+  // circle((x+beta * y - 1,alpha * x + y - 1),radius:0.02)
+  // let x = 2/4
+  // let y = 1/4
+  // circle((x+beta * y,alpha * x + y),radius:0.01)
+  // let x = 2/4
+  // let y = 2/4
+  // circle((x+beta * y,alpha * x + y),radius:0.01)
+  // let x = 1/4
+  // let y = 2/4
+  // circle((x+beta * y,alpha * x + y),radius:0.01)
+
+  let gets1(x,y) = (x,y) 
+  let gets2(x,y) = (x,alpha *x + y) 
+  let gets3(x,y) = (x+beta*y,y) 
+  let gets4(x,y) = (x+beta * y,alpha * x +y) 
+  
+  
+  let sub(x,y) = {
+    let (x1,x2) = x
+    let (y1,y2) = y
+    (x1 - y1,x2 - y2)
+  }
+  let add(x,y) = {
+    let (x1,x2) = x
+    let (y1,y2) = y
+    (x1 + y1,x2 + y2)
+  }
+  let mul(a, x) = {
+    let (x1,x2) = x
+    (a*x1, a*x2)
+  }
+
+  let drawgrid(offset,gets,stroke:black) = {
+  for x in range(4){
+  for y in range(4){
+    if x + y > 8 or x > 4 and y > 1 or y> 4 and x > 1 { continue }
+  let x1 = 1/4 * (x)
+  let y1 = 1/4 * (y)
+  let p11 = add(gets(x1,y1),offset)
+  let p12 = add(gets(x1,y1+1/4),offset)
+  let p21 = add(gets(x1+1/4,y1),offset)
+  let diffx = sub(p12,p11)
+  // line((s1,s2),(s1+1*diff1,s2+1*diff2))
+  if y != 3 {
+  // line(p11,p12,stroke:stroke)
+  line(p11,p12)
+  }
+  if x != 3{
+  line(p11,p21)
+  }
+  }
+  }
+}
+
+for i in range(4) {
+let gets = (gets1,gets2,gets3,gets4).at(i)  
+let x = (0,0,s+w,s+w).at(i)
+let y = (0,s+h,0,s+h).at(i)
+// drawgrid((0,0),gets1,stroke:none)
+drawgrid((x,y),gets)
+}
+
+  // rect((-0.4,-0.4),(0,1),fill:white, stroke:erasestroke)
+  // rect((-0.4,-0.4),(1,0),fill:white, stroke:erasestroke)
+  // rect((1.2,1),(0,1.3),fill:white, stroke:erasestroke)
+  // rect((1,1.12),(1.3,0),fill:white, stroke:erasestroke)
+  // rectw(0,0)
+  
+  // translate((-s - w, -s - w))
   content((1/8+w+s+0.04,1/8+w+s+0.04),text(size:0.5em*scaling)[1])
-  content((2/4+1/8+w+s - 0.13,2/4+1/8+w+s - 0.12),text(size:0.5em*scaling)[2])
-  content((3/4+1/8+w+s -0.05,3/4+1/8+w+s -0.05),text(size:0.5em*scaling)[3])
+  content((2/4+1/8+w+s - 0.16,2/4+1/8+w+s - 0.15),text(size:0.5em*scaling)[2])
+  content((3/4+1/8+w+s -0.10,3/4+1/8+w+s -0.10),text(size:0.5em*scaling)[3])
   
   
   // content((s+3*w/2,-0.1),$ov("       ",S_2)$)
@@ -2639,14 +2729,10 @@ of the partition.
   #v(1em)
 
   
-  Note that $Z$ has rectangular atoms.
-  and $Z_(i j)$ is bijective, since
-  // $Z_22 (a,b) = (c, d)$
-  // is equivalent to
-  // $
-  // mat(alpha,1;1,beta) dot vec(a,b) =(c,d)
-  // $
-  $det mat(1,beta;alpha,1) = 1- alpha beta != 0$, etc.
+  Note that $Z$ has rectangular atoms, since for $(a,b) in D$,
+  $Z^(-1) (a,b) = {a,a + beta dot b} times {b, alpha dot a + b}$
+  and otherwise, $Z^(-1) (a,b)$ is a single element set.
+  
 
   Now let $PP = PP_1 times PP_2$, where
   $PP_i$ is the uniform distribution over $S union.sq S$.
@@ -2664,7 +2750,7 @@ of the partition.
   For $(a,b) in S^2, epsilon in RR$, let $B_epsilon (a,b) = (a-epsilon,a+epsilon) times
   (b-epsilon,b+epsilon)$
   denote the $epsilon$ ball around $(a,b)$ in $S^2$.
-  For $z in S^2$, let $B^z_epsilon = {Z in (B_epsilon (z)))}$.
+  For $z in S^2$, let $B^z_epsilon = {Z in B_epsilon (z))}$.
 
   In @fig:Z, we can already see that the volume the partition corresponding to 1, as
   $epsilon -> 0$ is not of a product structure:
@@ -2680,41 +2766,40 @@ of the partition.
 
   Let $L$ be a linear invertible map and $B$ a borel set.
   Let $lambda$ be the Lebesgue measure.
-  Then $lambda (L in B) = lambda(B)/abs(det(L))$
-  Using this formula, and noting that $det Z_(i,j) = 1$ for $i j != 22$ and
-  $Z_22 = 1 - alpha beta$, we have, for $z in (0,1)^2$ and $epsilon$ small enough, that
-  $PP(S_(i j) sect B^z_epsilon) = 1/4 lambda(B_epsilon (z)) = epsilon^2/4$
+  Then $lambda (L(B)) = lambda(B) dot abs(det(L))$
+  Using this formula, and noting that $det Z^(-1)_(i,j) = 1$ for $i j != 22$ and
+  $det Z^(-1)_22 = (1 - alpha beta)$, we have,
+  for $z in (0,1)^2$ and $epsilon$ small enough, that
+  $PP(S_(i j) sect B^z_epsilon) = PP(Z^(-1)_(i j) (B_(epsilon) (z))) = 1/4 lambda(B_epsilon (z)) = epsilon^2/4$
   for $i j != 22$ and
-  $PP(S_(22) sect B^z_epsilon) = epsilon^2/(4(1-alpha beta))$
+  $PP(S_(22) sect B^z_epsilon) = PP(Z^(-1)_(22) (B_epsilon (z))) = epsilon^2/4 (1-alpha beta)$
 
-  Therefore the following holds for almost all $z in S^2$
+  Therefore the following holds for almost all $z in E$
   $
   PP(A|Z=z) = lim_(epsilon -> 0) PP(A sect B^z_epsilon) slash PP(B^z_epsilon)
   =
-  lim_(epsilon -> 0) (2/4 epsilon^2)/((3/4+1/(4(1-alpha beta))) epsilon^2) =
-   2/(3 + (1-alpha beta)^(-1)).
+  lim_(epsilon -> 0) (2/4 epsilon^2)/((3/4+1/4 (1-alpha beta)) epsilon^2) =
+   2/(4-alpha beta).
   $
   Similarly,
   $PP(B|Z=z) =
-   2/(3 + (1-alpha beta)^(-1))
+   2/(4-alpha beta)
   $
   and
   $PP(A,B|Z=z) =
-   1/(3 + (1-alpha beta)^(-1)).$
+   1/(4 - alpha beta).$
    Now,
-   setting $x= (1-alpha beta)^(-1)$
+   setting $x= alpha beta$
    $
    PP(A|Z=z) PP(B|Z=z) = PP(A,B|Z=z)
    &<=>
-   (2/(3 + x))^2 = 1/(3 + x) \
+   (2/(4 - x))^2 = 1/(4 - x) \
    &<=>
-   12 + 4 x = 9 + 6x + x^2 \
-   &<=>
-   x^2 + 2 x - 3 = 0 \
+   4 = 4-x
 $
-This is clearly false, since $x = (1-alpha beta)^(-1) > 1$.
+This is clearly false, since $x = alpha beta > 0$.
 Therefore,
-$PP(A|Z)PP(B|Z) != P(A,B|Z)$ a.s.
+$PP(A|Z)PP(B|Z) != P(A,B|Z)$ a.s. on $E$.
 
 In conclusion, we have seen that there is a $Z$, s.t.
 $Z^(-1)(z)$ is a rectangle for all $z$ in the codomain of $Z$, but
@@ -2735,11 +2820,12 @@ also ${1}$ does not disintegrate $Z$.
 
   Recall that $PP$ is the uniform distribution.
   Clearly, $sigma(U_1|_C) cancel(subset.eq) sigma(Z)$
-  for any $PP$-non-nullset $C$.
+  for any $PP$-non-nullset $C subset.eq E$.
   With the same arguments as in the previous example, we can see that
   the only disintegrating random index sets (w.r.t. $PP$) are $nothing$ and $I$.
+  $PP$-a.e. on $E$.
   Therefore,
-  $history(U_1|Z) = I$ $PP$-a.s.
+  $history(U_1|Z)(omega) = I$ for $PP$-a.e. $omega in E$
   
   We will now show that $history(U_1|Z) = nothing$ everywhere,
   contradiction the existence of $history$, by the previous paragraph.
@@ -2897,12 +2983,14 @@ we can infer a temporal property
 that corresponds to the ancestor relationship in graphs.
 Once we have a theory for conditional systems, it seems likely
 that we can use this theory to infer more arrows
-of a graph, since we have access
+of a graphical probabilistic system (corresponding to some causal model), since we have access
 to all conditional independence relationships between random variables on a graph.
 In other words, it should be possible to break up Markov equivalence classes
 in certain cases since these models might not agree
 for independence relationships for random variables other than nodes.
 
+
+#set heading(outlined: true)
 
 
 
