@@ -44,10 +44,10 @@
   on some probability space $(Omega,AS,PP)$ and
   let $X,Y$ and $Z$ be arbitary $sigma(U) ms$ random elements.
   We characterize all independencies $X indep Y | Z$
-  are implied by the independence of $U$.
-  Formally, these are the independencies which hold in all possible
+  implied by the independence of $U$.
+  Formally, these are the independencies which hold in all
   probability measures $P$ that render $U$ independent and are absolutely continuous
-  with respect to $PP$, i.e. for all such $P$, it holds that $X indep_P Y | Z$.
+  with respect to $PP$, i.e. for all such $P$, it needs to hold that $X indep_P Y | Z$.
   We first introduce random index sets and random families that generalize
   families of random elements by allowing the index set of the family to be random.
   Then, we introduce the history, a combinatorial object
