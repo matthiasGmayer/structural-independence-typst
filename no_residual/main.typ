@@ -8,34 +8,55 @@
 #show: arkheion.with(
   title : "A Theory of Structural Independence",
   abstract:[
-  We introduce a theory of structural independence that addresses whether an independence
-  is implied by the structure of an independent family of random elements,
-  rather than being a numerical coincidence.
-  This theory is a generalization of Pearl's d-separation, where, instead of having the structure of a graph,
-  we have the structure of an independent family.
-  Let $U = (U_i\)_(i in I)$ be an independent family of random elements
-  on some probability space $(Omega,AS,PP)$.
-  We characterize all independencies of $sigma(U)$-measurable random elements that
+  // We introduce a theory of structural independence that characterizes all independencies
+  // that are implied by the independence of a family of random elements.
+  // // rather than being a 'numerical coincidence'.
+  // This theory is a generalization of Pearl's d-separation, where, instead of having the structure of a graph,
+  // we have the structure of an independent family.
+  // Let $U = (U_i\)_(i in I)$ be an independent family of random elements
+  // on some probability space $(Omega,AS,PP)$.
+  // We characterize all independencies of $sigma(U)$-measurable random elements that
+  // are implied by the independence of $U$.
+  // Formally, these are the independencies which hold in all possible
+  // probability measures that render $U$ independent and are absolutely continuous
+  // w.r.t. $PP$.
+  // For this, we first introduce random index sets and random families that generalize
+  // canonical families of random elements by allowing the index set of the family to be random.
+  // Then, we introduce the history, a combinatorial object
+  // that measures the dependance of $sigma(U)$-measurable random elements
+  // on $U_i$ for each $i in I$.
+  // Let $X,Y$ and $Z$ be $sigma(U) ms$ random elements.
+  // // conditional on some $sigma(U)$-measurable random element $Z$.
+  // The history of $X$ given $Z$,
+  // is a random index set $history(X|Z) : Omega -> powerset (I)$ such that
+  // the independence of $X$ and $Y$ given $Z$ is implied by the independence of $U$ if and only if
+  // $history(X|Z) sect history(Y|Z) aseq nothing$ with respect to $PP$.
+  // // More precisely, if and only if 
+  // // for all $i in I$
+  // // $i in history(X|Z) (omega) => i in.not history(Y|Z) (omega)$.
+  // // holds for a.e. $omega in Omega$
+  // // This can be written as 
+
+  We introduce a theory of structural independence characterizing all independencies implied by the independence of a random element family.
+  // This theory is a generalization of Pearl's d-separation, where, instead of having the structure of a graph,
+  // we have the structure of an independent family.
+  More formally, let $U = (U_i\)_(i in I)$ be an independent family of random elements
+  on some probability space $(Omega,AS,PP)$ and
+  let $X,Y$ and $Z$ be arbitary $sigma(U) ms$ random elements.
+  We characterize all independencies $X indep Y | Z$
   are implied by the independence of $U$.
   Formally, these are the independencies which hold in all possible
-  probability measures that render $U$ independent and are absolutely continuous
-  w.r.t. $PP$.
-  For this, we first introduce random index sets and random families that generalize
-  canonical families of random elements by allowing the index set of the family to be random.
+  probability measures $P$ that render $U$ independent and are absolutely continuous
+  with respect to $PP$, i.e. for all such $P$, it holds that $X indep_P Y | Z$.
+  We first introduce random index sets and random families that generalize
+  families of random elements by allowing the index set of the family to be random.
   Then, we introduce the history, a combinatorial object
-  that measures the dependance of $sigma(U)$-measurable random elements
-  on $U_i$ for each $i in I$.
-  Let $X,Y$ and $Z$ be $sigma(U) ms$ random elements.
-  // conditional on some $sigma(U)$-measurable random element $Z$.
-  The history of a $X$ given $Z$,
-  is a random index set $history(X|Z) : Omega -> powerset (I)$, s.t.
+  that measures the dependance of $X$
+  on $U_i$ for each $i in I$ given $Z$.
+  More precisely, the history of $X$ given $Z$
+  is a random index set $history(X|Z) : Omega -> powerset (I)$ such that
   the independence of $X$ and $Y$ given $Z$ is implied by the independence of $U$ if and only if
-  $history(X|Z) sect history(Y|Z) aseq nothing$ w.r.t. $PP$.
-  // More precisely, if and only if 
-  // for all $i in I$
-  // $i in history(X|Z) (omega) => i in.not history(Y|Z) (omega)$.
-  // holds for a.e. $omega in Omega$
-  // This can be written as 
+  $history(X|Z) sect history(Y|Z) aseq nothing$ with respect to $PP$.
   ],
   authors: (
     (name: "Matthias G. Mayer", email: "matthias.georg.mayer@gmail.com", affiliation: none),
@@ -67,7 +88,7 @@ a family of random elements.
 We give a review of basic definitions and
 known theorems in @background that will also be used in the rest of this introduction.
 In @related_work, we review d-separation, what it is used for, and how it
-is a specific version of the phenomenon we investigate.
+relates to the phenomenon we investigate.
 In @sec:finite_theory, we review the finite version
 of this theory from earlier work.
 
@@ -91,13 +112,14 @@ distributionstimes := {P : AS -> RR |& P "is a probability measure,"\
 &"and" P tilde PP}
 $
 
-and ask when it is the case that
-$forall P in distributionstimes: X indep_P Y | Z$.
+and ask when 
+$forall P in distributionstimes: X indep_P Y | Z$ holds.
 More specifically, we want to characterize this statement uniformly over all choices of $X,Y$ and $Z$ without quantifying over $distributionstimes$.
 
 #remark[
 The requirement that $P tilde PP$ can be relaxed
-to $P << PP$. It is however convenient for calculations
+to $P << PP$ without changing the resulting characterization.
+It is however convenient for calculations
 to require $P tilde PP$, s.t. $radiv(P,PP)$ can be chosen to be positive.
 The case $P << PP$ follows as a corollary.
 ]
@@ -116,18 +138,18 @@ For $J subset.eq I$, let $U_J$ denote the family $(U_i)_(i in J)$.
   $A indep_P B$ follows immediately because $U_J indep_P U_K$,
   since $U$ is an independent family w.r.t. $P$, and #lb $J sect K = nothing$.
 ]
-However, it is apriori not clear, that these are the only independencies that follow.
+However, it is a priori not clear, that these are the only independencies that follow.
 We want to see, whether $forall P in distributionstimes: X indep_P Y$ implies that
 there are $J, K subset.eq I$ disjoint, s.t.
 $sigma(X) subset.eq sigma(U_J)$ and
 $sigma(Y) subset.eq sigma(U_K)$.
-We will later see that this is indeed the case in @thm:fundamental_theorem
+We will see that this is indeed the case in @thm:fundamental_theorem
 // , whenever $X$ and $Y$ are not constant (since then the independence is trivial).
 
 The interesting theory begins once we condition on a random element $Z$.
 When do we have the conditional independence $X indep_P Y | Z$ for all $P in distributionstimes$?
 To answer this question, we want to generalize from @lem:independence_trivial,
-where we began to characterize this with dependence on disjoint background variables.
+where we began to characterize this with dependence on disjoint sets of background variables.
 Conditional on $Z$, we want to carry over this idea and allow this dependence to vary with $Z$.
 Suppose that ${Z=z}$ is not a $P$-nullset.
 For each $z in Val(Z)$, we want to assign $J_z,K_z subset.eq I$, s.t.
@@ -143,14 +165,18 @@ Clearly, using this condition and the same argumentation as in @lem:independence
 where these ideas are given a formal form.
 Once we start developing the general theory, conditioning on sets is no longer possible.
 We need to choose $J_z$ over all $z$ almost surely simultaneously. To do this we introduce random index sets and random families in @sec:random_index_sets.
+In @sec:infinite_independence, we examine the space of infinite product probability distributions $distributionstimes$.
 With these tools in hand, we can give a precursory statement of the fundamental theorem of structural independence at the start of @sec:construction.
 The fundamental theorem characterizes all independencies that are implied by an independent family
 through $Z$ dependent random index sets.
 We continue to construct these random index sets, called (conditional) history of $X$ given $Z$ and written $history(X|Z) : Omega -> powerset(I)$.
-In @sec:fundamental_theorem, we examine the properties of the history and introduce the random index set of irrelevance to prove the
+In @sec:fundamental_theorem, we examine we introduce the random index set of irrelevance to prove the
 fundamental theorem of structural independence.
 in @sec:properties, we study properties of the history and structural independence and show that
 the history is determined uniquely by some desiderata.
+In @sec:counterexample, we introduce a counterexample that proves that
+disintegration is not characterized by rectangular atoms in non-finite case.
+In @sec:further_work, we discuss directions for further research.
 
 = Background <background>
 This section is intended to disambiguate notation.
@@ -738,7 +764,7 @@ The other direction is not true in general.
 
 
 
-= Infinite product probability measures
+= Infinite product probability measures <sec:infinite_independence>
 
 In the next sections we want to define the history and prove the fundamental theorem of structural independence.
 For this, we need to characterize the elements in $distributionstimes$ further.
@@ -2504,7 +2530,7 @@ In the following let $J$ be a random index set.
 
 
 
-= A Counterexample
+= A Counterexample <sec:counterexample>
 
 In this section,
 we introduce a example
@@ -2849,7 +2875,7 @@ also ${1}$ does not disintegrate $Z$.
 ]
 
 
-= Further work
+= Further work <sec:further_work>
 
 #set heading(outlined:false)
 
